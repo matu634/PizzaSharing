@@ -1,0 +1,53 @@
+@model IEnumerable<Domain.LoanRow>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPaid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Loan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceiptRow)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Involvement)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Loan.LoanId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceiptRow.ReceiptRowId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Involvement)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.LoanRowId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LoanRowId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LoanRowId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
