@@ -17,6 +17,9 @@ namespace Domain
         public List<ReceiptRowChange> ReceiptRowChanges { get; set; }
 
         public List<Price> Prices { get; set; }
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
         
         public decimal GetPriceAtTime(DateTime dateTime)
         {

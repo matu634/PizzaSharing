@@ -22,7 +22,8 @@ namespace WebApp.Controllers
         // GET: Changes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Changes.ToListAsync());
+            var appDbContext = _context.Changes.Include(c => c.Category);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: Changes/Details/5
@@ -34,6 +35,7 @@ namespace WebApp.Controllers
             }
 
             var change = await _context.Changes
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.ChangeId == id);
             if (change == null)
             {
@@ -46,6 +48,7 @@ namespace WebApp.Controllers
         // GET: Changes/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeId,ChangeName")] Change change)
+        public async Task<IActionResult> Create([Bind("ChangeId,ChangeName,CategoryId")] Change change)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -78,6 +82,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -86,7 +91,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,ChangeName")] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,ChangeName,CategoryId")] Change change)
         {
             if (id != change.ChangeId)
             {
@@ -113,6 +118,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -125,6 +131,7 @@ namespace WebApp.Controllers
             }
 
             var change = await _context.Changes
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.ChangeId == id);
             if (change == null)
             {

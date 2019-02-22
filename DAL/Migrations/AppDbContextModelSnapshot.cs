@@ -40,11 +40,15 @@ namespace DAL.Migrations
                     b.Property<int>("ChangeId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CategoryId");
+
                     b.Property<string>("ChangeName")
                         .IsRequired()
                         .HasMaxLength(100);
 
                     b.HasKey("ChangeId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Changes");
                 });
@@ -248,6 +252,8 @@ namespace DAL.Migrations
 
                     b.Property<DateTime>("CreatedTime");
 
+                    b.Property<bool>("IsFinalized");
+
                     b.Property<int>("ReceiptManagerId");
 
                     b.HasKey("ReceiptId");
@@ -405,6 +411,14 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Organization", "Organization")
                         .WithMany("Categories")
                         .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Change", b =>
+                {
+                    b.HasOne("Domain.Category", "Category")
+                        .WithMany("Changes")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
