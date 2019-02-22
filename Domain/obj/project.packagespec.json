@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Repos\\C#\\PizzaSharing\\Domain\\Domain.csproj",
+    "projectUniqueName": "C:\\Projects Repositories\\PizzaSharing\\Domain\\Domain.csproj",
     "projectName": "Domain",
-    "projectPath": "C:\\Repos\\C#\\PizzaSharing\\Domain\\Domain.csproj",
-    "outputPath": "C:\\Repos\\C#\\PizzaSharing\\Domain\\obj\\",
+    "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Domain\\Domain.csproj",
+    "outputPath": "C:\\Projects Repositories\\PizzaSharing\\Domain\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

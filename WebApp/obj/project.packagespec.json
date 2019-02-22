@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Repos\\C#\\PizzaSharing\\WebApp\\WebApp.csproj",
+    "projectUniqueName": "C:\\Projects Repositories\\PizzaSharing\\WebApp\\WebApp.csproj",
     "projectName": "WebApp",
-    "projectPath": "C:\\Repos\\C#\\PizzaSharing\\WebApp\\WebApp.csproj",
-    "outputPath": "C:\\Repos\\C#\\PizzaSharing\\WebApp\\obj\\",
+    "projectPath": "C:\\Projects Repositories\\PizzaSharing\\WebApp\\WebApp.csproj",
+    "outputPath": "C:\\Projects Repositories\\PizzaSharing\\WebApp\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.2": {
         "projectReferences": {
-          "C:\\Repos\\C#\\PizzaSharing\\DAL\\DAL.csproj": {
-            "projectPath": "C:\\Repos\\C#\\PizzaSharing\\DAL\\DAL.csproj"
+          "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj": {
+            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj"
           }
         }
       }

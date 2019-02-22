@@ -10,6 +10,8 @@ namespace Domain
         
         public List<ReceiptRow> ReceiptRows { get; set; }
 
+        public bool IsFinalized { get; set; } = false;
+
         public DateTime CreatedTime { get; set; }
 
         public int ReceiptManagerId { get; set; }

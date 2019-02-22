@@ -10,3 +10,15 @@ C:\Repos\C#\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.AssemblyInfo.cs
 C:\Repos\C#\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.csproj.CopyComplete
 C:\Repos\C#\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.dll
 C:\Repos\C#\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.pdb
+C:\Projects Repositories\PizzaSharing\DAL\bin\Debug\netstandard2.0\DAL.deps.json
+C:\Projects Repositories\PizzaSharing\DAL\bin\Debug\netstandard2.0\DAL.dll
+C:\Projects Repositories\PizzaSharing\DAL\bin\Debug\netstandard2.0\DAL.pdb
+C:\Projects Repositories\PizzaSharing\DAL\bin\Debug\netstandard2.0\Domain.dll
+C:\Projects Repositories\PizzaSharing\DAL\bin\Debug\netstandard2.0\Domain.pdb
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.csprojAssemblyReference.cache
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.csproj.CoreCompileInputs.cache
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.AssemblyInfoInputs.cache
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.AssemblyInfo.cs
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.csproj.CopyComplete
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.dll
+C:\Projects Repositories\PizzaSharing\DAL\obj\Debug\netstandard2.0\DAL.pdb
