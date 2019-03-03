@@ -2,28 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.App.EF;
 using Domain;
 
 namespace WebApp.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
+        
 
-        public CategoriesController(AppDbContext context)
+        public CategoriesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Categories.Include(c => c.Organization);
-            return View(await appDbContext.ToListAsync());
+            var categories = await _uow.Categories.AllAsync();
+            return View(categories);
         }
 
         // GET: Categories/Details/5
@@ -34,9 +37,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .Include(c => c.Organization)
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category =  await _uow.Categories.FindAsync(id);            
+            
             if (category == null)
             {
                 return NotFound();
@@ -46,9 +48,9 @@ namespace WebApp.Controllers
         }
 
         // GET: Categories/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "OrganizationId", "OrganizationName");
+            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName");
             return View();
         }
 
@@ -61,11 +63,11 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                await _uow.Categories.AddAsync(category);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 
@@ -77,12 +79,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _uow.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 
@@ -100,25 +102,11 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.CategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Categories.Update(category);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(_context.Organizations, "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 
@@ -130,9 +118,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
-                .Include(c => c.Organization)
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _uow.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -146,15 +132,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            _uow.Categories.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }

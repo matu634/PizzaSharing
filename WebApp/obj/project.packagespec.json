@@ -15,8 +15,8 @@
     "frameworks": {
       "netcoreapp2.2": {
         "projectReferences": {
-          "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj": {
-            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj"
+          "C:\\Projects Repositories\\PizzaSharing\\DAL.App.EF\\DAL.App.EF.csproj": {
+            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL.App.EF\\DAL.App.EF.csproj"
           }
         }
       }

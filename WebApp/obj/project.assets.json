@@ -4916,19 +4916,58 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "DAL/1.0.0": {
+      "Contracts.DAL.App/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
-          "Domain": "1.0.0",
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0",
-          "Pomelo.EntityFrameworkCore.MySql": "2.2.0"
+          "Contracts.DAL.Base": "1.0.0",
+          "Domain": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/DAL.dll": {}
+          "bin/placeholder/Contracts.DAL.App.dll": {}
         },
         "runtime": {
-          "bin/placeholder/DAL.dll": {}
+          "bin/placeholder/Contracts.DAL.App.dll": {}
+        }
+      },
+      "Contracts.DAL.Base/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Contracts.DAL.Base.dll": {}
+        }
+      },
+      "DAL.App.EF/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Contracts.DAL.App": "1.0.0",
+          "DAL.Base.EF": "1.0.0",
+          "Domain": "1.0.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0"
+        },
+        "compile": {
+          "bin/placeholder/DAL.App.EF.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.App.EF.dll": {}
+        }
+      },
+      "DAL.Base.EF/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "2.2.2"
+        },
+        "compile": {
+          "bin/placeholder/DAL.Base.EF.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DAL.Base.EF.dll": {}
         }
       },
       "Domain/1.0.0": {
@@ -13396,10 +13435,25 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
-    "DAL/1.0.0": {
+    "Contracts.DAL.App/1.0.0": {
       "type": "project",
-      "path": "../DAL/DAL.csproj",
-      "msbuildProject": "../DAL/DAL.csproj"
+      "path": "../Contracts.DAL.App/Contracts.DAL.App.csproj",
+      "msbuildProject": "../Contracts.DAL.App/Contracts.DAL.App.csproj"
+    },
+    "Contracts.DAL.Base/1.0.0": {
+      "type": "project",
+      "path": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj",
+      "msbuildProject": "../Contracts.DAL.Base/Contracts.DAL.Base.csproj"
+    },
+    "DAL.App.EF/1.0.0": {
+      "type": "project",
+      "path": "../DAL.App.EF/DAL.App.EF.csproj",
+      "msbuildProject": "../DAL.App.EF/DAL.App.EF.csproj"
+    },
+    "DAL.Base.EF/1.0.0": {
+      "type": "project",
+      "path": "../DAL.Base.EF/DAL.Base.EF.csproj",
+      "msbuildProject": "../DAL.Base.EF/DAL.Base.EF.csproj"
     },
     "Domain/1.0.0": {
       "type": "project",
@@ -13409,7 +13463,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.2": [
-      "DAL >= 1.0.0",
+      "DAL.App.EF >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
       "Microsoft.EntityFrameworkCore.Sqlite >= 2.2.2",
@@ -13448,8 +13502,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj": {
-              "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL\\DAL.csproj"
+            "C:\\Projects Repositories\\PizzaSharing\\DAL.App.EF\\DAL.App.EF.csproj": {
+              "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL.App.EF\\DAL.App.EF.csproj"
             }
           }
         }

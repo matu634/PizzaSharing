@@ -2,28 +2,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.App.EF;
 using Domain;
 
 namespace WebApp.Controllers
 {
     public class PricesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public PricesController(AppDbContext context)
+        public PricesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
+
 
         // GET: Prices
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Prices.Include(p => p.Change).Include(p => p.Product);
-            return View(await appDbContext.ToListAsync());
+//            var appDbContext = _context.Prices.Include(p => p.Change).Include(p => p.Product);
+//            return View(await appDbContext.ToListAsync());
+            var prices =  await _uow.Prices.AllAsync();
+            return View(prices);
         }
 
         // GET: Prices/Details/5
@@ -34,10 +39,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _context.Prices
-                .Include(p => p.Change)
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.PriceId == id);
+            
+            var price = await _uow.Prices.FindAsync(id);
             if (price == null)
             {
                 return NotFound();
@@ -47,10 +50,10 @@ namespace WebApp.Controllers
         }
 
         // GET: Prices/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "ChangeId", "ChangeName");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName").Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName").Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View();
         }
 
@@ -63,12 +66,12 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(price);
-                await _context.SaveChangesAsync();
+                await _uow.Prices.AddAsync(price);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "ChangeId", "ChangeName", price.ChangeId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", price.ProductId);
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 
@@ -80,13 +83,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _context.Prices.FindAsync(id);
+            var price = await _uow.Prices.FindAsync(id);
             if (price == null)
             {
                 return NotFound();
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "ChangeId", "ChangeName", price.ChangeId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", price.ProductId);
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 
@@ -104,26 +107,12 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(price);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PriceExists(price.PriceId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Prices.Update(price);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "ChangeId", "ChangeName", price.ChangeId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", price.ProductId);
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 
@@ -135,10 +124,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var price = await _context.Prices
-                .Include(p => p.Change)
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.PriceId == id);
+            var price = await _uow.Prices.FindAsync(id);
             if (price == null)
             {
                 return NotFound();
@@ -152,15 +138,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var price = await _context.Prices.FindAsync(id);
-            _context.Prices.Remove(price);
-            await _context.SaveChangesAsync();
+            _uow.Prices.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PriceExists(int id)
-        {
-            return _context.Prices.Any(e => e.PriceId == id);
         }
     }
 }

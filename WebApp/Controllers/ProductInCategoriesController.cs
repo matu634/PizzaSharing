@@ -2,28 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL;
+using DAL.App.EF;
 using Domain;
 
 namespace WebApp.Controllers
 {
     public class ProductInCategoriesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ProductInCategoriesController(AppDbContext context)
+        public ProductInCategoriesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: ProductInCategories
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.ProductInCategories.Include(p => p.Category).Include(p => p.Product);
-            return View(await appDbContext.ToListAsync());
+            var productsInCategories = await _uow.ProductsInCategories.AllAsync();
+            return View(productsInCategories);
         }
 
         // GET: ProductInCategories/Details/5
@@ -34,10 +36,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInCategory = await _context.ProductInCategories
-                .Include(p => p.Category)
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.ProductInCategoryId == id);
+            var productInCategory = await _uow.ProductsInCategories.FindAsync(id);
+
             if (productInCategory == null)
             {
                 return NotFound();
@@ -47,10 +47,10 @@ namespace WebApp.Controllers
         }
 
         // GET: ProductInCategories/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName");
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName");
             return View();
         }
 
@@ -63,12 +63,12 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(productInCategory);
-                await _context.SaveChangesAsync();
+                await _uow.ProductsInCategories.AddAsync(productInCategory);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 
@@ -80,13 +80,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInCategory = await _context.ProductInCategories.FindAsync(id);
+            var productInCategory = await _uow.ProductsInCategories.FindAsync(id);
             if (productInCategory == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 
@@ -102,28 +102,15 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
+            
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(productInCategory);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductInCategoryExists(productInCategory.ProductInCategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.ProductsInCategories.Update(productInCategory);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 
@@ -135,10 +122,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var productInCategory = await _context.ProductInCategories
-                .Include(p => p.Category)
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.ProductInCategoryId == id);
+            var productInCategory = await _uow.ProductsInCategories.FindAsync(id);
             if (productInCategory == null)
             {
                 return NotFound();
@@ -152,15 +136,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var productInCategory = await _context.ProductInCategories.FindAsync(id);
-            _context.ProductInCategories.Remove(productInCategory);
-            await _context.SaveChangesAsync();
+            _uow.ProductsInCategories.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProductInCategoryExists(int id)
-        {
-            return _context.ProductInCategories.Any(e => e.ProductInCategoryId == id);
         }
     }
 }

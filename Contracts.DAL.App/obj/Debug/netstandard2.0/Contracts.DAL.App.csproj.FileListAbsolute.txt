@@ -1,0 +1,14 @@
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Contracts.DAL.App.deps.json
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Contracts.DAL.App.dll
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Contracts.DAL.App.pdb
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.csprojAssemblyReference.cache
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.csproj.CoreCompileInputs.cache
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.AssemblyInfoInputs.cache
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.AssemblyInfo.cs
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.dll
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.pdb
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Contracts.DAL.Base.dll
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Domain.dll
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Contracts.DAL.Base.pdb
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\bin\Debug\netstandard2.0\Domain.pdb
+C:\Projects Repositories\PizzaSharing\Contracts.DAL.App\obj\Debug\netstandard2.0\Contracts.DAL.App.csproj.CopyComplete

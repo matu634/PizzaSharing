@@ -94,6 +94,12 @@ C:\Repos\C#\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\Razor\Views\Prices\Delet
 C:\Repos\C#\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\Razor\Views\Prices\Details.g.cshtml.cs
 C:\Repos\C#\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\Razor\Views\Prices\Edit.g.cshtml.cs
 C:\Repos\C#\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\Razor\Views\Prices\Index.g.cshtml.cs
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.csprojAssemblyReference.cache
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.csproj.CoreCompileInputs.cache
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.RazorAssemblyInfo.cache
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.RazorAssemblyInfo.cs
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.AssemblyInfoInputs.cache
+C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.AssemblyInfo.cs
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.deps.json
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.runtimeconfig.json
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.runtimeconfig.dev.json
@@ -101,16 +107,10 @@ C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.dll
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.pdb
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.Views.dll
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\WebApp.Views.pdb
-C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.dll
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.App.EF.dll
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Domain.dll
-C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.pdb
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.App.EF.pdb
 C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Domain.pdb
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.csprojAssemblyReference.cache
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.csproj.CoreCompileInputs.cache
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.RazorAssemblyInfo.cache
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.RazorAssemblyInfo.cs
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.AssemblyInfoInputs.cache
-C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.AssemblyInfo.cs
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.TagHelpers.input.cache
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.TagHelpers.output.cache
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.RazorCoreGenerate.cache
@@ -190,3 +190,9 @@ C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.View
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.csproj.CopyComplete
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.dll
 C:\Projects Repositories\PizzaSharing\WebApp\obj\Debug\netcoreapp2.2\WebApp.pdb
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Contracts.DAL.App.dll
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Contracts.DAL.Base.dll
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.Base.EF.dll
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Contracts.DAL.App.pdb
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\Contracts.DAL.Base.pdb
+C:\Projects Repositories\PizzaSharing\WebApp\bin\Debug\netcoreapp2.2\DAL.Base.EF.pdb
