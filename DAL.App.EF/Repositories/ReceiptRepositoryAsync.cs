@@ -1,4 +1,5 @@
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.Base;
 using Contracts.DAL.Base.Repositories;
 using DAL.Base.EF.Repositories;
 using Domain;
@@ -8,7 +9,7 @@ namespace DAL.App.EF.Repositories
 {
     public class ReceiptRepositoryAsync : BaseRepositoryAsync<Receipt>, IReceiptRepository
     {
-        public ReceiptRepositoryAsync(DbContext dbContext) : base(dbContext)
+        public ReceiptRepositoryAsync(IDataContext dataContext) : base(dataContext)
         {
         }
     }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using Contracts.DAL.Base.Helpers;
 using Contracts.DAL.Base.Repositories;
 using DAL.App.EF.Repositories;
 using DAL.Base.EF.Repositories;
@@ -11,84 +12,59 @@ using DAL.Base.EF.Repositories;
 namespace DAL.App.EF
 {
     public class AppUnitOfWork : IAppUnitOfWork
-    {
-        //Repo cache
-        private readonly Dictionary<Type, object> _repositoryCache = new Dictionary<Type, object>();
-        private AppDbContext _appDbContext;
+    {   
+        private readonly AppDbContext _appDbContext;
 
-        public AppUnitOfWork(AppDbContext appDbContext)
+        private readonly IRepositoryProvider _repositoryProvider;
+
+        public AppUnitOfWork(AppDbContext appDbContext, IRepositoryProvider repositoryProvider)
         {
             _appDbContext = appDbContext;
+            _repositoryProvider = repositoryProvider;
         }
 
         
-        //----------------------------Repositories----------------------------
+        //-------------------------------------------------Repositories-------------------------------------------------
         
         
-        public ICategoryRepository Categories =>
-            GetOrCreateRepository(context => new CategoryRepositoryAsync(_appDbContext));
+        public ICategoryRepository Categories => _repositoryProvider.GetRepository<ICategoryRepository>();
 
-        public IChangeRepository Changes => 
-            GetOrCreateRepository(context => new ChangeRepositoryAsync(_appDbContext));
+        public IChangeRepository Changes => _repositoryProvider.GetRepository<IChangeRepository>();
         
-        public ILoanRepository Loans => 
-            GetOrCreateRepository(context => new LoanRepositoryAsync(_appDbContext));
+        public ILoanRepository Loans => _repositoryProvider.GetRepository<ILoanRepository>();
         
-        public ILoanRowRepository LoanRows => 
-            GetOrCreateRepository(context => new LoanRowRepositoryAsync(_appDbContext));
+        public ILoanRowRepository LoanRows => _repositoryProvider.GetRepository<ILoanRowRepository>();
 
-        public IOrganizationRepository Organizations =>
-            GetOrCreateRepository(context => new OrganizationRepositoryAsync(_appDbContext));
+        public IOrganizationRepository Organizations =>_repositoryProvider.GetRepository<IOrganizationRepository>();
 
-        public IPriceRepository Prices => 
-            GetOrCreateRepository(context => new PriceRepositoryAsync(_appDbContext));
+        public IPriceRepository Prices => _repositoryProvider.GetRepository<IPriceRepository>();
 
-        public IProductInCategoryRepository ProductsInCategories =>
-            GetOrCreateRepository(context => new ProductInCategoryRepositoryAsync(_appDbContext));
+        public IProductInCategoryRepository ProductsInCategories =>_repositoryProvider.GetRepository<IProductInCategoryRepository>();
 
-        public IProductRepository Products => 
-            GetOrCreateRepository(context => new ProductRepositoryAsync(_appDbContext));
+        public IProductRepository Products => _repositoryProvider.GetRepository<IProductRepository>();
         
-        public IReceiptRepository Receipts => 
-            GetOrCreateRepository(context => new ReceiptRepositoryAsync(_appDbContext));
+        public IReceiptRepository Receipts => _repositoryProvider.GetRepository<IReceiptRepository>();
 
-        public IReceiptParticipantRepository ReceiptParticipants =>
-            GetOrCreateRepository(context => new ReceiptParticipantRepositoryAsync(_appDbContext));
+        public IReceiptParticipantRepository ReceiptParticipants =>_repositoryProvider.GetRepository<IReceiptParticipantRepository>();
 
-        public IReceiptRowRepository ReceiptRows =>
-            GetOrCreateRepository(context => new ReceiptRowRepositoryAsync(_appDbContext));
+        public IReceiptRowRepository ReceiptRows =>_repositoryProvider.GetRepository<IReceiptRowRepository>();
 
-        public IReceiptRowChangeRepository ReceiptRowChanges =>
-            GetOrCreateRepository(context => new ReceiptRowChangeRepositoryAsync(context));
+        public IReceiptRowChangeRepository ReceiptRowChanges =>_repositoryProvider.GetRepository<IReceiptRowChangeRepository>();
 
         
-        //----------------------------Get base repo Method----------------------------
+        //---------------------------------------------Get base repo Method---------------------------------------------
         
         
         public IBaseRepositoryAsync<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()
         {
-            return GetOrCreateRepository(context => new BaseRepositoryAsync<TEntity>(_appDbContext));
+            return _repositoryProvider.GetRepositoryForEntity<TEntity>();
         }
 
         
-        //----------------------------Caching repos method----------------------------
         
         
-        private TRepository GetOrCreateRepository<TRepository>(Func<AppDbContext, TRepository> factoryMethod)
-        {
-            _repositoryCache.TryGetValue(typeof(TRepository), out var repoObject);
-            if (repoObject != null)
-            {
-                return (TRepository) repoObject;
-            }
-
-            repoObject = factoryMethod(_appDbContext);
-            _repositoryCache[typeof(TRepository)] = repoObject;
-            return (TRepository) repoObject;
-        }
         
-        
-        //----------------------------UoW methods----------------------------
+        //-------------------------------------------------UoW methods--------------------------------------------------
 
         
         public virtual int SaveChanges()

@@ -13,10 +13,10 @@ namespace DAL.Base.EF.Repositories
         protected readonly DbContext RepoDbContext;
         protected readonly DbSet<TEntity> RepoDbSet;
         
-        public BaseRepositoryAsync(DbContext dbContext)
+        public BaseRepositoryAsync(IDataContext dataContext)
         {
-            RepoDbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            RepoDbSet = dbContext.Set<TEntity>();
+            RepoDbContext =  (dataContext as DbContext) ?? throw new ArgumentNullException(nameof(dataContext));
+            RepoDbSet =  RepoDbContext.Set<TEntity>();
         }
 
         public virtual async Task<IEnumerable<TEntity>> AllAsync()
