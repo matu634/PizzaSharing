@@ -17,9 +17,9 @@ namespace DAL.App.EF
 
         private readonly IRepositoryProvider _repositoryProvider;
 
-        public AppUnitOfWork(AppDbContext appDbContext, IRepositoryProvider repositoryProvider)
+        public AppUnitOfWork(IDataContext appDbContext, IRepositoryProvider repositoryProvider)
         {
-            _appDbContext = appDbContext;
+            _appDbContext = appDbContext as AppDbContext ?? throw new ArgumentException("Datacontext has to be DbContext");
             _repositoryProvider = repositoryProvider;
         }
 
@@ -59,10 +59,6 @@ namespace DAL.App.EF
         {
             return _repositoryProvider.GetRepositoryForEntity<TEntity>();
         }
-
-        
-        
-        
         
         //-------------------------------------------------UoW methods--------------------------------------------------
 

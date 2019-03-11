@@ -26,12 +26,12 @@ namespace DAL.Base.EF.Helpers
             //Repo not found in cache, create it
 
             var repoCreationMethod = _repositoryFactory.GetRepositoryFactory<TRepository>();
-            if (repoCreationMethod == null) throw new NullReferenceException("No factory found for repo: " + typeof(TRepository).Name);
-            
-            repoObject =  repoCreationMethod(_dataContext);
+            if (repoCreationMethod == null)
+                throw new NullReferenceException("No factory found for repo: " + typeof(TRepository).Name);
+
+            repoObject = repoCreationMethod(_dataContext);
             _repositoryCache[typeof(TRepository)] = repoObject;
             return (TRepository) repoObject;
-
         }
 
         public IBaseRepositoryAsync<TEntity> GetRepositoryForEntity<TEntity>() where TEntity : class, IBaseEntity, new()
@@ -39,11 +39,12 @@ namespace DAL.Base.EF.Helpers
             _repositoryCache.TryGetValue(typeof(IBaseRepositoryAsync<TEntity>), out var repoObject);
             if (repoObject != null) return (IBaseRepositoryAsync<TEntity>) repoObject;
             //Repo not found in cache, create it
-            
+
             var repoCreationMethod = _repositoryFactory.GetRepositoryFactoryForEntity<TEntity>();
-            if (repoCreationMethod == null) throw new NullReferenceException("No factory found for entity: " + typeof(TEntity).Name);
-            
-            repoObject =  repoCreationMethod(_dataContext);
+            if (repoCreationMethod == null)
+                throw new NullReferenceException("No factory found for entity: " + typeof(TEntity).Name);
+
+            repoObject = repoCreationMethod(_dataContext);
             _repositoryCache[typeof(IBaseRepositoryAsync<TEntity>)] = repoObject;
             return (IBaseRepositoryAsync<TEntity>) repoObject;
         }

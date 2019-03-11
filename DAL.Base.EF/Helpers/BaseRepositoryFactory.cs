@@ -29,7 +29,8 @@ namespace DAL.Base.EF.Helpers
             return repoCreationMethod;
         }
 
-        public Func<IDataContext, object> GetRepositoryFactoryForEntity<TEntity>() where TEntity : class, IBaseEntity, new()
+        public Func<IDataContext, object> GetRepositoryFactoryForEntity<TEntity>()
+            where TEntity : class, IBaseEntity, new()
         {
             return (context) => new BaseRepositoryAsync<TEntity>(context);
         }
