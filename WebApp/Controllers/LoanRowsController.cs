@@ -37,7 +37,7 @@ namespace WebApp.Controllers
             var loanRow = await _context.LoanRows
                 .Include(l => l.Loan)
                 .Include(l => l.ReceiptRow)
-                .FirstOrDefaultAsync(m => m.LoanRowId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (loanRow == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace WebApp.Controllers
         // GET: LoanRows/Create
         public IActionResult Create()
         {
-            ViewData["LoanId"] = new SelectList(_context.Loans, "LoanId", "LoanId");
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "ReceiptRowId", "ReceiptRowId");
+            ViewData["LoanId"] = new SelectList(_context.Loans, "Id", "Id");
+            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoanRowId,IsPaid,LoanId,ReceiptRowId,Involvement")] LoanRow loanRow)
+        public async Task<IActionResult> Create([Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")] LoanRow loanRow)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoanId"] = new SelectList(_context.Loans, "LoanId", "LoanId", loanRow.LoanId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "ReceiptRowId", "ReceiptRowId", loanRow.ReceiptRowId);
+            ViewData["LoanId"] = new SelectList(_context.Loans, "Id", "Id", loanRow.LoanId);
+            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", loanRow.ReceiptRowId);
             return View(loanRow);
         }
 
@@ -85,8 +85,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["LoanId"] = new SelectList(_context.Loans, "LoanId", "LoanId", loanRow.LoanId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "ReceiptRowId", "ReceiptRowId", loanRow.ReceiptRowId);
+            ViewData["LoanId"] = new SelectList(_context.Loans, "Id", "Id", loanRow.LoanId);
+            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", loanRow.ReceiptRowId);
             return View(loanRow);
         }
 
@@ -95,9 +95,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LoanRowId,IsPaid,LoanId,ReceiptRowId,Involvement")] LoanRow loanRow)
+        public async Task<IActionResult> Edit(int id, [Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")] LoanRow loanRow)
         {
-            if (id != loanRow.LoanRowId)
+            if (id != loanRow.Id)
             {
                 return NotFound();
             }
@@ -111,7 +111,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LoanRowExists(loanRow.LoanRowId))
+                    if (!LoanRowExists(loanRow.Id))
                     {
                         return NotFound();
                     }
@@ -122,8 +122,8 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoanId"] = new SelectList(_context.Loans, "LoanId", "LoanId", loanRow.LoanId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "ReceiptRowId", "ReceiptRowId", loanRow.ReceiptRowId);
+            ViewData["LoanId"] = new SelectList(_context.Loans, "Id", "Id", loanRow.LoanId);
+            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", loanRow.ReceiptRowId);
             return View(loanRow);
         }
 
@@ -138,7 +138,7 @@ namespace WebApp.Controllers
             var loanRow = await _context.LoanRows
                 .Include(l => l.Loan)
                 .Include(l => l.ReceiptRow)
-                .FirstOrDefaultAsync(m => m.LoanRowId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (loanRow == null)
             {
                 return NotFound();
@@ -160,7 +160,7 @@ namespace WebApp.Controllers
 
         private bool LoanRowExists(int id)
         {
-            return _context.LoanRows.Any(e => e.LoanRowId == id);
+            return _context.LoanRows.Any(e => e.Id == id);
         }
     }
 }

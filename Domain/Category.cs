@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    public class Category
+    public class Category : BaseEntity
     {
-        public int CategoryId { get; set; }
-        
         [MaxLength(100)]
         [MinLength(1)]
         [Required]

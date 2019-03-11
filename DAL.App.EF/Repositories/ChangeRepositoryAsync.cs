@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class OrganizationRepository : BaseRepository<Organization>, IOrganizationRepository
+    public class ChangeRepositoryAsync : BaseRepositoryAsync<Change> , IChangeRepository
     {
-        public OrganizationRepository(DbContext dbContext) : base(dbContext)
+        public ChangeRepositoryAsync(DbContext dbContext) : base(dbContext)
         {
         }
     }

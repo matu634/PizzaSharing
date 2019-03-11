@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ReceiptRepository : BaseRepository<Receipt>, IReceiptRepository
+    public class ReceiptRepositoryAsync : BaseRepositoryAsync<Receipt>, IReceiptRepository
     {
-        public ReceiptRepository(DbContext dbContext) : base(dbContext)
+        public ReceiptRepositoryAsync(DbContext dbContext) : base(dbContext)
         {
         }
     }

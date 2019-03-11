@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 
@@ -37,7 +36,7 @@ namespace WebApp.Controllers
 
             var receipt = await _context.Receipts
                 .Include(r => r.ReceiptManager)
-                .FirstOrDefaultAsync(m => m.ReceiptId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receipt == null)
             {
                 return NotFound();
@@ -58,7 +57,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReceiptId,IsFinalized,CreatedTime,ReceiptManagerId")] Receipt receipt)
+        public async Task<IActionResult> Create([Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")] Receipt receipt)
         {
             if (ModelState.IsValid)
             {
@@ -92,9 +91,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReceiptId,IsFinalized,CreatedTime,ReceiptManagerId")] Receipt receipt)
+        public async Task<IActionResult> Edit(int id, [Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")] Receipt receipt)
         {
-            if (id != receipt.ReceiptId)
+            if (id != receipt.Id)
             {
                 return NotFound();
             }
@@ -108,7 +107,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReceiptExists(receipt.ReceiptId))
+                    if (!ReceiptExists(receipt.Id))
                     {
                         return NotFound();
                     }
@@ -133,7 +132,7 @@ namespace WebApp.Controllers
 
             var receipt = await _context.Receipts
                 .Include(r => r.ReceiptManager)
-                .FirstOrDefaultAsync(m => m.ReceiptId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receipt == null)
             {
                 return NotFound();
@@ -155,7 +154,7 @@ namespace WebApp.Controllers
 
         private bool ReceiptExists(int id)
         {
-            return _context.Receipts.Any(e => e.ReceiptId == id);
+            return _context.Receipts.Any(e => e.Id == id);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace WebApp.Controllers
         // GET: Categories/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName");
+            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "Id", "OrganizationName");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryName,OrganizationId")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 
@@ -84,7 +84,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 
@@ -93,9 +93,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryName,OrganizationId")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,OrganizationId")] Category category)
         {
-            if (id != category.CategoryId)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -106,7 +106,7 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "OrganizationId", "OrganizationName", category.OrganizationId);
+            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
             return View(category);
         }
 

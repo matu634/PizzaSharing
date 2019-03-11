@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class CategoryRepository : BaseRepository<Category> , ICategoryRepository
+    public class CategoryRepositoryAsync : BaseRepositoryAsync<Category> , ICategoryRepository
     {
-        public CategoryRepository(DbContext dbContext) : base(dbContext)
+        public CategoryRepositoryAsync(DbContext dbContext) : base(dbContext)
         {
         }
 

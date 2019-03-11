@@ -14,7 +14,11 @@
     ],
     "frameworks": {
       "netstandard2.0": {
-        "projectReferences": {}
+        "projectReferences": {
+          "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
+            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+          }
+        }
       }
     },
     "warningProperties": {

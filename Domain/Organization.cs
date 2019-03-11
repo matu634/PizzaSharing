@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
-    public class Organization
+    public class Organization : BaseEntity
     {
-        public int OrganizationId { get; set; }
-        
         [MaxLength(100)]
         [MinLength(1)]
         [Required]

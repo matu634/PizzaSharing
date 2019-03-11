@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 
@@ -37,7 +36,7 @@ namespace WebApp.Controllers
 
             var change = await _context.Changes
                 .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.ChangeId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (change == null)
             {
                 return NotFound();
@@ -49,7 +48,7 @@ namespace WebApp.Controllers
         // GET: Changes/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
             return View();
         }
 
@@ -58,7 +57,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeId,ChangeName,CategoryId")] Change change)
+        public async Task<IActionResult> Create([Bind("ChangeName,CategoryId,Id")] Change change)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +65,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -83,7 +82,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -92,9 +91,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeId,ChangeName,CategoryId")] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind("ChangeName,CategoryId,Id")] Change change)
         {
-            if (id != change.ChangeId)
+            if (id != change.Id)
             {
                 return NotFound();
             }
@@ -108,7 +107,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ChangeExists(change.ChangeId))
+                    if (!ChangeExists(change.Id))
                     {
                         return NotFound();
                     }
@@ -119,7 +118,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", change.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
             return View(change);
         }
 
@@ -133,7 +132,7 @@ namespace WebApp.Controllers
 
             var change = await _context.Changes
                 .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.ChangeId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (change == null)
             {
                 return NotFound();
@@ -155,7 +154,7 @@ namespace WebApp.Controllers
 
         private bool ChangeExists(int id)
         {
-            return _context.Changes.Any(e => e.ChangeId == id);
+            return _context.Changes.Any(e => e.Id == id);
         }
     }
 }

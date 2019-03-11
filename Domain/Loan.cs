@@ -3,10 +3,8 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class Loan
+    public class Loan : BaseEntity
     {
-        public int LoanId { get; set; }
-
         public int ReceiptParticipantId { get; set; }
         public ReceiptParticipant ReceiptParticipant { get; set; }
 

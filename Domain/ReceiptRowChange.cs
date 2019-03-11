@@ -1,9 +1,7 @@
 namespace Domain
 {
-    public class ReceiptRowChange
+    public class ReceiptRowChange : BaseEntity
     {
-        public int ReceiptRowChangeId { get; set; }
-        
         public int ReceiptRowId { get; set; }
         public ReceiptRow ReceiptRow { get; set; }
 

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 
@@ -38,7 +37,7 @@ namespace WebApp.Controllers
             var receiptRow = await _context.ReceiptRows
                 .Include(r => r.Product)
                 .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.ReceiptRowId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receiptRow == null)
             {
                 return NotFound();
@@ -50,8 +49,8 @@ namespace WebApp.Controllers
         // GET: ReceiptRows/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName");
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId");
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductName");
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id");
             return View();
         }
 
@@ -60,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReceiptRowId,Amount,RowDiscount,ProductId,ReceiptId")] ReceiptRow receiptRow)
+        public async Task<IActionResult> Create([Bind("Amount,RowDiscount,ProductId,ReceiptId,Id")] ReceiptRow receiptRow)
         {
             if (ModelState.IsValid)
             {
@@ -68,8 +67,8 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", receiptRow.ProductId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptRow.ReceiptId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductName", receiptRow.ProductId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptRow.ReceiptId);
             return View(receiptRow);
         }
 
@@ -86,8 +85,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", receiptRow.ProductId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptRow.ReceiptId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductName", receiptRow.ProductId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptRow.ReceiptId);
             return View(receiptRow);
         }
 
@@ -96,9 +95,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReceiptRowId,Amount,RowDiscount,ProductId,ReceiptId")] ReceiptRow receiptRow)
+        public async Task<IActionResult> Edit(int id, [Bind("Amount,RowDiscount,ProductId,ReceiptId,Id")] ReceiptRow receiptRow)
         {
-            if (id != receiptRow.ReceiptRowId)
+            if (id != receiptRow.Id)
             {
                 return NotFound();
             }
@@ -112,7 +111,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReceiptRowExists(receiptRow.ReceiptRowId))
+                    if (!ReceiptRowExists(receiptRow.Id))
                     {
                         return NotFound();
                     }
@@ -123,8 +122,8 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "ProductName", receiptRow.ProductId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptRow.ReceiptId);
+            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "ProductName", receiptRow.ProductId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptRow.ReceiptId);
             return View(receiptRow);
         }
 
@@ -139,7 +138,7 @@ namespace WebApp.Controllers
             var receiptRow = await _context.ReceiptRows
                 .Include(r => r.Product)
                 .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.ReceiptRowId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receiptRow == null)
             {
                 return NotFound();
@@ -161,7 +160,7 @@ namespace WebApp.Controllers
 
         private bool ReceiptRowExists(int id)
         {
-            return _context.ReceiptRows.Any(e => e.ReceiptRowId == id);
+            return _context.ReceiptRows.Any(e => e.Id == id);
         }
     }
 }

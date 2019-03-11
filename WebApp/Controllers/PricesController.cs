@@ -52,8 +52,8 @@ namespace WebApp.Controllers
         // GET: Prices/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName").Prepend(new SelectListItem{Text = "Select change", Value = ""});
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName").Prepend(new SelectListItem{Text = "Select product", Value = ""});
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "Id", "ChangeName").Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName").Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View();
         }
 
@@ -62,7 +62,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PriceId,Value,ProductId,ChangeId,ValidFrom,ValidTo")] Price price)
+        public async Task<IActionResult> Create([Bind("Id,Value,ProductId,ChangeId,ValidFrom,ValidTo")] Price price)
         {
             if (ModelState.IsValid)
             {
@@ -70,8 +70,8 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "Id", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 
@@ -88,8 +88,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "Id", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 
@@ -98,9 +98,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PriceId,Value,ProductId,ChangeId,ValidFrom,ValidTo")] Price price)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Value,ProductId,ChangeId,ValidFrom,ValidTo")] Price price)
         {
-            if (id != price.PriceId)
+            if (id != price.Id)
             {
                 return NotFound();
             }
@@ -111,8 +111,8 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "ChangeId", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
+            ViewData["ChangeId"] = new SelectList(await _uow.Changes.AllAsync(), "Id", "ChangeName", price.ChangeId).Prepend(new SelectListItem{Text = "Select change", Value = ""});
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", price.ProductId).Prepend(new SelectListItem{Text = "Select product", Value = ""});
             return View(price);
         }
 

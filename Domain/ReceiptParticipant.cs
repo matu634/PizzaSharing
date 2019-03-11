@@ -2,10 +2,8 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class ReceiptParticipant
+    public class ReceiptParticipant : BaseEntity
     {
-        public int ReceiptParticipantId { get; set; }
-
         public int ReceiptId { get; set; }
         public Receipt Receipt { get; set; }
 

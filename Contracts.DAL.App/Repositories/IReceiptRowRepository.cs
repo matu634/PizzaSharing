@@ -3,7 +3,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IReceiptRowRepository : IBaseRepository<ReceiptRow>
+    public interface IReceiptRowRepository : IBaseRepositoryAsync<ReceiptRow>
     {
         
     }

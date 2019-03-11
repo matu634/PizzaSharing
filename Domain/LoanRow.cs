@@ -1,9 +1,7 @@
 namespace Domain
 {
-    public class LoanRow
+    public class LoanRow : BaseEntity
     {
-        public int LoanRowId { get; set; }
-        
         public bool IsPaid { get; set; }
 
         public int LoanId { get; set; }

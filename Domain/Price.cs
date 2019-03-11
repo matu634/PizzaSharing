@@ -2,10 +2,8 @@ using System;
 
 namespace Domain
 {
-    public class Price
+    public class Price : BaseEntity
     {
-        public int PriceId { get; set; }
-        
         public decimal Value { get; set; }
         
         public int? ProductId { get; set; }

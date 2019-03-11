@@ -1,9 +1,7 @@
 namespace Domain
 {
-    public class ProductInCategory
-    {
-        public int ProductInCategoryId { get; set; }
-        
+    public class ProductInCategory : BaseEntity
+    {   
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 

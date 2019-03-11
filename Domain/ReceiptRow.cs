@@ -4,10 +4,8 @@ using System.Linq;
 
 namespace Domain
 {
-    public class ReceiptRow
+    public class ReceiptRow : BaseEntity
     {
-        public int ReceiptRowId { get; set; }
-        
         public int Amount { get; set; }
         //Example: 0.1 for 10% discount
         public decimal RowDiscount { get; set; }

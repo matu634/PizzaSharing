@@ -835,7 +835,8 @@
           "Contracts.DAL.App": "1.0.0",
           "DAL.Base.EF": "1.0.0",
           "Domain": "1.0.0",
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0"
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0",
+          "Pomelo.EntityFrameworkCore.MySql": "2.2.0"
         },
         "runtime": {
           "DAL.App.EF.dll": {}
@@ -858,6 +859,7 @@
       },
       "Domain/1.0.0": {
         "dependencies": {
+          "Contracts.DAL.Base": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "2.2.0",
           "System.ComponentModel.Annotations": "4.5.0"
         },

@@ -4,10 +4,8 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class Receipt
+    public class Receipt : BaseEntity
     {
-        public int ReceiptId { get; set; }
-        
         public List<ReceiptRow> ReceiptRows { get; set; }
 
         public bool IsFinalized { get; set; } = false;

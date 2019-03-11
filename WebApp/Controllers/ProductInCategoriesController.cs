@@ -49,8 +49,8 @@ namespace WebApp.Controllers
         // GET: ProductInCategories/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName");
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName");
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName");
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductInCategoryId,CategoryId,ProductId")] ProductInCategory productInCategory)
+        public async Task<IActionResult> Create([Bind("Id,CategoryId,ProductId")] ProductInCategory productInCategory)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +67,8 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 
@@ -85,8 +85,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 
@@ -95,9 +95,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductInCategoryId,CategoryId,ProductId")] ProductInCategory productInCategory)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,ProductId")] ProductInCategory productInCategory)
         {
-            if (id != productInCategory.ProductInCategoryId)
+            if (id != productInCategory.Id)
             {
                 return NotFound();
             }
@@ -109,8 +109,8 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "CategoryId", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "ProductId", "ProductName", productInCategory.ProductId);
+            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
+            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
             return View(productInCategory);
         }
 

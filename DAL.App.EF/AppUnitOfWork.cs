@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.Base;
 using Contracts.DAL.Base.Repositories;
 using DAL.App.EF.Repositories;
 using DAL.Base.EF.Repositories;
@@ -25,48 +26,48 @@ namespace DAL.App.EF
         
         
         public ICategoryRepository Categories =>
-            GetOrCreateRepository(context => new CategoryRepository(_appDbContext));
+            GetOrCreateRepository(context => new CategoryRepositoryAsync(_appDbContext));
 
         public IChangeRepository Changes => 
-            GetOrCreateRepository(context => new ChangeRepository(_appDbContext));
+            GetOrCreateRepository(context => new ChangeRepositoryAsync(_appDbContext));
         
         public ILoanRepository Loans => 
-            GetOrCreateRepository(context => new LoanRepository(_appDbContext));
+            GetOrCreateRepository(context => new LoanRepositoryAsync(_appDbContext));
         
         public ILoanRowRepository LoanRows => 
-            GetOrCreateRepository(context => new LoanRowRepository(_appDbContext));
+            GetOrCreateRepository(context => new LoanRowRepositoryAsync(_appDbContext));
 
         public IOrganizationRepository Organizations =>
-            GetOrCreateRepository(context => new OrganizationRepository(_appDbContext));
+            GetOrCreateRepository(context => new OrganizationRepositoryAsync(_appDbContext));
 
         public IPriceRepository Prices => 
-            GetOrCreateRepository(context => new PriceRepository(_appDbContext));
+            GetOrCreateRepository(context => new PriceRepositoryAsync(_appDbContext));
 
         public IProductInCategoryRepository ProductsInCategories =>
-            GetOrCreateRepository(context => new ProductInCategoryRepository(_appDbContext));
+            GetOrCreateRepository(context => new ProductInCategoryRepositoryAsync(_appDbContext));
 
         public IProductRepository Products => 
-            GetOrCreateRepository(context => new ProductRepository(_appDbContext));
+            GetOrCreateRepository(context => new ProductRepositoryAsync(_appDbContext));
         
         public IReceiptRepository Receipts => 
-            GetOrCreateRepository(context => new ReceiptRepository(_appDbContext));
+            GetOrCreateRepository(context => new ReceiptRepositoryAsync(_appDbContext));
 
         public IReceiptParticipantRepository ReceiptParticipants =>
-            GetOrCreateRepository(context => new ReceiptParticipantRepository(_appDbContext));
+            GetOrCreateRepository(context => new ReceiptParticipantRepositoryAsync(_appDbContext));
 
         public IReceiptRowRepository ReceiptRows =>
-            GetOrCreateRepository(context => new ReceiptRowRepository(_appDbContext));
+            GetOrCreateRepository(context => new ReceiptRowRepositoryAsync(_appDbContext));
 
         public IReceiptRowChangeRepository ReceiptRowChanges =>
-            GetOrCreateRepository(context => new ReceiptRowChangeRepository(context));
+            GetOrCreateRepository(context => new ReceiptRowChangeRepositoryAsync(context));
 
         
         //----------------------------Get base repo Method----------------------------
         
         
-        public IBaseRepository<TEntity> BaseRepository<TEntity>() where TEntity : class, new()
+        public IBaseRepositoryAsync<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()
         {
-            return GetOrCreateRepository(context => new BaseRepository<TEntity>(_appDbContext));
+            return GetOrCreateRepository(context => new BaseRepositoryAsync<TEntity>(_appDbContext));
         }
 
         

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ProductInCategoryRepository : BaseRepository<ProductInCategory>, IProductInCategoryRepository
+    public class ProductInCategoryRepositoryAsync : BaseRepositoryAsync<ProductInCategory>, IProductInCategoryRepository
     {
-        public ProductInCategoryRepository(DbContext dbContext) : base(dbContext)
+        public ProductInCategoryRepositoryAsync(DbContext dbContext) : base(dbContext)
         {
         }
 

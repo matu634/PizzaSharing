@@ -16,3 +16,6 @@ C:\Projects Repositories\PizzaSharing\Domain\obj\Debug\netstandard2.0\Domain.Ass
 C:\Projects Repositories\PizzaSharing\Domain\obj\Debug\netstandard2.0\Domain.AssemblyInfo.cs
 C:\Projects Repositories\PizzaSharing\Domain\obj\Debug\netstandard2.0\Domain.dll
 C:\Projects Repositories\PizzaSharing\Domain\obj\Debug\netstandard2.0\Domain.pdb
+C:\Projects Repositories\PizzaSharing\Domain\bin\Debug\netstandard2.0\Contracts.DAL.Base.dll
+C:\Projects Repositories\PizzaSharing\Domain\bin\Debug\netstandard2.0\Contracts.DAL.Base.pdb
+C:\Projects Repositories\PizzaSharing\Domain\obj\Debug\netstandard2.0\Domain.csproj.CopyComplete

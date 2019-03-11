@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 
@@ -35,7 +34,7 @@ namespace WebApp.Controllers
             }
 
             var organization = await _context.Organizations
-                .FirstOrDefaultAsync(m => m.OrganizationId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (organization == null)
             {
                 return NotFound();
@@ -55,7 +54,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrganizationId,OrganizationName")] Organization organization)
+        public async Task<IActionResult> Create([Bind("OrganizationName,Id")] Organization organization)
         {
             if (ModelState.IsValid)
             {
@@ -87,9 +86,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrganizationId,OrganizationName")] Organization organization)
+        public async Task<IActionResult> Edit(int id, [Bind("OrganizationName,Id")] Organization organization)
         {
-            if (id != organization.OrganizationId)
+            if (id != organization.Id)
             {
                 return NotFound();
             }
@@ -103,7 +102,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrganizationExists(organization.OrganizationId))
+                    if (!OrganizationExists(organization.Id))
                     {
                         return NotFound();
                     }
@@ -126,7 +125,7 @@ namespace WebApp.Controllers
             }
 
             var organization = await _context.Organizations
-                .FirstOrDefaultAsync(m => m.OrganizationId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (organization == null)
             {
                 return NotFound();
@@ -148,7 +147,7 @@ namespace WebApp.Controllers
 
         private bool OrganizationExists(int id)
         {
-            return _context.Organizations.Any(e => e.OrganizationId == id);
+            return _context.Organizations.Any(e => e.Id == id);
         }
     }
 }

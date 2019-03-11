@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 
@@ -38,7 +37,7 @@ namespace WebApp.Controllers
             var receiptParticipant = await _context.ReceiptParticipants
                 .Include(r => r.AppUser)
                 .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.ReceiptParticipantId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receiptParticipant == null)
             {
                 return NotFound();
@@ -51,7 +50,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId");
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id");
             return View();
         }
 
@@ -60,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReceiptParticipantId,ReceiptId,AppUserId")] ReceiptParticipant receiptParticipant)
+        public async Task<IActionResult> Create([Bind("ReceiptId,AppUserId,Id")] ReceiptParticipant receiptParticipant)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +68,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptParticipant.ReceiptId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
             return View(receiptParticipant);
         }
 
@@ -87,7 +86,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptParticipant.ReceiptId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
             return View(receiptParticipant);
         }
 
@@ -96,9 +95,9 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReceiptParticipantId,ReceiptId,AppUserId")] ReceiptParticipant receiptParticipant)
+        public async Task<IActionResult> Edit(int id, [Bind("ReceiptId,AppUserId,Id")] ReceiptParticipant receiptParticipant)
         {
-            if (id != receiptParticipant.ReceiptParticipantId)
+            if (id != receiptParticipant.Id)
             {
                 return NotFound();
             }
@@ -112,7 +111,7 @@ namespace WebApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReceiptParticipantExists(receiptParticipant.ReceiptParticipantId))
+                    if (!ReceiptParticipantExists(receiptParticipant.Id))
                     {
                         return NotFound();
                     }
@@ -124,7 +123,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "ReceiptId", "ReceiptId", receiptParticipant.ReceiptId);
+            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
             return View(receiptParticipant);
         }
 
@@ -139,7 +138,7 @@ namespace WebApp.Controllers
             var receiptParticipant = await _context.ReceiptParticipants
                 .Include(r => r.AppUser)
                 .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.ReceiptParticipantId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (receiptParticipant == null)
             {
                 return NotFound();
@@ -161,7 +160,7 @@ namespace WebApp.Controllers
 
         private bool ReceiptParticipantExists(int id)
         {
-            return _context.ReceiptParticipants.Any(e => e.ReceiptParticipantId == id);
+            return _context.ReceiptParticipants.Any(e => e.Id == id);
         }
     }
 }

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class LoanRowRepository : BaseRepository<LoanRow>, ILoanRowRepository
+    public class LoanRepositoryAsync : BaseRepositoryAsync<Loan> , ILoanRepository
     {
-        public LoanRowRepository(DbContext dbContext) : base(dbContext)
+        public LoanRepositoryAsync(DbContext dbContext) : base(dbContext)
         {
         }
     }
