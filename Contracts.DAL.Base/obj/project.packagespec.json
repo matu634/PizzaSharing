@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj",
+    "projectUniqueName": "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj",
     "projectName": "Contracts.DAL.Base",
-    "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj",
-    "outputPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\obj\\",
+    "projectPath": "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj",
+    "outputPath": "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

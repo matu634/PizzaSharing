@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Projects Repositories\\PizzaSharing\\DAL.Base.EF\\DAL.Base.EF.csproj",
+    "projectUniqueName": "C:\\Repos\\Pizza2\\DAL.Base.EF\\DAL.Base.EF.csproj",
     "projectName": "DAL.Base.EF",
-    "projectPath": "C:\\Projects Repositories\\PizzaSharing\\DAL.Base.EF\\DAL.Base.EF.csproj",
-    "outputPath": "C:\\Projects Repositories\\PizzaSharing\\DAL.Base.EF\\obj\\",
+    "projectPath": "C:\\Repos\\Pizza2\\DAL.Base.EF\\DAL.Base.EF.csproj",
+    "outputPath": "C:\\Repos\\Pizza2\\DAL.Base.EF\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,8 +15,8 @@
     "frameworks": {
       "netstandard2.0": {
         "projectReferences": {
-          "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
-            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+          "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
+            "projectPath": "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
           }
         }
       }

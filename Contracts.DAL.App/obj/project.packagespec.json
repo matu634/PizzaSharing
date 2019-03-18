@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.App\\Contracts.DAL.App.csproj",
+    "projectUniqueName": "C:\\Repos\\Pizza2\\Contracts.DAL.App\\Contracts.DAL.App.csproj",
     "projectName": "Contracts.DAL.App",
-    "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.App\\Contracts.DAL.App.csproj",
-    "outputPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.App\\obj\\",
+    "projectPath": "C:\\Repos\\Pizza2\\Contracts.DAL.App\\Contracts.DAL.App.csproj",
+    "outputPath": "C:\\Repos\\Pizza2\\Contracts.DAL.App\\obj\\",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -15,11 +15,11 @@
     "frameworks": {
       "netstandard2.0": {
         "projectReferences": {
-          "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
-            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
+          "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj": {
+            "projectPath": "C:\\Repos\\Pizza2\\Contracts.DAL.Base\\Contracts.DAL.Base.csproj"
           },
-          "C:\\Projects Repositories\\PizzaSharing\\Domain\\Domain.csproj": {
-            "projectPath": "C:\\Projects Repositories\\PizzaSharing\\Domain\\Domain.csproj"
+          "C:\\Repos\\Pizza2\\Domain\\Domain.csproj": {
+            "projectPath": "C:\\Repos\\Pizza2\\Domain\\Domain.csproj"
           }
         }
       }

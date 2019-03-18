@@ -10,3 +10,15 @@ C:\Projects Repositories\PizzaSharing\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.B
 C:\Projects Repositories\PizzaSharing\DAL.Base.EF\bin\Debug\netstandard2.0\Contracts.DAL.Base.dll
 C:\Projects Repositories\PizzaSharing\DAL.Base.EF\bin\Debug\netstandard2.0\Contracts.DAL.Base.pdb
 C:\Projects Repositories\PizzaSharing\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.csproj.CopyComplete
+C:\Repos\Pizza2\DAL.Base.EF\bin\Debug\netstandard2.0\DAL.Base.EF.deps.json
+C:\Repos\Pizza2\DAL.Base.EF\bin\Debug\netstandard2.0\DAL.Base.EF.dll
+C:\Repos\Pizza2\DAL.Base.EF\bin\Debug\netstandard2.0\DAL.Base.EF.pdb
+C:\Repos\Pizza2\DAL.Base.EF\bin\Debug\netstandard2.0\Contracts.DAL.Base.dll
+C:\Repos\Pizza2\DAL.Base.EF\bin\Debug\netstandard2.0\Contracts.DAL.Base.pdb
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.csprojAssemblyReference.cache
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.csproj.CoreCompileInputs.cache
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.AssemblyInfoInputs.cache
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.AssemblyInfo.cs
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.csproj.CopyComplete
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.dll
+C:\Repos\Pizza2\DAL.Base.EF\obj\Debug\netstandard2.0\DAL.Base.EF.pdb
