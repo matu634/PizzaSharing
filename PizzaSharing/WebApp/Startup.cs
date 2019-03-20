@@ -48,12 +48,10 @@ namespace WebApp
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<AppUser, AppRole>()
-//                .AddDefaultUI(UIFramework.Bootstrap4)
-//                .AddEntityFrameworkStores<AppDbContext>();
                 .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();                //cookie functionality
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSender, EmailSender>();
             
             services.Configure<IdentityOptions>(options =>
             {
@@ -69,6 +67,17 @@ namespace WebApp
             services.AddSingleton<IRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IRepositoryProvider, BaseRepositoryProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsAllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                    });
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -93,6 +102,8 @@ namespace WebApp
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
+            app.UseCors("CorsAllowAll");
 
             app.UseMvc(routes =>
             {

@@ -1,15 +1,38 @@
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {LogManager, View, autoinject} from "aurelia-framework";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import {IPrice} from "../interfaces/IPrice";
+import {PricesService} from "../services/prices-service";
 
 export var log = LogManager.getLogger('Prices.Create');
 
+@autoinject()
 export class Create {
 
-  constructor() {
+  private price: IPrice;
+
+  constructor(
+    private router: Router,
+    private pricesService: PricesService
+  ) {
     log.debug('constructor');
   }
 
-  // ============ View LifeCycle events ==============
+  // ================================================= View methods ====================================================
+
+  submit(): void {
+    log.debug('price:', this.price);
+    // this.price.productId = 1;
+    // this.pricesService.post(this.price).then(response => {
+    //   if (response.status == 201){
+    //     this.router.navigateToRoute("pricesIndex")
+    //   } else {
+    //     log.error('Error in response!', response)
+    //   }
+    // });
+  }
+
+
+  // ============================================== View LifeCycle events ==============================================
   created(owningView: View, myView: View) {
     log.debug('created');
   }

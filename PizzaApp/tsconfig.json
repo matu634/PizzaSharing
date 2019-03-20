@@ -2,13 +2,13 @@
   "compileOnSave": false,
   "compilerOptions": {
     //Käveri eriti tugevalt tüübitud optionid
-    "noImplicitThis" :  true,
-    "noImplicitReturns" : true,
-    "noUnusedLocals" :  true,
+//    "noImplicitThis" :  true,
+//    "noImplicitReturns" : true,
+//    "noUnusedLocals" :  true,
 //    "noUnusedParameters" : true,
     "noImplicitAny" :  true,
     "strictNullChecks" : true,
-    "strictFunctionTypes" :  true,
+//    "strictFunctionTypes" :  true,
 //    "strictPropertyInitialization" : true,
     
     "target": "es5",

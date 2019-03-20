@@ -1,11 +1,17 @@
-import {LogManager, View} from "aurelia-framework";
+import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {IPrice} from "../interfaces/IPrice";
+import {PricesService} from "../services/prices-service";
 
 export var log = LogManager.getLogger('Prices.Index');
 
+//-----------Dependency injection-----------
+@autoinject()
 export class Index {
+  
+  private prices:  IPrice[] = [];
 
-  constructor() {
+  constructor(private service : PricesService) {
     log.debug('constructor');
   }
 
@@ -20,6 +26,12 @@ export class Index {
 
   attached() {
     log.debug('attached');
+    this.service.fetchAll().then(jsonData => {
+      log.debug("jsonData", jsonData);
+      this.prices = jsonData;  
+    }).catch(reason => {
+      log.debug('catch reason', reason)
+    });
   }
 
   detached() {

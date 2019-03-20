@@ -88,7 +88,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             }
             else
             {
-                // If the user does not have an account, then ask the user to create an account.
+                // If the user does not have an account, then ask the user to post an account.
                 ReturnUrl = returnUrl;
                 LoginProvider = info.LoginProvider;
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))

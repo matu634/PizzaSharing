@@ -23,7 +23,7 @@ namespace DAL.Base.EF.Helpers
         {
             _repositoryCache.TryGetValue(typeof(TRepository), out var repoObject);
             if (repoObject != null) return (TRepository) repoObject;
-            //Repo not found in cache, create it
+            //Repo not found in cache, post it
 
             var repoCreationMethod = _repositoryFactory.GetRepositoryFactory<TRepository>();
             if (repoCreationMethod == null)
@@ -38,7 +38,7 @@ namespace DAL.Base.EF.Helpers
         {
             _repositoryCache.TryGetValue(typeof(IBaseRepositoryAsync<TEntity>), out var repoObject);
             if (repoObject != null) return (IBaseRepositoryAsync<TEntity>) repoObject;
-            //Repo not found in cache, create it
+            //Repo not found in cache, post it
 
             var repoCreationMethod = _repositoryFactory.GetRepositoryFactoryForEntity<TEntity>();
             if (repoCreationMethod == null)

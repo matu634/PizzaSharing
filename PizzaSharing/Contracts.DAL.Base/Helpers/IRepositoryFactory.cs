@@ -7,7 +7,7 @@ namespace Contracts.DAL.Base.Helpers
         /// <summary>
         /// Get method for repository creation
         /// </summary>
-        /// <typeparam name="TRepository">Repository type to create</typeparam>
+        /// <typeparam name="TRepository">Repository type to post</typeparam>
         /// <returns></returns>
         Func<IDataContext, object> GetRepositoryFactory<TRepository>();
         

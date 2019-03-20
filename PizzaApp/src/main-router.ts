@@ -22,10 +22,10 @@ export class MainRouter {
         
         // {route: '', name: '', moduleId: PLATFORM.moduleName(''), nav: true, title: ''}
         {route: ['prices/index', 'prices'],   name: 'pricesIndex',    moduleId: PLATFORM.moduleName('prices/index'),    nav: true, title: 'Prices'},
-        {route: 'prices/details', name: 'pricesDetails',  moduleId: PLATFORM.moduleName('prices/details'),  nav: true, title: 'Details'},
-        {route: 'prices/create',  name: 'pricesCreate',   moduleId: PLATFORM.moduleName('prices/create'),   nav: true, title: 'Create'},
-        {route: 'prices/edit',    name: 'pricesEdit',     moduleId: PLATFORM.moduleName('prices/edit'),     nav: true, title: 'Edit'},
-        {route: 'prices/delete',  name: 'pricesDelete',   moduleId: PLATFORM.moduleName('prices/delete'),   nav: true, title: 'Delete'}
+        {route: 'prices/details/:id', name: 'pricesDetails',  moduleId: PLATFORM.moduleName('prices/details'),  nav: false, title: 'Details'},
+        {route: 'prices/create',  name: 'pricesCreate',   moduleId: PLATFORM.moduleName('prices/create'),   nav: false, title: 'Create'},
+        {route: 'prices/edit/:id',    name: 'pricesEdit',     moduleId: PLATFORM.moduleName('prices/edit'),     nav: false, title: 'Edit'},
+        {route: 'prices/delete/:id',  name: 'pricesDelete',   moduleId: PLATFORM.moduleName('prices/delete'),   nav: false, title: 'Delete'}
       ]
     );
 

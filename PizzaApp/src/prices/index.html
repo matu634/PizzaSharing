@@ -1,3 +1,55 @@
 <template>
-  Index html file
+  <h1>Index</h1>
+
+  <p>
+    <a route-href="route: pricesCreate">Create New</a>
+  </p>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>
+        Value
+      </th>
+      <th>
+        Product
+      </th>
+      <th>
+        Change
+      </th>
+      <th>
+        ValidFrom
+      </th>
+      <th>
+        ValidTo
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr repeat.for="price of prices">
+      <td>
+        ${price.value}
+      </td>
+      <td>
+        ${price.productId}
+      </td>
+      <td>
+        ${price.changeId}
+      </td>
+      <td>
+        ${price.validFrom}
+      </td>
+      <td>
+        ${price.validTo}
+      </td>
+      <td>
+        <a route-href="route: pricesEdit; params.bind: {id: price.id}">Edit</a> |
+        <a route-href="route: pricesDetails; params.bind: {id: price.id}">Details</a> |
+        <a route-href="route: pricesDelete; params.bind: {id: price.id}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+
 </template>

@@ -7,7 +7,7 @@ namespace WebApp.Helpers
     {
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            //TODO: Meilide saatmine on raske! EI TEE MIDAGI
+            //TODO: How to send emails?
             return Task.CompletedTask;
         }
     }

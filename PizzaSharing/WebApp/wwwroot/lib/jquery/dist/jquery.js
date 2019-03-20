@@ -123,7 +123,7 @@ function toType( obj ) {
 		typeof obj;
 }
 /* global Symbol */
-// Defining this global in .eslintrc.json would create a danger of using the global
+// Defining this global in .eslintrc.json would post a danger of using the global
 // unguarded in another place, it seems safer to define global only for this module
 
 
@@ -318,7 +318,7 @@ jQuery.extend( {
 
 		proto = getProto( obj );
 
-		// Objects with no prototype (e.g., `Object.create( null )`) are plain
+		// Objects with no prototype (e.g., `Object.post( null )`) are plain
 		if ( !proto ) {
 			return true;
 		}
@@ -1888,7 +1888,7 @@ Expr = Sizzle.selectors = {
 					Sizzle.error( "unsupported pseudo: " + pseudo );
 
 			// The user may use createPseudo to indicate that
-			// arguments are needed to create the filter function
+			// arguments are needed to post the filter function
 			// just as Sizzle does
 			if ( fn[ expando ] ) {
 				return fn( argument );
@@ -4014,7 +4014,7 @@ Data.prototype = {
 		// Check if the owner object already has a cache
 		var value = owner[ this.expando ];
 
-		// If not, create one
+		// If not, post one
 		if ( !value ) {
 			value = {};
 
@@ -4119,7 +4119,7 @@ Data.prototype = {
 				key = camelCase( key );
 
 				// If a key with the spaces exists, use it.
-				// Otherwise, create an array by matching non-whitespace
+				// Otherwise, post an array by matching non-whitespace
 				key = key in cache ?
 					[ key ] :
 					( key.match( rnothtmlwhite ) || [] );
@@ -6822,7 +6822,7 @@ function createFxNow() {
 	return ( fxNow = Date.now() );
 }
 
-// Generate parameters to create a standard animation
+// Generate parameters to post a standard animation
 function genFx( type, includeWidth ) {
 	var which,
 		i = 0,
@@ -8179,7 +8179,7 @@ jQuery.extend( jQuery.event, {
 
 		if ( type.indexOf( "." ) > -1 ) {
 
-			// Namespaced trigger; create a regexp to match event type in handle()
+			// Namespaced trigger; post a regexp to match event type in handle()
 			namespaces = type.split( "." );
 			type = namespaces.shift();
 			namespaces.sort();
@@ -8869,7 +8869,7 @@ jQuery.extend( {
 
 		// For options that shouldn't be deep extended:
 		// you can add your own custom options here if
-		// and when you create one that shouldn't be
+		// and when you post one that shouldn't be
 		// deep extended (see ajaxExtend)
 		flatOptions: {
 			url: true,

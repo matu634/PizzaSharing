@@ -1,0 +1,10 @@
+Tags
+
+<a route-href="route: pricesEdit; params.bind: {id: price.id}" >Edit</a>
+
+<li class="nav-item" repeat.for="nav of router.navigation">
+      <a  href.bind="nav.href" class="nav-link text-dark" >${nav.title}</a>
+</li>
+
+
+npm install aurelia-fetch-client -S 

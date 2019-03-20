@@ -1,13 +1,32 @@
-import {LogManager, View} from "aurelia-framework";
-import {RouteConfig, NavigationInstruction} from "aurelia-router";
+import {LogManager, View, autoinject} from "aurelia-framework";
+import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import {PricesService} from "../services/prices-service";
+import {IPrice} from "../interfaces/IPrice";
 
 export var log = LogManager.getLogger('Prices.Delete');
 
+@autoinject()
 export class Delete {
+  
+  private price: IPrice;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private priceService: PricesService
+  ) {
     log.debug('constructor');
   }
+  
+  submit(): void{
+    this.priceService.delete(this.price.id).then(response =>{
+      if (response.status == 200){
+        this.router.navigateToRoute("pricesIndex");
+      } else {
+        log.error("response", response)
+      }
+    })
+  }
+  
 
   // ============ View LifeCycle events ==============
   created(owningView: View, myView: View) {
@@ -37,6 +56,11 @@ export class Delete {
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
+    this.priceService.fetchSingle(params.id).then(value => {
+      log.debug("price", value);
+      this.price = value;
+      
+    })
   }
 
   canDeactivate() {
