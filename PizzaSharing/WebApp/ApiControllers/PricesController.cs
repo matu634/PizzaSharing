@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,32 +15,28 @@ namespace WebApp.ApiControllers
     [ApiController]
     public class PricesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public PricesController(AppDbContext context)
+        public PricesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Prices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Price>>> GetPrices()
         {
-            return await _context.Prices.ToListAsync();
+            var prices =  await _uow.Prices.AllAsync();
+            return Ok(prices);
         }
 
         // GET: api/Prices/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Price>> GetPrice(int id)
         {
-            var price = await _context.Prices.FindAsync(id);
-
-            if (price == null)
-            {
-                return NotFound();
-            }
-
-            return price;
+            var price = await _uow.Prices.FindAsync(id);
+            if (price == null) return StatusCode(404);
+            return Ok(price);
         }
 
         // PUT: api/Prices/5
@@ -50,34 +47,22 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(price).State = EntityState.Modified;
-
-            try
+            if (await _uow.Prices.FindAsync(id) == null || await _uow.Prices.FindAsync(price.Id) == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PriceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            _uow.Prices.Update(price);
+            await _uow.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Prices
         [HttpPost]
         public async Task<ActionResult<Price>> PostPrice(Price price)
         {
-            _context.Prices.Add(price);
-            await _context.SaveChangesAsync();
+            await _uow.Prices.AddAsync(price);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetPrice", new { id = price.Id }, price);
         }
@@ -86,21 +71,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Price>> DeletePrice(int id)
         {
-            var price = await _context.Prices.FindAsync(id);
+            var price = await _uow.Prices.FindAsync(id);
             if (price == null)
             {
                 return NotFound();
             }
 
-            _context.Prices.Remove(price);
-            await _context.SaveChangesAsync();
+            _uow.Prices.Remove(price);
+            await _uow.SaveChangesAsync();
 
             return price;
-        }
-
-        private bool PriceExists(int id)
-        {
-            return _context.Prices.Any(e => e.Id == id);
         }
     }
 }

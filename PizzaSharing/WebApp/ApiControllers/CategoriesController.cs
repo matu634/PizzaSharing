@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,32 +15,28 @@ namespace WebApp.ApiControllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public CategoriesController(AppDbContext context)
+        public CategoriesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Categories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var category =  await _uow.Categories.AllAsync();
+            return Ok(category);
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return category;
+            var category = await _uow.Categories.FindAsync(id);
+            if (category == null) return StatusCode(404);
+            return Ok(category);
         }
 
         // PUT: api/Categories/5
@@ -50,34 +47,22 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
+            if (await _uow.Categories.FindAsync(id) == null || await _uow.Categories.FindAsync(category.Id) == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
+            _uow.Categories.Update(category);
+            await _uow.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Categories
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            await _uow.Categories.AddAsync(category);
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetCategory", new { id = category.Id }, category);
         }
@@ -86,21 +71,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Category>> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _uow.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            _uow.Categories.Remove(category);
+            await _uow.SaveChangesAsync();
 
             return category;
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }
