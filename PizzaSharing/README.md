@@ -41,8 +41,42 @@ dotnet ef database update --project DAL.App.EF --startup-project WebApp
 
 dotnet ef database drop --project DAL --startup-project WebApp
 
+Aurelia - Adding new routes/views
+---------------------------------
+1. Add routes to main-router.ts
+2. Add folder to src (i.e prices). then add all view files (index.html, index.ts, ...)
+(copy home.ts file, 1) replace logger tag, 2) replace class name(file name in camel case))
+//TODO: ei leia router.navigationi üles main-router.html failis    34.29
+
 PIZZA APP CONTROLLER GENERATION
 -------------------------------
+Pizza App Api controllers generation
+------------------------------------
+
+dotnet aspnet-codegenerator controller -name OrganizationsController -actions -m Organization -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name CategoriesController -actions -m Category -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ProductsController -actions -m Product -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ProductInCategoriesController -actions -m ProductInCategory -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name PricesController -actions -m Price -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ChangesController -actions -m Change -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ReceiptsController -actions -m Receipt -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ReceiptRowsController -actions -m ReceiptRow -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ReceiptRowChangesController -actions -m ReceiptRowChange -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name ReceiptParticipantsController -actions -m ReceiptParticipant -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name LoansController -actions -m Loan -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name LoanRowsController -actions -m LoanRow -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
 
 UoW implemented controllers(DONT RUN THESE)
 ---------------------------
@@ -75,3 +109,7 @@ strictFunctionTypes
 strictPropertyInitialization
 
 tsconfig files kõik panna true
+
+
+EKSAM:  Layoutis render body!
+	Partial vaates ViewData on koopiad, muutused ei esine mujal
