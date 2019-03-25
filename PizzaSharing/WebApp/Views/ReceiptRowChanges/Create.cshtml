@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="RowChange.ReceiptRowId" class="control-label"></label>
-                <select asp-for="RowChange.ReceiptRowId" class ="form-control" asp-items="Model.Rows"></select>
+                <label asp-for="ReceiptRowChange.ReceiptRowId" class="control-label"></label>
+                <select asp-for="ReceiptRowChange.ReceiptRowId" class ="form-control" asp-items="Model.Rows"></select>
             </div>
             <div class="form-group">
-                <label asp-for="RowChange.ChangeId" class="control-label"></label>
-                <select asp-for="RowChange.ChangeId" class ="form-control" asp-items="Model.Changes"></select>
+                <label asp-for="ReceiptRowChange.ChangeId" class="control-label"></label>
+                <select asp-for="ReceiptRowChange.ChangeId" class ="form-control" asp-items="Model.Changes"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

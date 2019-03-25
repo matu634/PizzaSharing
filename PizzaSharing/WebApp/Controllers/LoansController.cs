@@ -2,28 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using Domain.Identity;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class LoansController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public LoansController(AppDbContext context)
+        public LoansController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Loans
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Loans.Include(l => l.LoanGiver).Include(l => l.LoanTaker).Include(l => l.ReceiptParticipant);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.Loans.AllAsync());
         }
 
         // GET: Loans/Details/5
@@ -34,11 +36,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.LoanGiver)
-                .Include(l => l.LoanTaker)
-                .Include(l => l.ReceiptParticipant)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var loan = await _uow.Loans.FindAsync(id);
             if (loan == null)
             {
                 return NotFound();
@@ -48,12 +46,18 @@ namespace WebApp.Controllers
         }
 
         // GET: Loans/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["LoanGiverId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LoanTakerId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ReceiptParticipantId"] = new SelectList(_context.ReceiptParticipants, "Id", "Id");
-            return View();
+            var viewModel = new LoanViewModel
+            {
+                LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                ReceiptParticipants = new SelectList(await _uow.ReceiptParticipants.AllAsync(),
+                    nameof(ReceiptParticipant.Id), nameof(ReceiptParticipant.Id))
+            };
+            return View(viewModel);
         }
 
         // POST: Loans/Create
@@ -61,18 +65,26 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReceiptParticipantId,IsPaid,LoanGiverId,LoanTakerId,Id")] Loan loan)
+        public async Task<IActionResult> Create([Bind("ReceiptParticipantId,IsPaid,LoanGiverId,LoanTakerId,Id")]
+            Loan loan)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(loan);
-                await _context.SaveChangesAsync();
+                await _uow.Loans.AddAsync(loan);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoanGiverId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanGiverId);
-            ViewData["LoanTakerId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanTakerId);
-            ViewData["ReceiptParticipantId"] = new SelectList(_context.ReceiptParticipants, "Id", "Id", loan.ReceiptParticipantId);
-            return View(loan);
+
+            var viewModel = new LoanViewModel
+            {
+                LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanGiverId),
+                LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanTakerId),
+                ReceiptParticipants = new SelectList(await _uow.ReceiptParticipants.AllAsync(),
+                    nameof(ReceiptParticipant.Id), nameof(ReceiptParticipant.Id), loan.ReceiptParticipantId)
+            };
+            return View(viewModel);
         }
 
         // GET: Loans/Edit/5
@@ -83,15 +95,22 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans.FindAsync(id);
+            var loan = await _uow.Loans.FindAsync(id);
             if (loan == null)
             {
                 return NotFound();
             }
-            ViewData["LoanGiverId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanGiverId);
-            ViewData["LoanTakerId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanTakerId);
-            ViewData["ReceiptParticipantId"] = new SelectList(_context.ReceiptParticipants, "Id", "Id", loan.ReceiptParticipantId);
-            return View(loan);
+
+            var viewModel = new LoanViewModel
+            {
+                LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanGiverId),
+                LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanTakerId),
+                ReceiptParticipants = new SelectList(await _uow.ReceiptParticipants.AllAsync(),
+                    nameof(ReceiptParticipant.Id), nameof(ReceiptParticipant.Id), loan.ReceiptParticipantId)
+            };
+            return View(viewModel);
         }
 
         // POST: Loans/Edit/5
@@ -99,7 +118,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReceiptParticipantId,IsPaid,LoanGiverId,LoanTakerId,Id")] Loan loan)
+        public async Task<IActionResult> Edit(int id, [Bind("ReceiptParticipantId,IsPaid,LoanGiverId,LoanTakerId,Id")]
+            Loan loan)
         {
             if (id != loan.Id)
             {
@@ -108,28 +128,22 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(loan);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LoanExists(loan.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Loans.Update(loan);
+                await _uow.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LoanGiverId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanGiverId);
-            ViewData["LoanTakerId"] = new SelectList(_context.Users, "Id", "Id", loan.LoanTakerId);
-            ViewData["ReceiptParticipantId"] = new SelectList(_context.ReceiptParticipants, "Id", "Id", loan.ReceiptParticipantId);
-            return View(loan);
+
+            var viewModel = new LoanViewModel
+            {
+                LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanGiverId),
+                LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname), loan.LoanTakerId),
+                ReceiptParticipants = new SelectList(await _uow.ReceiptParticipants.AllAsync(),
+                    nameof(ReceiptParticipant.Id), nameof(ReceiptParticipant.Id), loan.ReceiptParticipantId)
+            };
+            return View(viewModel);
         }
 
         // GET: Loans/Delete/5
@@ -140,11 +154,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.LoanGiver)
-                .Include(l => l.LoanTaker)
-                .Include(l => l.ReceiptParticipant)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var loan = await _uow.Loans.FindAsync(id);
             if (loan == null)
             {
                 return NotFound();
@@ -158,15 +168,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var loan = await _context.Loans.FindAsync(id);
-            _context.Loans.Remove(loan);
-            await _context.SaveChangesAsync();
+            _uow.Loans.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LoanExists(int id)
-        {
-            return _context.Loans.Any(e => e.Id == id);
         }
     }
 }

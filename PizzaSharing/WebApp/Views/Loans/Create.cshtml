@@ -1,4 +1,4 @@
-@model Domain.Loan
+@model WebApp.ViewModels.LoanViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,21 +13,21 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ReceiptParticipantId" class="control-label"></label>
-                <select asp-for="ReceiptParticipantId" class ="form-control" asp-items="ViewBag.ReceiptParticipantId"></select>
+                <label asp-for="Loan.ReceiptParticipantId" class="control-label"></label>
+                <select asp-for="Loan.ReceiptParticipantId" class ="form-control" asp-items="Model.ReceiptParticipants"></select>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
+                    <input class="form-check-input" asp-for="Loan.IsPaid" /> @Html.DisplayNameFor(model => model.Loan.IsPaid)
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="LoanGiverId" class="control-label"></label>
-                <select asp-for="LoanGiverId" class ="form-control" asp-items="ViewBag.LoanGiverId"></select>
+                <label asp-for="Loan.LoanGiverId" class="control-label"></label>
+                <select asp-for="Loan.LoanGiverId" class ="form-control" asp-items="Model.LoanGivers"></select>
             </div>
             <div class="form-group">
-                <label asp-for="LoanTakerId" class="control-label"></label>
-                <select asp-for="LoanTakerId" class ="form-control" asp-items="ViewBag.LoanTakerId"></select>
+                <label asp-for="Loan.LoanTakerId" class="control-label"></label>
+                <select asp-for="Loan.LoanTakerId" class ="form-control" asp-items="Model.LoanTakers"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Receipt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppUser)
+                Receipt participant
             </th>
             <th></th>
         </tr>
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Receipt.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.Id)
+                @Html.DisplayFor(modelItem => item.AppUser.UserNickname)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

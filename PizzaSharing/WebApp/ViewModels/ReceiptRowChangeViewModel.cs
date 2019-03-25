@@ -5,7 +5,7 @@ namespace WebApp.ViewModels
 {
     public class ReceiptRowChangeViewModel
     {
-        public ReceiptRowChange RowChange { get; set; }
+        public ReceiptRowChange ReceiptRowChange { get; set; }
         public SelectList Rows { get; set; }
         public SelectList Changes { get; set; }
     }

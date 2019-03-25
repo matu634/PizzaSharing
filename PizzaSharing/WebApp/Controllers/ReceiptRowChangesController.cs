@@ -65,13 +65,14 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                Console.WriteLine(receiptRowChange);
                 await _uow.ReceiptRowChanges.AddAsync(receiptRowChange);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             var viewModel = new ReceiptRowChangeViewModel
             {
-                RowChange = receiptRowChange,
+                ReceiptRowChange = receiptRowChange,
                 Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
                 Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
             };
@@ -94,7 +95,7 @@ namespace WebApp.Controllers
             }
             var viewModel = new ReceiptRowChangeViewModel
             {
-                RowChange = receiptRowChange,
+                ReceiptRowChange = receiptRowChange,
                 Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
                 Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
             };
@@ -122,7 +123,7 @@ namespace WebApp.Controllers
             }
             var viewModel = new ReceiptRowChangeViewModel
             {
-                RowChange = receiptRowChange,
+                ReceiptRowChange = receiptRowChange,
                 Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
                 Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
             };

@@ -2,28 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using Domain.Identity;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class ReceiptParticipantsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ReceiptParticipantsController(AppDbContext context)
+        public ReceiptParticipantsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: ReceiptParticipants
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.ReceiptParticipants.Include(r => r.AppUser).Include(r => r.Receipt);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.ReceiptParticipants.AllAsync());
         }
 
         // GET: ReceiptParticipants/Details/5
@@ -34,10 +36,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptParticipant = await _context.ReceiptParticipants
-                .Include(r => r.AppUser)
-                .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receiptParticipant = await _uow.ReceiptParticipants.FindAsync(id);
             if (receiptParticipant == null)
             {
                 return NotFound();
@@ -47,11 +46,15 @@ namespace WebApp.Controllers
         }
 
         // GET: ReceiptParticipants/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id");
-            return View();
+            var viewModel = new ReceiptParticipantViewModel
+            {
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
+            };
+            return View(viewModel);
         }
 
         // POST: ReceiptParticipants/Create
@@ -63,13 +66,19 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(receiptParticipant);
-                await _context.SaveChangesAsync();
+                await _uow.ReceiptParticipants.AddAsync(receiptParticipant);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
-            return View(receiptParticipant);
+
+            var viewModel = new ReceiptParticipantViewModel
+            {
+                ReceiptParticipant = receiptParticipant,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
+            };
+            return View(viewModel);
         }
 
         // GET: ReceiptParticipants/Edit/5
@@ -80,14 +89,20 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptParticipant = await _context.ReceiptParticipants.FindAsync(id);
+            var receiptParticipant = await _uow.ReceiptParticipants.FindAsync(id);
             if (receiptParticipant == null)
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
-            return View(receiptParticipant);
+
+            var viewModel = new ReceiptParticipantViewModel
+            {
+                ReceiptParticipant = receiptParticipant,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
+            };
+            return View(viewModel);
         }
 
         // POST: ReceiptParticipants/Edit/5
@@ -95,7 +110,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReceiptId,AppUserId,Id")] ReceiptParticipant receiptParticipant)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("ReceiptId,AppUserId,Id")] ReceiptParticipant receiptParticipant)
         {
             if (id != receiptParticipant.Id)
             {
@@ -104,27 +120,20 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(receiptParticipant);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReceiptParticipantExists(receiptParticipant.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.ReceiptParticipants.Update(receiptParticipant);
+                await _uow.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", receiptParticipant.AppUserId);
-            ViewData["ReceiptId"] = new SelectList(_context.Receipts, "Id", "Id", receiptParticipant.ReceiptId);
-            return View(receiptParticipant);
+
+            var viewModel = new ReceiptParticipantViewModel
+            {
+                ReceiptParticipant = receiptParticipant,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
+            };
+            return View(viewModel);
         }
 
         // GET: ReceiptParticipants/Delete/5
@@ -135,10 +144,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptParticipant = await _context.ReceiptParticipants
-                .Include(r => r.AppUser)
-                .Include(r => r.Receipt)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receiptParticipant = await _uow.ReceiptParticipants.FindAsync(id);
             if (receiptParticipant == null)
             {
                 return NotFound();
@@ -152,15 +158,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var receiptParticipant = await _context.ReceiptParticipants.FindAsync(id);
-            _context.ReceiptParticipants.Remove(receiptParticipant);
-            await _context.SaveChangesAsync();
+            _uow.ReceiptParticipants.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReceiptParticipantExists(int id)
-        {
-            return _context.ReceiptParticipants.Any(e => e.Id == id);
         }
     }
 }

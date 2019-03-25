@@ -7,6 +7,10 @@ namespace Domain
 
         public int ChangeId { get; set; }
         public Change Change { get; set; }
-        
+
+        public override string ToString()
+        {
+            return $"Change: {ChangeId}, ReceiptRow: {ReceiptRowId}";
+        }
     }
 }

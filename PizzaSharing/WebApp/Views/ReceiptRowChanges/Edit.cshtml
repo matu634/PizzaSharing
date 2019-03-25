@@ -13,16 +13,16 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="RowChange.ReceiptRowId" class="control-label"></label>
-                <select asp-for="RowChange.ReceiptRowId" class="form-control" asp-items="Model.Rows"></select>
-                <span asp-validation-for="RowChange.ReceiptRowId" class="text-danger"></span>
+                <label asp-for="ReceiptRowChange.ReceiptRowId" class="control-label"></label>
+                <select asp-for="ReceiptRowChange.ReceiptRowId" class="form-control" asp-items="Model.Rows"></select>
+                <span asp-validation-for="ReceiptRowChange.ReceiptRowId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RowChange.ChangeId" class="control-label"></label>
-                <select asp-for="RowChange.ChangeId" class="form-control" asp-items="Model.Changes"></select>
-                <span asp-validation-for="RowChange.ChangeId" class="text-danger"></span>
+                <label asp-for="ReceiptRowChange.ChangeId" class="control-label"></label>
+                <select asp-for="ReceiptRowChange.ChangeId" class="form-control" asp-items="Model.Changes"></select>
+                <span asp-validation-for="ReceiptRowChange.ChangeId" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="RowChange.Id" />
+            <input type="hidden" asp-for="ReceiptRowChange.Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
