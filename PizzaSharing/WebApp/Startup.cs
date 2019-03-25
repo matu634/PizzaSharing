@@ -107,9 +107,9 @@ namespace WebApp
 
             app.UseMvc(routes =>
             {
-//                routes.MapRoute(
-//                    name: "areas",
-//                    template: "{area:exists}/{controller=}")
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=index}");
 
                 routes.MapRoute(
                     "default",
