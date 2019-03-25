@@ -1,4 +1,4 @@
-@model Domain.Price
+@model WebApp.ViewModels.PriceViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,27 +13,27 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
-                <span asp-validation-for="Value" class="text-danger"></span>
+                <label asp-for="Price.Value" class="control-label"></label>
+                <input asp-for="Price.Value" class="form-control" />
+                <span asp-validation-for="Price.Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                <label asp-for="Price.ProductId" class="control-label"></label>
+                <select asp-for="Price.ProductId" class ="form-control" asp-items="Model.ProductSelectList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ChangeId" class="control-label"></label>
-                <select asp-for="ChangeId" class ="form-control" asp-items="ViewBag.ChangeId"></select>
+                <label asp-for="Price.ChangeId" class="control-label"></label>
+                <select asp-for="Price.ChangeId" class ="form-control" asp-items="Model.ChangeSelectList"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ValidFrom" class="control-label"></label>
-                <input type="date" asp-for="ValidFrom" class="form-control" />
-                <span asp-validation-for="ValidFrom" class="text-danger"></span>
+                <label asp-for="Price.ValidFrom" class="control-label"></label>
+                <input type="date" asp-for="Price.ValidFrom" class="form-control" />
+                <span asp-validation-for="Price.ValidFrom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ValidTo" class="control-label"></label>
-                <input type="date" asp-for="ValidTo" class="form-control" />
-                <span asp-validation-for="ValidTo" class="text-danger"></span>
+                <label asp-for="Price.ValidTo" class="control-label"></label>
+                <input type="date" asp-for="Price.ValidTo" class="form-control" />
+                <span asp-validation-for="Price.ValidTo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

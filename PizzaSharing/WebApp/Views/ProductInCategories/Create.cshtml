@@ -1,4 +1,4 @@
-@model Domain.ProductInCategory
+@model WebApp.ViewModels.ProductInCategoryViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="ProductInCategory.CategoryId" class="control-label">Category</label>
+                <select asp-for="ProductInCategory.CategoryId" class ="form-control" asp-items="Model.Categories"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                <label asp-for="ProductInCategory.ProductId" class="control-label">Product Name</label>
+                <select asp-for="ProductInCategory.ProductId" class ="form-control" asp-items="Model.Products"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,4 +1,4 @@
-@model Domain.ReceiptRowChange
+@model WebApp.ViewModels.ReceiptRowChangeViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,12 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ReceiptRowId" class="control-label"></label>
-                <select asp-for="ReceiptRowId" class ="form-control" asp-items="ViewBag.ReceiptRowId"></select>
+                <label asp-for="RowChange.ReceiptRowId" class="control-label"></label>
+                <select asp-for="RowChange.ReceiptRowId" class ="form-control" asp-items="Model.Rows"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ChangeId" class="control-label"></label>
-                <select asp-for="ChangeId" class ="form-control" asp-items="ViewBag.ChangeId"></select>
+                <label asp-for="RowChange.ChangeId" class="control-label"></label>
+                <select asp-for="RowChange.ChangeId" class ="form-control" asp-items="Model.Changes"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

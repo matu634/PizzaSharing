@@ -9,13 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly IAppUnitOfWork _uow;
-        
+
 
         public CategoriesController(IAppUnitOfWork uow)
         {
@@ -37,8 +38,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category =  await _uow.Categories.FindAsync(id);            
-            
+            var category = await _uow.Categories.FindAsync(id);
+
             if (category == null)
             {
                 return NotFound();
@@ -50,8 +51,12 @@ namespace WebApp.Controllers
         // GET: Categories/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "Id", "OrganizationName");
-            return View();
+            var viewModel = new CategoryViewModel
+            {
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
+            };
+            return View(viewModel);
         }
 
         // POST: Categories/Create
@@ -59,7 +64,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")]
+            Category category)
         {
             if (ModelState.IsValid)
             {
@@ -67,8 +73,14 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList( await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
-            return View(category);
+
+            var viewModel = new CategoryViewModel
+            {
+                Category = category,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
+            };
+            return View(viewModel);
         }
 
         // GET: Categories/Edit/5
@@ -84,8 +96,14 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
-            return View(category);
+
+            var viewModel = new CategoryViewModel
+            {
+                Category = category,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
+            };
+            return View(viewModel);
         }
 
         // POST: Categories/Edit/5
@@ -93,7 +111,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,OrganizationId")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,OrganizationId")]
+            Category category)
         {
             if (id != category.Id)
             {
@@ -106,8 +125,14 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrganizationId"] = new SelectList(await _uow.Organizations.AllAsync(), "Id", "OrganizationName", category.OrganizationId);
-            return View(category);
+
+            var viewModel = new CategoryViewModel
+            {
+                Category = category,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
+            };
+            return View(viewModel);
         }
 
         // GET: Categories/Delete/5

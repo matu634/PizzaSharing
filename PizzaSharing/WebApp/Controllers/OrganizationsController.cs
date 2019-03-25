@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,17 @@ namespace WebApp.Controllers
 {
     public class OrganizationsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public OrganizationsController(AppDbContext context)
+        public OrganizationsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Organizations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Organizations.ToListAsync());
+            return View(await _uow.Organizations.AllAsync());
         }
 
         // GET: Organizations/Details/5
@@ -33,8 +34,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var organization = await _context.Organizations
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var organization = await _uow.Organizations.FindAsync(id);
             if (organization == null)
             {
                 return NotFound();
@@ -58,10 +58,11 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(organization);
-                await _context.SaveChangesAsync();
+                await _uow.Organizations.AddAsync(organization);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(organization);
         }
 
@@ -73,11 +74,12 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var organization = await _context.Organizations.FindAsync(id);
+            var organization = await _uow.Organizations.FindAsync(id);
             if (organization == null)
             {
                 return NotFound();
             }
+
             return View(organization);
         }
 
@@ -95,24 +97,12 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(organization);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrganizationExists(organization.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Organizations.Update(organization);
+                await _uow.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(organization);
         }
 
@@ -124,8 +114,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var organization = await _context.Organizations
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var organization = await _uow.Organizations.FindAsync(id);
             if (organization == null)
             {
                 return NotFound();
@@ -139,15 +128,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var organization = await _context.Organizations.FindAsync(id);
-            _context.Organizations.Remove(organization);
-            await _context.SaveChangesAsync();
+            _uow.Organizations.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool OrganizationExists(int id)
-        {
-            return _context.Organizations.Any(e => e.Id == id);
         }
     }
 }

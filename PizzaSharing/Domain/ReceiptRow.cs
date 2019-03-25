@@ -8,7 +8,7 @@ namespace Domain
     {
         public int Amount { get; set; }
         //Example: 0.1 for 10% discount
-        public decimal RowDiscount { get; set; }
+        public decimal? RowDiscount { get; set; }
 
         public int ProductId { get; set; }
         public Product Product { get; set; }

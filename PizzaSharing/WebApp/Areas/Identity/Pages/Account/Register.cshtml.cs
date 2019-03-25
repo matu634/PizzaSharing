@@ -65,6 +65,11 @@ namespace WebApp.Areas.Identity.Pages.Account
             [MaxLength(64)]
             [MinLength(1)]
             public string LastName { get; set; }
+            
+            [Required]
+            [MaxLength(16)]
+            [MinLength(1)]
+            public string Nickname { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -82,9 +87,24 @@ namespace WebApp.Areas.Identity.Pages.Account
                     UserName = Input.Email, 
                     Email = Input.Email,
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName
+                    LastName = Input.LastName,
+                    UserNickname = Input.Nickname
                 };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                //--------------------------------TODO: Handle unique nickname better-----------------------------------
+                IdentityResult result;
+                //
+                try
+                {
+                    result = await _userManager.CreateAsync(user, Input.Password);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("UNIQUE NICKNAME FOUND");
+                    ModelState.AddModelError("Nickname", "Nickname already taken. Please choose a different nickname");
+                    return Page();
+                }
+                //------------------------------------------------------------------------------------------------------
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

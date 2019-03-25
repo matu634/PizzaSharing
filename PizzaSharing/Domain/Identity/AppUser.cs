@@ -7,6 +7,8 @@ namespace Domain.Identity
 {
     public class AppUser : IdentityUser<int>, IBaseEntity
     {
+        [MaxLength(16)]
+        [MinLength(1)]
         public string UserNickname { get; set; }
         
         public List<Receipt> ManagedReceipts { get; set; }

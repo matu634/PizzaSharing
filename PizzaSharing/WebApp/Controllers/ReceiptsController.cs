@@ -2,28 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using Domain.Identity;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class ReceiptsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ReceiptsController(AppDbContext context)
+        public ReceiptsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Receipts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Receipts.Include(r => r.ReceiptManager);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.Receipts.AllAsync());
         }
 
         // GET: Receipts/Details/5
@@ -34,9 +36,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _context.Receipts
-                .Include(r => r.ReceiptManager)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receipt = await _uow.Receipts.FindAsync(id);
             if (receipt == null)
             {
                 return NotFound();
@@ -46,10 +46,14 @@ namespace WebApp.Controllers
         }
 
         // GET: Receipts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ReceiptManagerId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            var viewModel = new ReceiptViewModel
+            {
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname))
+            };
+            return View(viewModel);
         }
 
         // POST: Receipts/Create
@@ -57,16 +61,23 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")] Receipt receipt)
+        public async Task<IActionResult> Create([Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")]
+            Receipt receipt)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(receipt);
-                await _context.SaveChangesAsync();
+                await _uow.Receipts.AddAsync(receipt);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReceiptManagerId"] = new SelectList(_context.Users, "Id", "Id", receipt.ReceiptManagerId);
-            return View(receipt);
+
+            var viewModel = new ReceiptViewModel
+            {
+                Receipt = receipt,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname))
+            };
+            return View(viewModel);
         }
 
         // GET: Receipts/Edit/5
@@ -77,13 +88,19 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _context.Receipts.FindAsync(id);
+            var receipt = await _uow.Receipts.FindAsync(id);
             if (receipt == null)
             {
                 return NotFound();
             }
-            ViewData["ReceiptManagerId"] = new SelectList(_context.Users, "Id", "Id", receipt.ReceiptManagerId);
-            return View(receipt);
+
+            var viewModel = new ReceiptViewModel
+            {
+                Receipt = receipt,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname))
+            };
+            return View(viewModel);
         }
 
         // POST: Receipts/Edit/5
@@ -91,7 +108,8 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")] Receipt receipt)
+        public async Task<IActionResult> Edit(int id, [Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")]
+            Receipt receipt)
         {
             if (id != receipt.Id)
             {
@@ -100,26 +118,17 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(receipt);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReceiptExists(receipt.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Receipts.Update(receipt);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ReceiptManagerId"] = new SelectList(_context.Users, "Id", "Id", receipt.ReceiptManagerId);
-            return View(receipt);
+            var viewModel = new ReceiptViewModel
+            {
+                Receipt = receipt,
+                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
+                    nameof(AppUser.UserNickname))
+            };
+            return View(viewModel);
         }
 
         // GET: Receipts/Delete/5
@@ -130,9 +139,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _context.Receipts
-                .Include(r => r.ReceiptManager)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receipt = await _uow.Receipts.FindAsync(id);
             if (receipt == null)
             {
                 return NotFound();
@@ -146,15 +153,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var receipt = await _context.Receipts.FindAsync(id);
-            _context.Receipts.Remove(receipt);
-            await _context.SaveChangesAsync();
+            _uow.Receipts.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReceiptExists(int id)
-        {
-            return _context.Receipts.Any(e => e.Id == id);
         }
     }
 }

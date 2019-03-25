@@ -27,6 +27,10 @@ namespace DAL.App.EF
                 .HasOne(u => u.LoanTaker)
                 .WithMany(user => user.TakenLoans)
                 .HasForeignKey(loan => loan.LoanTakerId);
+            
+            builder.Entity<AppUser>()
+                .HasIndex(u => u.UserNickname)
+                .IsUnique();
         }
 
         public DbSet<Category> Categories { get; set; }

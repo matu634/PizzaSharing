@@ -2,28 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class ReceiptRowChangesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ReceiptRowChangesController(AppDbContext context)
+        public ReceiptRowChangesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: ReceiptRowChanges
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.ReceiptRowChanges.Include(r => r.Change).Include(r => r.ReceiptRow);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.ReceiptRowChanges.AllAsync());
         }
 
         // GET: ReceiptRowChanges/Details/5
@@ -34,10 +35,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptRowChange = await _context.ReceiptRowChanges
-                .Include(r => r.Change)
-                .Include(r => r.ReceiptRow)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receiptRowChange = await _uow.ReceiptRowChanges.FindAsync(id);
             if (receiptRowChange == null)
             {
                 return NotFound();
@@ -47,11 +45,15 @@ namespace WebApp.Controllers
         }
 
         // GET: ReceiptRowChanges/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "Id", "ChangeName");
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id");
-            return View();
+            var viewModel = new ReceiptRowChangeViewModel
+            {
+                Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
+                Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
+            };
+            
+            return View(viewModel);
         }
 
         // POST: ReceiptRowChanges/Create
@@ -63,13 +65,18 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(receiptRowChange);
-                await _context.SaveChangesAsync();
+                await _uow.ReceiptRowChanges.AddAsync(receiptRowChange);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "Id", "ChangeName", receiptRowChange.ChangeId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", receiptRowChange.ReceiptRowId);
-            return View(receiptRowChange);
+            var viewModel = new ReceiptRowChangeViewModel
+            {
+                RowChange = receiptRowChange,
+                Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
+                Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
+            };
+            
+            return View(viewModel);
         }
 
         // GET: ReceiptRowChanges/Edit/5
@@ -80,14 +87,19 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptRowChange = await _context.ReceiptRowChanges.FindAsync(id);
+            var receiptRowChange = await _uow.ReceiptRowChanges.FindAsync(id);
             if (receiptRowChange == null)
             {
                 return NotFound();
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "Id", "ChangeName", receiptRowChange.ChangeId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", receiptRowChange.ReceiptRowId);
-            return View(receiptRowChange);
+            var viewModel = new ReceiptRowChangeViewModel
+            {
+                RowChange = receiptRowChange,
+                Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
+                Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
+            };
+            
+            return View(viewModel);
         }
 
         // POST: ReceiptRowChanges/Edit/5
@@ -104,27 +116,18 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(receiptRowChange);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReceiptRowChangeExists(receiptRowChange.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.ReceiptRowChanges.Update(receiptRowChange);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ChangeId"] = new SelectList(_context.Changes, "Id", "ChangeName", receiptRowChange.ChangeId);
-            ViewData["ReceiptRowId"] = new SelectList(_context.ReceiptRows, "Id", "Id", receiptRowChange.ReceiptRowId);
-            return View(receiptRowChange);
+            var viewModel = new ReceiptRowChangeViewModel
+            {
+                RowChange = receiptRowChange,
+                Changes = new SelectList(await _uow.Changes.AllAsync(), nameof(Change.Id), nameof(Change.ChangeName)),
+                Rows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id), nameof(ReceiptRow.Id))
+            };
+            
+            return View(viewModel);
         }
 
         // GET: ReceiptRowChanges/Delete/5
@@ -135,10 +138,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receiptRowChange = await _context.ReceiptRowChanges
-                .Include(r => r.Change)
-                .Include(r => r.ReceiptRow)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receiptRowChange = await _uow.ReceiptRowChanges.FindAsync(id);
             if (receiptRowChange == null)
             {
                 return NotFound();
@@ -152,15 +152,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var receiptRowChange = await _context.ReceiptRowChanges.FindAsync(id);
-            _context.ReceiptRowChanges.Remove(receiptRowChange);
-            await _context.SaveChangesAsync();
+            _uow.ReceiptRowChanges.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReceiptRowChangeExists(int id)
-        {
-            return _context.ReceiptRowChanges.Any(e => e.Id == id);
         }
     }
 }

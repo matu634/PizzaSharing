@@ -120,7 +120,8 @@ namespace DAL.App.EF.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("UserNickname");
+                    b.Property<string>("UserNickname")
+                        .HasMaxLength(16);
 
                     b.HasKey("Id");
 
@@ -130,6 +131,9 @@ namespace DAL.App.EF.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("UserNickname")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -298,7 +302,7 @@ namespace DAL.App.EF.Migrations
 
                     b.Property<int>("ReceiptId");
 
-                    b.Property<decimal>("RowDiscount");
+                    b.Property<decimal?>("RowDiscount");
 
                     b.HasKey("Id");
 

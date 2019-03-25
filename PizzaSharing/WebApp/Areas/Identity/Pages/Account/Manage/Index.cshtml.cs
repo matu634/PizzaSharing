@@ -4,11 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MySql.Data.MySqlClient;
 
 namespace WebApp.Areas.Identity.Pages.Account.Manage
 {
@@ -17,15 +19,18 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IAppUnitOfWork _uow;
 
         public IndexModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, 
+            IAppUnitOfWork uow)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _uow = uow;
         }
 
         public string Username { get; set; }
@@ -47,6 +52,11 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [MaxLength(16)]
+            [MinLength(1)]
+            [Display(Name = "Nickname")]
+            public string Nickname { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -60,13 +70,15 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var nickname = user.UserNickname;
 
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Nickname = nickname
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -106,6 +118,22 @@ namespace WebApp.Areas.Identity.Pages.Account.Manage
                 {
                     var userId = await _userManager.GetUserIdAsync(user);
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                }
+            }
+
+            var nickname = user.UserNickname;
+            if (Input.Nickname != nickname)
+            {
+                try
+                {
+                    user.UserNickname = Input.Nickname;
+                    _uow.BaseRepository<AppUser>().Update(user);
+                    await _uow.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    //TODO: handle duplicate nickname better than this
+                    Console.WriteLine("DUPLICATE NICKNAME! TODO: handle duplicate nickname better than this");
                 }
             }
 

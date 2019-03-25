@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -49,9 +50,14 @@ namespace WebApp.Controllers
         // GET: ProductInCategories/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName");
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName");
-            return View();
+            var viewModel = new ProductInCategoryViewModel
+            {
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName)),
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName))
+            };
+            return View(viewModel);
         }
 
         // POST: ProductInCategories/Create
@@ -67,9 +73,16 @@ namespace WebApp.Controllers
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
-            return View(productInCategory);
+
+            var viewModel = new ProductInCategoryViewModel
+            {
+                ProductInCategory = productInCategory,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName)),
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName))
+            };
+            return View(viewModel);
         }
 
         // GET: ProductInCategories/Edit/5
@@ -85,9 +98,16 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
-            return View(productInCategory);
+
+            var viewModel = new ProductInCategoryViewModel
+            {
+                ProductInCategory = productInCategory,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName)),
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName))
+            };
+            return View(viewModel);
         }
 
         // POST: ProductInCategories/Edit/5
@@ -95,23 +115,31 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,ProductId")] ProductInCategory productInCategory)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,CategoryId,ProductId")] ProductInCategory productInCategory)
         {
             if (id != productInCategory.Id)
             {
                 return NotFound();
             }
 
-            
+
             if (ModelState.IsValid)
             {
                 _uow.ProductsInCategories.Update(productInCategory);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(await _uow.Categories.AllAsync(), "Id", "CategoryName", productInCategory.CategoryId);
-            ViewData["ProductId"] = new SelectList(await _uow.Products.AllAsync(), "Id", "ProductName", productInCategory.ProductId);
-            return View(productInCategory);
+
+            var viewModel = new ProductInCategoryViewModel
+            {
+                ProductInCategory = productInCategory,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName)),
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName))
+            };
+            return View(viewModel);
         }
 
         // GET: ProductInCategories/Delete/5

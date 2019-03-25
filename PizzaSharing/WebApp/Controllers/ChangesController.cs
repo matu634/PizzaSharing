@@ -1,29 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
 using Domain;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
     public class ChangesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ChangesController(AppDbContext context)
+        public ChangesController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: Changes
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Changes.Include(c => c.Category);
-            return View(await appDbContext.ToListAsync());
+            return View(await _uow.Changes.AllAsync());
         }
 
         // GET: Changes/Details/5
@@ -34,9 +30,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _context.Changes
-                .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var change = await _uow.Changes.FindAsync(id);
             if (change == null)
             {
                 return NotFound();
@@ -46,10 +40,15 @@ namespace WebApp.Controllers
         }
 
         // GET: Changes/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
-            return View();
+            var viewModel = new ChangeViewModel
+            {
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName))
+            };
+
+            return View(viewModel);
         }
 
         // POST: Changes/Create
@@ -61,12 +60,19 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(change);
-                await _context.SaveChangesAsync();
+                await _uow.Changes.AddAsync(change);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
-            return View(change);
+
+            var viewModel = new ChangeViewModel
+            {
+                Change = change,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName))
+            };
+
+            return View(viewModel);
         }
 
         // GET: Changes/Edit/5
@@ -77,13 +83,20 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _context.Changes.FindAsync(id);
+            var change = await _uow.Changes.FindAsync(id);
             if (change == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
-            return View(change);
+
+            var viewModel = new ChangeViewModel
+            {
+                Change = change,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName))
+            };
+
+            return View(viewModel);
         }
 
         // POST: Changes/Edit/5
@@ -100,26 +113,19 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(change);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ChangeExists(change.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _uow.Changes.Update(change);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", change.CategoryId);
-            return View(change);
+
+            var viewModel = new ChangeViewModel
+            {
+                Change = change,
+                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
+                    nameof(Category.CategoryName))
+            };
+
+            return View(viewModel);
         }
 
         // GET: Changes/Delete/5
@@ -130,9 +136,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _context.Changes
-                .Include(c => c.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var change = await _uow.Changes.FindAsync(id);
             if (change == null)
             {
                 return NotFound();
@@ -146,15 +150,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var change = await _context.Changes.FindAsync(id);
-            _context.Changes.Remove(change);
-            await _context.SaveChangesAsync();
+            _uow.Changes.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ChangeExists(int id)
-        {
-            return _context.Changes.Any(e => e.Id == id);
         }
     }
 }

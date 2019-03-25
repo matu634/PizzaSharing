@@ -1,4 +1,4 @@
-@model Domain.ReceiptRow
+@model WebApp.ViewModels.ReceiptRowViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,22 +13,22 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
+                <label asp-for="ReceiptRow.Amount" class="control-label"></label>
+                <input asp-for="ReceiptRow.Amount" class="form-control" />
+                <span asp-validation-for="ReceiptRow.Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RowDiscount" class="control-label"></label>
-                <input asp-for="RowDiscount" class="form-control" />
-                <span asp-validation-for="RowDiscount" class="text-danger"></span>
+                <label asp-for="ReceiptRow.RowDiscount" class="control-label"></label>
+                <input asp-for="ReceiptRow.RowDiscount" class="form-control" />
+                <span asp-validation-for="ReceiptRow.RowDiscount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                <label asp-for="ReceiptRow.ProductId" class="control-label"></label>
+                <select asp-for="ReceiptRow.ProductId" class ="form-control" asp-items="Model.Products"></select>
             </div>
             <div class="form-group">
-                <label asp-for="ReceiptId" class="control-label"></label>
-                <select asp-for="ReceiptId" class ="form-control" asp-items="ViewBag.ReceiptId"></select>
+                <label asp-for="ReceiptRow.ReceiptId" class="control-label"></label>
+                <select asp-for="ReceiptRow.ReceiptId" class ="form-control" asp-items="Model.Receipts"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
