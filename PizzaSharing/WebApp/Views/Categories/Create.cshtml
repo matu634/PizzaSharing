@@ -8,29 +8,46 @@
 
 <h4>Category</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Category.CategoryName" class="control-label"></label>
-                <input asp-for="Category.CategoryName" class="form-control" />
-                <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
+
+<div class="col-md-6">
+    <div class="card card-success">
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-plus"></i></h3>
+        </div>
+        <form role="form" asp-action="Create">
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Category.CategoryName" class="control-label">Category Name</label>
+                    <input asp-for="Category.CategoryName" class="form-control" />
+                    <span asp-validation-for="Category.CategoryName" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Category.OrganizationId" class="control-label">Organization(owner)</label>
+                    <select asp-for="Category.OrganizationId" class ="form-control" asp-items="Model.Organizations"></select>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Category.OrganizationId" class="control-label"></label>
-                <select asp-for="Category.OrganizationId" class ="form-control" asp-items="Model.Organizations"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

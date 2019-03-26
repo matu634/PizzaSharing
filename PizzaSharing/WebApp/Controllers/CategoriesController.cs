@@ -116,6 +116,7 @@ namespace WebApp.Controllers
         {
             if (id != category.Id)
             {
+                Console.WriteLine("Form id doesn't match url id");
                 return NotFound();
             }
 

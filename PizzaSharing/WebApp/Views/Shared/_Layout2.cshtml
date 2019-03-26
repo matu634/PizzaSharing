@@ -1,0 +1,178 @@
+@using Domain.Identity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewData["Title"] - WebApp</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to to the body tag
+to get the desired effect
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
+<body class="hold-transition sidebar-mini sidebar-collapse">
+<div class="wrapper">
+    @* <!-- Navbar --> *@
+    <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+        @* <!-- Left navbar links --> *@
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+            </li>
+        </ul>
+
+        @* <!-- Right navbar links --> *@
+        <ul class="navbar-nav ml-auto">
+            <partial name="_LoginPartial"/>
+        </ul>
+    </nav>
+
+    @* <!-- Main Sidebar Container --> *@
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        @* <!-- Brand Logo --> *@
+        <a class="brand-link" asp-area="" asp-controller="Home" asp-action="Index">
+            <img src="~/Pizza-icon.png" alt="AdminLTE Logo"
+                 class="brand-image fa-spin"
+                 style="opacity: .8">
+            <span class="brand-text font-weight-light">Pizza Sharing Admin</span>
+        </a>
+
+        @* <!-- Sidebar --> *@
+        <div class="sidebar">
+            @* <!-- Sidebar user panel (optional) --> *@
+            @* <div class="user-panel mt-3 pb-3 mb-3 d-flex"> *@
+            @*     <div class="image"> *@
+            @*         <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> *@
+            @*     </div> *@
+            @*     <div class="info"> *@
+            @*         <a href="#" class="d-block">Alexander Pierce</a> *@
+            @*     </div> *@
+            @* </div> *@
+
+            @* <!-- Sidebar Menu --> *@
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="nav-icon fa fa-home"></i>
+                            <p >Home</p>
+                        </a>
+                    </li>
+                    
+                    <partial name="_LoginSidebarPartial"/>
+                    
+
+                    <li class="nav-header">All Tables</li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Organizations"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Organizations</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Categories</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Products"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Products</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="ProductInCategories"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ProductInCategories</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Prices" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Prices</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Receipts"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Receipts</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="ReceiptRows" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptRows</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Changes"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Changes</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="ReceiptRowChanges" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptRowChanges</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="ReceiptParticipants"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptParticipants</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Loans" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Loans</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="LoanRows"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>LoanRows</p></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    @* <!-- Content Wrapper. Contains page content --> *@
+    <div class="content-wrapper">
+        @* <!-- Main content --> *@
+        <div class="content">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    @* <!-- Control Sidebar --> *@
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+
+    @* <!-- Main Footer --> *@
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="float-right d-none d-sm-block-down">
+            <strong>Copyright &copy; 2018 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        </div>
+        <!-- Default to the left -->
+        &copy; 2019 - Pizza Sharing App - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        
+    </footer>
+</div>
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="~/AdminLTE/dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="~/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+<script src="~/AdminLTE/dist/js/demo.js"></script>
+<script src="~/AdminLTE/dist/js/pages/dashboard3.js"></script>
+
+@RenderSection("Scripts", required: false)
+</body>
+</html>
