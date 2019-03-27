@@ -53,7 +53,7 @@ namespace WebApp.Controllers
             var viewModel = new ProductInCategoryViewModel
             {
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                    nameof(Category.CategoryAndOwnerNAme)),
                 Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
                     nameof(Product.ProductName))
             };
@@ -78,7 +78,7 @@ namespace WebApp.Controllers
             {
                 ProductInCategory = productInCategory,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                    nameof(Category.CategoryAndOwnerNAme)),
                 Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
                     nameof(Product.ProductName))
             };
@@ -103,7 +103,7 @@ namespace WebApp.Controllers
             {
                 ProductInCategory = productInCategory,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                    nameof(Category.CategoryAndOwnerNAme)),
                 Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
                     nameof(Product.ProductName))
             };
@@ -135,7 +135,7 @@ namespace WebApp.Controllers
             {
                 ProductInCategory = productInCategory,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                    nameof(Category.CategoryAndOwnerNAme)),
                 Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
                     nameof(Product.ProductName))
             };

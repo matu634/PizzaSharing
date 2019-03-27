@@ -25,5 +25,7 @@ namespace Domain
             if (currentPrice == null) throw new Exception($"Price for Product {ProductName}(id: {Id}) at {dateTime} was not found!");
             return currentPrice.Value;
         }
+        
+        //TODO: Add Organization field(+ add List<Products> in organization)
     }
 }

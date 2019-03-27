@@ -30,7 +30,8 @@ namespace DAL.App.EF.Repositories
             if (productInCategory != null)
             {
                 await RepoDbContext.Entry(productInCategory).Reference(obj => obj.Product).LoadAsync();
-                await RepoDbContext.Entry(productInCategory).Reference(obj => obj.Category).LoadAsync();    
+                await RepoDbContext.Entry(productInCategory).Reference(obj => obj.Category).LoadAsync();
+                await RepoDbContext.Entry(productInCategory.Category).Reference(obj => obj.Organization).LoadAsync();
             }
             
             return productInCategory;

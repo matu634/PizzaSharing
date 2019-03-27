@@ -16,5 +16,7 @@ namespace Domain
         public List<Change> Changes { get; set; }
 
         public List<ProductInCategory> ProductsInCategory { get; set; }
+
+        public string CategoryAndOwnerNAme => $"{CategoryName}({Organization.OrganizationName})";
     }
 }
