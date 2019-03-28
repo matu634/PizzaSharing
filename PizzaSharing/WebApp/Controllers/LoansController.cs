@@ -77,6 +77,7 @@ namespace WebApp.Controllers
 
             var viewModel = new LoanViewModel
             {
+                Loan = loan,
                 LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
                     nameof(AppUser.UserNickname), loan.LoanGiverId),
                 LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
@@ -103,6 +104,7 @@ namespace WebApp.Controllers
 
             var viewModel = new LoanViewModel
             {
+                Loan = loan,
                 LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
                     nameof(AppUser.UserNickname), loan.LoanGiverId),
                 LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
@@ -136,6 +138,7 @@ namespace WebApp.Controllers
 
             var viewModel = new LoanViewModel
             {
+                Loan = loan,
                 LoanGivers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
                     nameof(AppUser.UserNickname), loan.LoanGiverId),
                 LoanTakers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),

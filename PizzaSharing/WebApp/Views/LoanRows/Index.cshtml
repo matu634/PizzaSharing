@@ -3,51 +3,82 @@
 @{
     ViewData["Title"] = "Index";
 }
+<h1>Loan Rows</h1>
+<h4>Index</h4>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Loan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReceiptRow)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Involvement)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Loan.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReceiptRow.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Involvement)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-dark">
+            @* Card Header *@
+            <div class="card-header">
+                <h3 class="card-title">All Loan Rows</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm">
+                        <form>
+                            <button class="btn btn-success btn-tool" asp-area="" asp-action="Create">
+                                <i class="fa fa-plus"></i>
+                                Create New
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @* Card body *@
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Category Name
+                        </th>
+                        <th>
+                            Organization(owner)
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsPaid)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Loan.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReceiptRow.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Involvement)
+                            </td>
+                            <td>
+                                <form>
+                                    <div class="btn-group">
+                                        <button class="btn btn-success border-right" asp-action="Edit" asp-route-id="@item.Id">
+                                            <i class="fa fa-edit"></i>
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-primary border-left border-right" asp-action="Details" asp-route-id="@item.Id">
+                                            <i class="fa fa-info-circle"></i>
+                                            Details
+                                        </button>
+                                        <button class="btn btn-danger border-left" asp-action="Delete" asp-route-id="@item.Id">
+                                            <i class="fa fa-times"></i>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

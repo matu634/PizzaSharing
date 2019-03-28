@@ -3,34 +3,49 @@
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create</h1>
 
 <h4>Change</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Change.ChangeName" class="control-label">Name</label>
-                <input asp-for="Change.ChangeName" class="form-control" />
-                <span asp-validation-for="Change.ChangeName" class="text-danger"></span>
+
+<div class="col-md-6">
+    <div class="card card-success">
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-plus"></i></h3>
+        </div>
+        <form role="form" asp-action="Create">
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Change.ChangeName" class="control-label">Change Name</label>
+                    <input asp-for="Change.ChangeName" class="form-control" />
+                    <span asp-validation-for="Change.ChangeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Change.CategoryId" class="control-label">Category</label>
+                    <select asp-for="Change.CategoryId" class ="form-control" asp-items="Model.Categories"></select>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Change.CategoryId" class="control-label">Category</label>
-                <select asp-for="Change.CategoryId" class ="form-control" asp-items="Model.Categories"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -24,10 +24,11 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group">
-                    <label asp-for="Category.Id" class="control-label">Category Id</label>
+                    <label asp-for="Category.Id" class="control-label">Id</label>
                     <input asp-for="Category.Id" class="form-control" disabled/>
                 </div>
 
+                @* Model Specific Fields *@
                 <div class="form-group">
                     <label asp-for="Category.CategoryName" class="control-label">Category Name</label>
                     <input asp-for="Category.CategoryName" class="form-control" />

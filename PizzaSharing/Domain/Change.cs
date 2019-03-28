@@ -16,8 +16,9 @@ namespace Domain
 
         public List<Price> Prices { get; set; }
 
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public int CategoryId { get; set; } //TODO: Create a many to many relationship between Change And Category
+        public Category Category { get; set; } //TODO: Create an Organization field
+                                                //TODO: Create a ChangeAndOrganization field (needs [ValidateNever])
         
         public decimal GetPriceAtTime(DateTime dateTime)
         {

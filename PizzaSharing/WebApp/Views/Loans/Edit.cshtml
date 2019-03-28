@@ -3,46 +3,71 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
 <h1>Edit</h1>
 
 <h4>Loan</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Loan.ReceiptParticipantId" class="control-label"></label>
-                <select asp-for="Loan.ReceiptParticipantId" class="form-control" asp-items="Model.ReceiptParticipants"></select>
-                <span asp-validation-for="Loan.ReceiptParticipantId" class="text-danger"></span>
+
+
+<div class="col-md-6">
+    <div class="card card-warning">
+        
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-edit"></i></h3>
+        </div>
+        <form role="form" asp-action="Edit">
+
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Loan.Id" class="control-label">Id</label>
+                    <input asp-for="Loan.Id" class="form-control" disabled/>
+                </div>
+
+                @* Model Specific Fields *@
+                <div class="form-group">
+                    <label asp-for="Loan.ReceiptParticipantId" class="control-label"></label>
+                    <select asp-for="Loan.ReceiptParticipantId" class="form-control" asp-items="Model.ReceiptParticipants"></select>
+                    <span asp-validation-for="Loan.ReceiptParticipantId" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Loan.IsPaid" /> @Html.DisplayNameFor(model => model.Loan.IsPaid)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Loan.LoanGiverId" class="control-label"></label>
+                    <select asp-for="Loan.LoanGiverId" class="form-control" asp-items="Model.LoanGivers"></select>
+                    <span asp-validation-for="Loan.LoanGiverId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Loan.LoanTakerId" class="control-label"></label>
+                    <select asp-for="Loan.LoanTakerId" class="form-control" asp-items="Model.LoanTakers"></select>
+                    <span asp-validation-for="Loan.LoanTakerId" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Loan.IsPaid" /> @Html.DisplayNameFor(model => model.Loan.IsPaid)
-                </label>
+
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Loan.Id"/>
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Loan.LoanGiverId" class="control-label"></label>
-                <select asp-for="Loan.LoanGiverId" class="form-control" asp-items="Model.LoanGivers"></select>
-                <span asp-validation-for="Loan.LoanGiverId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Loan.LoanTakerId" class="control-label"></label>
-                <select asp-for="Loan.LoanTakerId" class="form-control" asp-items="Model.LoanTakers"></select>
-                <span asp-validation-for="Loan.LoanTakerId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Loan.Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

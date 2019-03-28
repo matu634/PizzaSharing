@@ -3,43 +3,6 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>Receipt</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Receipt.IsFinalized" /> @Html.DisplayNameFor(model => model.Receipt.IsFinalized)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Receipt.CreatedTime" class="control-label">Time Created At</label>
-                <input type="date" asp-for="Receipt.CreatedTime" class="form-control" disabled/>
-                <span asp-validation-for="Receipt.CreatedTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Receipt.ReceiptManagerId" class="control-label">Manager Nickname</label>
-                <select asp-for="Receipt.ReceiptManagerId" class="form-control" asp-items="Model.AppUsers"></select>
-                <span asp-validation-for="Receipt.ReceiptManagerId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Receipt.Id" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
 <h1>Edit</h1>
 
 <h4>Receipt</h4>

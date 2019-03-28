@@ -3,42 +3,53 @@
 @{
     ViewData["Title"] = "Create";
 }
-
 <h1>Create</h1>
 
 <h4>Loan</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Loan.ReceiptParticipantId" class="control-label"></label>
-                <select asp-for="Loan.ReceiptParticipantId" class ="form-control" asp-items="Model.ReceiptParticipants"></select>
+
+<div class="col-md-6">
+    <div class="card card-success">
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-plus"></i></h3>
+        </div>
+        <form role="form" asp-action="Create">
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Loan.ReceiptParticipantId" class="control-label">Receipt Participant Id</label>
+                    <select asp-for="Loan.ReceiptParticipantId" class ="form-control" asp-items="Model.ReceiptParticipants"></select>
+                </div>
+                <input type="hidden" asp-for="Loan.IsPaid" value="false"/>
+                <div class="form-group">
+                    <label asp-for="Loan.LoanGiverId" class="control-label">Loan Giver</label>
+                    <select asp-for="Loan.LoanGiverId" class ="form-control" asp-items="Model.LoanGivers"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Loan.LoanTakerId" class="control-label">Loan Taker</label>
+                    <select asp-for="Loan.LoanTakerId" class ="form-control" asp-items="Model.LoanTakers"></select>
+                </div>
+
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Loan.IsPaid" /> @Html.DisplayNameFor(model => model.Loan.IsPaid)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Loan.LoanGiverId" class="control-label"></label>
-                <select asp-for="Loan.LoanGiverId" class ="form-control" asp-items="Model.LoanGivers"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Loan.LoanTakerId" class="control-label"></label>
-                <select asp-for="Loan.LoanTakerId" class ="form-control" asp-items="Model.LoanTakers"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

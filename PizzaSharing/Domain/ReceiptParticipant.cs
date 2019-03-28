@@ -11,10 +11,5 @@ namespace Domain
         public AppUser AppUser { get; set; }
 
         public Loan Loan { get; set; }
-
-        public override string ToString()
-        {
-            return $"{AppUser.UserNickname} for receipt no. {ReceiptId}";
-        }
     }
 }
