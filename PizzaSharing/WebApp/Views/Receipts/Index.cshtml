@@ -1,47 +1,90 @@
+@using System.Runtime.Serialization
 @model IEnumerable<Domain.Receipt>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Receipts</h1>
+<h4>Index</h4>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IsFinalized)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedTime)
-            </th>
-            <th>
-                Manager Nickname
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsFinalized)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReceiptManager.UserNickname)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-dark">
+            @* Card Header *@
+            <div class="card-header">
+                <h3 class="card-title">All Receipts</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm">
+                        <form>
+                            <button class="btn btn-success btn-tool" asp-area="" asp-action="Create">
+                                <i class="fa fa-plus"></i>
+                                Create New
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @* Card body *@
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Is Finalized
+                        </th>
+                        <th>
+                            Time Created
+                        </th>
+                        <th>
+                            Manager
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsFinalized)
+                            </td>
+                            <td>
+                                @item.CreatedTime.ToString("dd-MMMM-yyyy hh:mm tt")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReceiptManager.UserNickname)
+                            </td>
+                            <td>
+                                <form>
+                                    <div class="btn-group">
+                                        <button class="btn btn-success border-right" asp-action="Edit" asp-route-id="@item.Id">
+                                            <i class="fa fa-edit"></i>
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-primary border-left border-right" asp-action="Details" asp-route-id="@item.Id">
+                                            <i class="fa fa-info-circle"></i>
+                                            Details
+                                        </button>
+                                        <button class="btn btn-danger border-left" asp-action="Delete" asp-route-id="@item.Id">
+                                            <i class="fa fa-times"></i>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

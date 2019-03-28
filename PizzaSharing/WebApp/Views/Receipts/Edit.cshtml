@@ -39,6 +39,62 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+<h1>Edit</h1>
+
+<h4>Receipt</h4>
+<hr />
+
+
+<div class="col-md-6">
+    <div class="card card-warning">
+        
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-edit"></i></h3>
+        </div>
+        <form role="form" asp-action="Edit">
+
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+              <div class="form-group">
+                    <label class="control-label">Time Created At</label>
+                    <input type="text" disabled class="form-control" value="@Model.Receipt.CreatedTime.ToString("dd-MMMM-yyyy hh:mm tt")"/>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Receipt.IsFinalized" /> @Html.DisplayNameFor(model => model.Receipt.IsFinalized)
+                    </label>
+                </div>
+              <div class="form-group">
+                    <label asp-for="Receipt.ReceiptManagerId" class="control-label">Manager Nickname</label>
+                    <select asp-for="Receipt.ReceiptManagerId" class="form-control" asp-items="Model.AppUsers"></select>
+                    <span asp-validation-for="Receipt.ReceiptManagerId" class="text-danger"></span>
+                </div>
+            </div>
+
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Receipt.Id"/>
+                    <input type="hidden" asp-for="Receipt.CreatedTime"/>
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

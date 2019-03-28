@@ -5,44 +5,72 @@
 }
 
 <h1>Details</h1>
+<h4>Price</h4>
+<hr />
 
-<div>
-    <h4>Price</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Value)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Value)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Change)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Change.ChangeName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValidFrom)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ValidFrom)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ValidTo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ValidTo)
-        </dd>
-    </dl>
+<div class="col-md-9">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa fa-info-circle"></i>
+            </h3>
+        </div>
+
+        @* Card Body *@
+        <div class="card-body">
+            <dt>
+                Id
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            <dt>
+                Price Value
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Value)
+            </dd>
+            <dt >
+                Product Name
+            </dt>
+            <dd >
+                @Html.DisplayFor(model => model.Product.ProductName)
+                @if(Model.Product == null){<span>-</span>}
+            </dd>
+            <dt >
+                Change Name
+            </dt>
+            <dd >
+                @Html.DisplayFor(model => model.Change.ChangeName)
+                @if(Model.Change == null){<span>-</span>}
+            </dd>
+            <dt>
+                Valid From
+            </dt>
+            <dd>
+                @Model.ValidFrom.ToString("dd/MM/yyyy")
+            </dd>
+            <dt>
+                Valid To
+            </dt>
+            <dd>
+                @Model.ValidTo.ToString("dd/MM/yyyy")
+            </dd>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<form>
+    <div class="btn-group">
+        <button class="btn btn-success border-right" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fa fa-edit"></i>
+            Edit
+        </button>
+        <button class="btn btn-default border-left" asp-action="Index">
+            <i class="fa fa-list"></i>
+            Back to List
+        </button>
+    </div>
+</form>

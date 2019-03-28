@@ -3,34 +3,60 @@
 @{
     ViewData["Title"] = "Details";
 }
-
 <h1>Details</h1>
+<h4>Receipt</h4>
+<hr/>
 
-<div>
-    <h4>Receipt</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsFinalized)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsFinalized)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReceiptManager)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReceiptManager.Id)
-        </dd>
-    </dl>
+<div class="col-md-9">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fa fa-info-circle"></i>
+            </h3>
+        </div>
+
+        @* Card Body *@
+        <div class="card-body">
+            <dt>
+                Id
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+            @* Model specific fields *@
+            <dt>
+                Is Finalized
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.IsFinalized)
+            </dd>
+            <dt>
+                Time Created
+            </dt>
+            <dd>
+                @Model.CreatedTime.ToString("dd-MMMM-yyyy hh:mm tt")
+            </dd>
+            <dt>
+                Manager
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ReceiptManager.UserNickname)
+            </dd>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<form>
+    <div class="btn-group">
+        <button class="btn btn-success border-right" asp-action="Edit" asp-route-id="@Model.Id">
+            <i class="fa fa-edit"></i>
+            Edit
+        </button>
+        <button class="btn btn-default border-left" asp-action="Index">
+            <i class="fa fa-list"></i>
+            Back to List
+        </button>
+    </div>
+</form>

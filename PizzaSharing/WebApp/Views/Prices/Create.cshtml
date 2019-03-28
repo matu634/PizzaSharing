@@ -1,3 +1,4 @@
+@using Domain
 @model WebApp.ViewModels.PriceViewModel
 
 @{
@@ -8,43 +9,61 @@
 
 <h4>Price</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Price.Value" class="control-label"></label>
-                <input asp-for="Price.Value" class="form-control" />
-                <span asp-validation-for="Price.Value" class="text-danger"></span>
+
+<div class="col-md-6">
+    <div class="card card-success">
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-plus"></i></h3>
+        </div>
+        <form role="form" asp-action="Create">
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Price.Value" class="control-label"></label>
+                    <input asp-for="Price.Value" class="form-control" />
+                    <span asp-validation-for="Price.Value" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price.ProductId" class="control-label"></label>
+                    <select asp-for="Price.ProductId" class ="form-control" asp-items="Model.ProductSelectList"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price.ChangeId" class="control-label"></label>
+                    <select asp-for="Price.ChangeId" class ="form-control" asp-items="Model.ChangeSelectList"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price.ValidFrom" class="control-label"></label>
+                    <input type="date" asp-for="Price.ValidFrom" class="form-control" 
+                           value="@DateTime.Now.ToString("yyyy/MM/dd")" />
+                    <span asp-validation-for="Price.ValidFrom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price.ValidTo" class="control-label"></label>
+                    <input type="date" asp-for="Price.ValidTo" class="form-control" 
+                           value="@DateTime.Now.AddYears(50).ToString("yyyy/MM/dd")"/>
+                    <span asp-validation-for="Price.ValidTo" class="text-danger"></span>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Price.ProductId" class="control-label"></label>
-                <select asp-for="Price.ProductId" class ="form-control" asp-items="Model.ProductSelectList"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price.ChangeId" class="control-label"></label>
-                <select asp-for="Price.ChangeId" class ="form-control" asp-items="Model.ChangeSelectList"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price.ValidFrom" class="control-label"></label>
-                <input type="date" asp-for="Price.ValidFrom" class="form-control" />
-                <span asp-validation-for="Price.ValidFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price.ValidTo" class="control-label"></label>
-                <input type="date" asp-for="Price.ValidTo" class="form-control" />
-                <span asp-validation-for="Price.ValidTo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary"/>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form >
+    <button class="btn btn-default" asp-area="" asp-action="Index">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
