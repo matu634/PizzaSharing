@@ -36,10 +36,10 @@ dotnet aspnet-codegenerator identity -dc DAL.App.EF.AppDbContext -f
 
 EF core migration/update
 -------------------------
-dotnet ef migrations add UserUniqueNickname --project DAL.App.EF --startup-project WebApp
+dotnet ef migrations add ProductBugFix --project DAL.App.EF --startup-project WebApp
 dotnet ef database update --project DAL.App.EF --startup-project WebApp
 
-dotnet ef database drop --project DAL --startup-project WebApp
+dotnet ef database drop --project DAL.App.EF --startup-project WebApp
 
 Aurelia - Adding new routes/views
 ---------------------------------

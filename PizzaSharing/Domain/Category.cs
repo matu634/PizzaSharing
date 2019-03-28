@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Domain
 {
@@ -17,6 +18,8 @@ namespace Domain
 
         public List<ProductInCategory> ProductsInCategory { get; set; }
 
-        public string CategoryAndOwnerNAme => $"{CategoryName}({Organization.OrganizationName})";
+        [ValidateNever]
+        //This will throw an exception without the ValidateNever attribute. This doesn't need to be validated.
+        public string CategoryAndOwnerName => $"{CategoryName} ({Organization.OrganizationName})";
     }
 }

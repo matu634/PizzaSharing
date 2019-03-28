@@ -228,11 +228,15 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("OrganizationId");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Products");
                 });
@@ -468,6 +472,14 @@ namespace DAL.App.EF.Migrations
                     b.HasOne("Domain.Product", "Product")
                         .WithMany("Prices")
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Domain.Product", b =>
+                {
+                    b.HasOne("Domain.Organization", "Organization")
+                        .WithMany("Products")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.ProductInCategory", b =>

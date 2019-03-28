@@ -67,6 +67,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")]
             Category category)
         {
+            category.Organization = await _uow.Organizations.FindAsync(category.OrganizationId);
             if (ModelState.IsValid)
             {
                 await _uow.Categories.AddAsync(category);

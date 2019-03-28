@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Domain
 {
@@ -25,7 +26,12 @@ namespace Domain
             if (currentPrice == null) throw new Exception($"Price for Product {ProductName}(id: {Id}) at {dateTime} was not found!");
             return currentPrice.Value;
         }
+
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
         
-        //TODO: Add Organization field(+ add List<Products> in organization)
+        [ValidateNever]
+        //This will throw an exception without the ValidateNever attribute. This doesn't need to be validated.
+        public string ProductAndOwnerName => $"{ProductName} ({Organization.OrganizationName})";
     }
 }
