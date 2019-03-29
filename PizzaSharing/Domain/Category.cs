@@ -18,8 +18,8 @@ namespace Domain
 
         public List<ProductInCategory> ProductsInCategory { get; set; }
 
-        [ValidateNever]
+//        [ValidateNever]
         //This will throw an exception without the ValidateNever attribute. This doesn't need to be validated.
-        public string CategoryAndOwnerName => $"{CategoryName} ({Organization.OrganizationName})";
+        public string CategoryAndOwnerName => $"{CategoryName} ({Organization?.OrganizationName ?? "Error. Categories' Organization not loaded"})";
     }
 }

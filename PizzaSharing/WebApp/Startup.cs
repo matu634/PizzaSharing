@@ -1,4 +1,5 @@
-﻿using Contracts.DAL.App;
+﻿using System.Linq;
+using Contracts.DAL.App;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
 using DAL.App.EF;
