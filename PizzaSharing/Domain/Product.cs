@@ -31,8 +31,6 @@ namespace Domain
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
         
-//        [ValidateNever]
-        //This will throw an exception without the ValidateNever attribute. This doesn't need to be validated.
         public string ProductAndOwnerName => $"{ProductName} ({Organization?.OrganizationName ?? "Error! Product's Organization not loaded"})";
          }
 }
