@@ -49,7 +49,7 @@ namespace WebApp.ApiControllers
                     keyString: _configuration["JWT:Key"],
                     issuer: _configuration["JWT:Issuer"],
                     expiresInDays: int.Parse(_configuration["JWT:ExpireDays"]));
-                return Ok(jwt);
+                return Ok(new {token = jwt});
             }
 
             return StatusCode(403);

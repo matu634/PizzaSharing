@@ -28,7 +28,11 @@
                     <label asp-for="Change.CategoryId" class="control-label">Category</label>
                     <select asp-for="Change.CategoryId" class ="form-control" asp-items="Model.Categories"></select>
                 </div>
-
+                <div class="form-group">
+                    <label asp-for="Change.OrganizationId" class="control-label"></label>
+                    <select asp-for="Change.OrganizationId" class="form-control" asp-items="Model.Organizations"></select>
+                    <span asp-validation-for="Change.OrganizationId" class="text-danger"></span>
+                </div>
             </div>
             @* Card Footer *@
             <div class="card-footer">

@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/bootstrap": "^4.3.0",
     "@types/jquery": "^3.3.29",
+    "admin-lte": "^3.0.0-alpha.2",
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.3.0",
     "aurelia-fetch-client": "^1.8.2",

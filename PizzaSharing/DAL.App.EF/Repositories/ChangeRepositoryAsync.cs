@@ -20,6 +20,7 @@ namespace DAL.App.EF.Repositories
         {
             return await RepoDbSet
                 .Include(change => change.Category)
+                .Include(change => change.Organization)
                 .ToListAsync();
         }
 
@@ -30,6 +31,7 @@ namespace DAL.App.EF.Repositories
             if (change != null)
             {
                 await RepoDbContext.Entry(change).Reference(c => c.Category).LoadAsync();
+                await RepoDbContext.Entry(change).Reference(c => c.Organization).LoadAsync();
             }
 
             return change;

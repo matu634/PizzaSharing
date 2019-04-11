@@ -1,3 +1,4 @@
+import { AppConfig } from './../app-config';
 import {PLATFORM, LogManager, autoinject} from "aurelia-framework";
 import {HttpClient} from "aurelia-fetch-client";
 import {RouterConfiguration, Router} from "aurelia-router";
@@ -9,7 +10,9 @@ export var log = LogManager.getLogger('PricesService');
 export class PricesService {
 
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private serviceAppConfig : AppConfig ) {
     log.debug('constructor');
   }
 
@@ -17,7 +20,12 @@ export class PricesService {
     //TODO: use config
     let url = 'https://localhost:5001/api/prices';
 
-    return this.httpClient.fetch(url, {cache: "no-store"})
+    return this.httpClient.fetch(url, {
+      cache: "no-store",
+      headers: {
+        Authorization: 'Bearer ' + this.serviceAppConfig.jwt,
+      }
+    })
       .then(response => response.json())
       .then(jsonData => jsonData);
   }

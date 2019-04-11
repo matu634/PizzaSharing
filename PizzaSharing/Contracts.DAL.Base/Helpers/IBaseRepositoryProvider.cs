@@ -2,7 +2,7 @@ using Contracts.DAL.Base.Repositories;
 
 namespace Contracts.DAL.Base.Helpers
 {
-    public interface IRepositoryProvider
+    public interface IBaseRepositoryProvider
     {
         /// <summary>
         /// Return TRepository from cache or call factory to post it

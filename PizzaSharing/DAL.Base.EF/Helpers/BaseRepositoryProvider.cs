@@ -6,14 +6,14 @@ using Contracts.DAL.Base.Repositories;
 
 namespace DAL.Base.EF.Helpers
 {
-    public class BaseRepositoryProvider : IRepositoryProvider
+    public class BaseRepositoryProvider : IBaseRepositoryProvider
     {
         //Repo cache
         private readonly Dictionary<Type, object> _repositoryCache = new Dictionary<Type, object>();
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IBaseRepositoryFactory _repositoryFactory;
         private readonly IDataContext _dataContext;
 
-        public BaseRepositoryProvider(IRepositoryFactory repositoryFactory, IDataContext dataContext)
+        public BaseRepositoryProvider(IBaseRepositoryFactory repositoryFactory, IDataContext dataContext)
         {
             _repositoryFactory = repositoryFactory;
             _dataContext = dataContext;

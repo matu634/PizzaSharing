@@ -1,4 +1,6 @@
-﻿using System.Linq;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using Contracts.DAL.App;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
@@ -6,6 +8,7 @@ using DAL.App.EF;
 using DAL.App.EF.Helpers;
 using DAL.Base.EF.Helpers;
 using Domain.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using WebApp.Helpers;
 
@@ -48,7 +52,7 @@ namespace WebApp
                 .AddDefaultTokenProviders(); //cookie functionality
 
             services.AddSingleton<IEmailSender, EmailSender>();
-
+            
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -60,8 +64,8 @@ namespace WebApp
             });
 
             services.AddScoped<IDataContext, AppDbContext>();
-            services.AddSingleton<IRepositoryFactory, AppRepositoryFactory>();
-            services.AddScoped<IRepositoryProvider, BaseRepositoryProvider>();
+            services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
+            services.AddScoped<IBaseRepositoryProvider, BaseRepositoryProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
             services.AddCors(options =>
@@ -81,6 +85,25 @@ namespace WebApp
                     options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                     options.SerializerSettings.Formatting = Formatting.Indented;
                 });
+            
+            // =============== JWT support ===============
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication()
+                .AddCookie(options => { options.SlidingExpiration = true; })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

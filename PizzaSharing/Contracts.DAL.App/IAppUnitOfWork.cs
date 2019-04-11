@@ -3,7 +3,7 @@ using Contracts.DAL.Base;
 
 namespace Contracts.DAL.App
 {
-    public interface IAppUnitOfWork : IUnitOfWork
+    public interface IAppUnitOfWork : IBaseUnitOfWork
     {
         ICategoryRepository Categories { get; }
         IChangeRepository Changes { get; }

@@ -45,7 +45,9 @@ namespace WebApp.Controllers
             var viewModel = new ChangeViewModel
             {
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName))
+                    nameof(Category.CategoryName)),
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
 
             return View(viewModel);
@@ -56,7 +58,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ChangeName,CategoryId,Id")] Change change)
+        public async Task<IActionResult> Create([Bind] Change change)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +71,9 @@ namespace WebApp.Controllers
             {
                 Change = change,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName))
+                    nameof(Category.CategoryName)),
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
 
             return View(viewModel);
@@ -93,7 +97,9 @@ namespace WebApp.Controllers
             {
                 Change = change,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName))
+                    nameof(Category.CategoryName)),
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
 
             return View(viewModel);
@@ -104,7 +110,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ChangeName,CategoryId,Id")] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind] Change change)
         {
             if (id != change.Id)
             {
@@ -122,7 +128,9 @@ namespace WebApp.Controllers
             {
                 Change = change,
                 Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName))
+                    nameof(Category.CategoryName)),
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
 
             return View(viewModel);

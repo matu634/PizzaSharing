@@ -23,20 +23,25 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group">
-                    <label asp-for="Change.Id" class="control-label">Id</label>
+                    <label asp-for="Change.Id" class="control-label"></label>
                     <input asp-for="Change.Id" class="form-control" disabled/>
                 </div>
 
                 @* Model Specific Fields *@
                 <div class="form-group">
-                    <label asp-for="Change.ChangeName" class="control-label">Change Name</label>
+                    <label asp-for="Change.ChangeName" class="control-label"></label>
                     <input asp-for="Change.ChangeName" class="form-control"/>
                     <span asp-validation-for="Change.ChangeName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Change.CategoryId" class="control-label">Applicable Category</label>
+                    <label asp-for="Change.CategoryId" class="control-label"></label>
                     <select asp-for="Change.CategoryId" class="form-control" asp-items="Model.Categories"></select>
                     <span asp-validation-for="Change.CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Change.OrganizationId" class="control-label"></label>
+                    <select asp-for="Change.OrganizationId" class="form-control" asp-items="Model.Organizations"></select>
+                    <span asp-validation-for="Change.OrganizationId" class="text-danger"></span>
                 </div>
             </div>
 

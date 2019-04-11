@@ -11,20 +11,26 @@ namespace Domain
         [MinLength(1)]
         [Required]
         public string ChangeName { get; set; }
-        
+
         public List<ReceiptRowChange> ReceiptRowChanges { get; set; }
 
         public List<Price> Prices { get; set; }
 
-        public int CategoryId { get; set; } //TODO: Create a many to many relationship between Change And Category
-        public Category Category { get; set; } //TODO: Create an Organization field
-                                                //TODO: Create a ChangeAndOrganization field (needs [ValidateNever])
+        public int CategoryId { get; set; }
+        public Category Category { get; set; } 
+
+        public int OrganizationId { get; set; }
+        public Organization Organization { get; set; }
+
+        public string ChangeAndOrganizationName =>
+            $"{ChangeName} ({Organization?.OrganizationName ?? "Organization not loaded"})";
         
         public decimal GetPriceAtTime(DateTime dateTime)
         {
             Price currentPrice = Prices
                 .FirstOrDefault(p => p.ValidTo.Ticks > dateTime.Ticks && p.ValidFrom.Ticks < dateTime.Ticks);
-            if (currentPrice == null) throw new Exception($"Price for change {ChangeName}(id:{Id}) at {dateTime} was not found!");
+            if (currentPrice == null)
+                throw new Exception($"Price for change {ChangeName}(id:{Id}) at {dateTime} was not found!");
             return currentPrice.Value;
         }
     }

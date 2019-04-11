@@ -7,5 +7,6 @@ namespace WebApp.ViewModels
     {
         public Change Change { get; set; }
         public SelectList Categories { get; set; }
+        public SelectList Organizations { get; set; }
     }
 }

@@ -46,9 +46,13 @@ namespace DAL.App.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<int>("OrganizationId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Changes");
                 });
@@ -429,6 +433,11 @@ namespace DAL.App.EF.Migrations
                     b.HasOne("Domain.Category", "Category")
                         .WithMany("Changes")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Organization", "Organization")
+                        .WithMany("Changes")
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

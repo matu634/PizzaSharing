@@ -15,5 +15,10 @@ namespace Domain
 
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
+        
+        public override string ToString()
+        {
+            return "Price Id: " + Id;
+        }
     }
 }

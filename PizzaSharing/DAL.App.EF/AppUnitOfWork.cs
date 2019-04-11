@@ -1,76 +1,45 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
-using Contracts.DAL.Base.Repositories;
-using DAL.App.EF.Repositories;
-using DAL.Base.EF.Repositories;
+using DAL.Base.EF;
 
 namespace DAL.App.EF
 {
-    public class AppUnitOfWork : IAppUnitOfWork
+    public class AppUnitOfWork : BaseUnitOfWork, IAppUnitOfWork
     {   
-        private readonly AppDbContext _appDbContext;
 
-        private readonly IRepositoryProvider _repositoryProvider;
-
-        public AppUnitOfWork(IDataContext appDbContext, IRepositoryProvider repositoryProvider)
+        public AppUnitOfWork(IDataContext appDbContext, IBaseRepositoryProvider repositoryProvider) : base(appDbContext, repositoryProvider)
         {
-            _appDbContext = appDbContext as AppDbContext ?? throw new ArgumentException("Datacontext has to be DbContext");
-            _repositoryProvider = repositoryProvider;
         }
 
         
         //-------------------------------------------------Repositories-------------------------------------------------
         
         
-        public ICategoryRepository Categories => _repositoryProvider.GetRepository<ICategoryRepository>();
+        public ICategoryRepository Categories => RepositoryProvider.GetRepository<ICategoryRepository>();
 
-        public IChangeRepository Changes => _repositoryProvider.GetRepository<IChangeRepository>();
+        public IChangeRepository Changes => RepositoryProvider.GetRepository<IChangeRepository>();
         
-        public ILoanRepository Loans => _repositoryProvider.GetRepository<ILoanRepository>();
+        public ILoanRepository Loans => RepositoryProvider.GetRepository<ILoanRepository>();
         
-        public ILoanRowRepository LoanRows => _repositoryProvider.GetRepository<ILoanRowRepository>();
+        public ILoanRowRepository LoanRows => RepositoryProvider.GetRepository<ILoanRowRepository>();
 
-        public IOrganizationRepository Organizations =>_repositoryProvider.GetRepository<IOrganizationRepository>();
+        public IOrganizationRepository Organizations =>RepositoryProvider.GetRepository<IOrganizationRepository>();
 
-        public IPriceRepository Prices => _repositoryProvider.GetRepository<IPriceRepository>();
+        public IPriceRepository Prices => RepositoryProvider.GetRepository<IPriceRepository>();
 
-        public IProductInCategoryRepository ProductsInCategories =>_repositoryProvider.GetRepository<IProductInCategoryRepository>();
+        public IProductInCategoryRepository ProductsInCategories =>RepositoryProvider.GetRepository<IProductInCategoryRepository>();
 
-        public IProductRepository Products => _repositoryProvider.GetRepository<IProductRepository>();
+        public IProductRepository Products => RepositoryProvider.GetRepository<IProductRepository>();
         
-        public IReceiptRepository Receipts => _repositoryProvider.GetRepository<IReceiptRepository>();
+        public IReceiptRepository Receipts => RepositoryProvider.GetRepository<IReceiptRepository>();
 
-        public IReceiptParticipantRepository ReceiptParticipants =>_repositoryProvider.GetRepository<IReceiptParticipantRepository>();
+        public IReceiptParticipantRepository ReceiptParticipants =>RepositoryProvider.GetRepository<IReceiptParticipantRepository>();
 
-        public IReceiptRowRepository ReceiptRows =>_repositoryProvider.GetRepository<IReceiptRowRepository>();
+        public IReceiptRowRepository ReceiptRows =>RepositoryProvider.GetRepository<IReceiptRowRepository>();
 
-        public IReceiptRowChangeRepository ReceiptRowChanges =>_repositoryProvider.GetRepository<IReceiptRowChangeRepository>();
-
-        
-        //---------------------------------------------Get base repo Method---------------------------------------------
-        
-        
-        public IBaseRepositoryAsync<TEntity> BaseRepository<TEntity>() where TEntity : class, IBaseEntity, new()
-        {
-            return _repositoryProvider.GetRepositoryForEntity<TEntity>();
-        }
-        
-        //-------------------------------------------------UoW methods--------------------------------------------------
-
-        
-        public virtual int SaveChanges()
-        {
-            return _appDbContext.SaveChanges();
-        }
-
-        public virtual async Task<int> SaveChangesAsync()
-        {
-            return await _appDbContext.SaveChangesAsync();
-        }
+        public IReceiptRowChangeRepository ReceiptRowChanges =>RepositoryProvider.GetRepository<IReceiptRowChangeRepository>();
     }
 }

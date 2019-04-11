@@ -13,5 +13,7 @@ namespace Domain
         public List<Category> Categories { get; set; }
 
         public List<Product> Products { get; set; }
+
+        public List<Change> Changes { get; set; }
     }
 }

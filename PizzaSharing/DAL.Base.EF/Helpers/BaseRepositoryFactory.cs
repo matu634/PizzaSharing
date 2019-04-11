@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF.Helpers
 {
-    public class BaseRepositoryFactory : IRepositoryFactory
+    public class BaseRepositoryFactory : IBaseRepositoryFactory
     {
         public readonly Dictionary<Type, Func<IDataContext, object>> RepoFactoryMethods;
 

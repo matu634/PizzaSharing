@@ -2,7 +2,7 @@ using System;
 
 namespace Contracts.DAL.Base.Helpers
 {
-    public interface IRepositoryFactory
+    public interface IBaseRepositoryFactory
     {
         /// <summary>
         /// Get method for repository creation
