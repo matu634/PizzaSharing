@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using DAL.App.DTO;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,16 @@ namespace DAL.App.EF.Repositories
             }
 
             return rowChange;
+        }
+
+        public async Task AddAsync(ChangeDTO changeDTO)
+        {
+            var receiptRowChange = new ReceiptRowChange()
+            {
+                ChangeId = changeDTO.ChangeId.Value,
+                ReceiptRowId = changeDTO.ReceiptRowId.Value
+            };
+            await RepoDbSet.AddAsync(receiptRowChange);
         }
     }
 }
