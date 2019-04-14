@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using DAL.App.DTO;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +35,26 @@ namespace DAL.App.EF.Repositories
             }
 
             return loanRow;
+        }
+
+        public async Task AddAsync(RowParticipantDTO participantDTO)
+        {
+            if (participantDTO.Involvement == null) return;
+            
+            var loanRow = new LoanRow()
+            {
+                Involvement = participantDTO.Involvement.Value,
+                IsPaid = false,
+                LoanId = participantDTO.LoanId,
+                ReceiptRowId = participantDTO.ReceiptRowId
+            };
+
+            await RepoDbSet.AddAsync(loanRow);
+        }
+
+        public async Task<List<LoanRow>> FindByReceiptRow(int receiptRowId)
+        {
+            return await RepoDbSet.Where(loanRow => loanRow.ReceiptRowId == receiptRowId).ToListAsync();
         }
     }
 }

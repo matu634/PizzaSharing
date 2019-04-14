@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ReceiptParticipantRepositoryAsync : BaseRepositoryAsync<ReceiptParticipant>, IReceiptParticipantRepository
+    public class ReceiptParticipantRepositoryAsync : BaseRepositoryAsync<ReceiptParticipant>,
+        IReceiptParticipantRepository
     {
         public ReceiptParticipantRepositoryAsync(IDataContext dataContext) : base(dataContext)
         {
@@ -35,12 +36,21 @@ namespace DAL.App.EF.Repositories
             return participant;
         }
 
-        public Task<ReceiptParticipant> FindOrAddAsync(int receiptId, int participantAppUserId)
+        public async Task<ReceiptParticipant> FindOrAddAsync(int receiptId, int loanTakerId)
         {
-            var participant = RepoDbSet
-                .FirstAsync(obj => obj.AppUserId == participantAppUserId && obj.ReceiptId == receiptId);
+            var participant = await RepoDbSet
+                .FirstOrDefaultAsync(obj => obj.AppUserId == loanTakerId && obj.ReceiptId == receiptId);
+
             if (participant != null) return participant;
-            return null;
+
+            participant = (await RepoDbSet.AddAsync(new ReceiptParticipant
+            {
+                AppUserId = loanTakerId,
+                ReceiptId = receiptId
+            })).Entity;
+            await RepoDbContext.Entry(participant).Reference(p => p.Receipt).LoadAsync();
+            await RepoDbContext.Entry(participant).Reference(p => p.AppUser).LoadAsync();
+            return participant;
         }
     }
 }

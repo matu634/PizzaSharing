@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
 using Contracts.DAL.App;
@@ -55,8 +56,8 @@ namespace WebApp.ApiControllers
         //Only used for initial row adding
         public async Task<IActionResult> AddReceiptRow(ReceiptRowAllDTO receiptRowDTO)
         {
-            if (receiptRowDTO.ReceiptRowId != null) return BadRequest();
-            if (receiptRowDTO.ReceiptId == null) return BadRequest();
+            if (receiptRowDTO.ReceiptRowId != null) return BadRequest("This action is not used to edit existing rows.");
+            if (receiptRowDTO.ReceiptId == null) return BadRequest("Receipt Id not specified");
             var receipt = await _uow.Receipts.FindAsync(receiptRowDTO.ReceiptId);
             
             //Make sure data is valid
@@ -69,10 +70,10 @@ namespace WebApp.ApiControllers
                 receiptRowDTO.Discount.HasValue &&
                 (receiptRowDTO.Discount.Value < 0.0m || receiptRowDTO.Discount.Value > 1.0m))
             {
-                return BadRequest();
+                return BadRequest("Invalid receiptId, productId, amount or discount value");
             }
             
-            //Add ReceiptRow
+            //1. Add ReceiptRow
             var rowMin = new ReceiptRowMinDTO()
             {
                 Amount = receiptRowDTO.Amount.Value,
@@ -80,12 +81,9 @@ namespace WebApp.ApiControllers
                 ProductId = receiptRowDTO.Product.ProductId.Value,
                 ReceiptId = receiptRowDTO.ReceiptId.Value
             };
-            var row = await _uow.ReceiptRows.AddAsync(rowMin);
+            var receiptRow = await _uow.ReceiptRows.AddAsync(rowMin);
             
-            //TODO: saving here to get row id, maybe remove to keep UnitOfWork happy
-//            await _uow.SaveChangesAsync();
-            
-            //Add row changes (optional)
+            //2. Add row changes (optional)
             if (receiptRowDTO.Changes != null && receiptRowDTO.Changes.Count > 0)
             {
                 foreach (var changeDTO in receiptRowDTO.Changes)
@@ -93,23 +91,45 @@ namespace WebApp.ApiControllers
                     if (changeDTO.ChangeId == null ||
                         await _uow.Changes.FindAsync(changeDTO.ChangeId) == null)
                     {
-                        return BadRequest();
+                        return BadRequest("Change could not be found");
                     }
 
-                    changeDTO.ReceiptRowId = row.Id;
+                    changeDTO.ReceiptRowId = receiptRow.Id;
                     await _uow.ReceiptRowChanges.AddAsync(changeDTO);
                 }
             }
-            //Add participants (optional)
-            /*
+            //3. Add participants (optional)
             if (receiptRowDTO.Participants != null && receiptRowDTO.Participants.Count > 0)
-            {   
-                foreach (var participant in receiptRowDTO.Participants)
+            {
+                //Make sure there is only one entry per appUser
+                var uniqueAppUsersCount = receiptRowDTO.Participants.Select(dto => dto.AppUserId).Distinct().Count();
+                if (uniqueAppUsersCount != receiptRowDTO.Participants.Count) 
+                    return BadRequest("Row participant: Only one entry per user is allowed for each row");
+                var involvementSum = decimal.Zero;
+                
+                foreach (var participantDTO in receiptRowDTO.Participants)
                 {
-                    _uow.ReceiptParticipants.FindOrAddAsync(receipt.Id, participant.AppUserId);
+                    if (participantDTO.Involvement == null ||
+                        participantDTO.Involvement > 1.0m||
+                        participantDTO.AppUserId == null ||
+                        participantDTO.AppUserId == receipt.ReceiptManagerId)
+                    {
+                        return BadRequest("Invalid involvement or AppUserId");
+                    }
+
+                    involvementSum += participantDTO.Involvement.Value;
+                    
+                    var participant = await _uow.ReceiptParticipants.FindOrAddAsync(receiptId: receipt.Id, loanTakerId: participantDTO.AppUserId.Value);
+                    var loan = await _uow.Loans.FindOrAddAsync(participant);
+                    
+                    participantDTO.LoanId = loan.Id;
+                    participantDTO.ReceiptRowId = receiptRow.Id;
+                    
+                    await _uow.LoanRows.AddAsync(participantDTO);
                 }
+                if (involvementSum > decimal.One) return BadRequest("Involvement sum over 1.00");
             }
-            */
+            
             
             await _uow.SaveChangesAsync();
             return Ok();
