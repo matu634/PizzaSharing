@@ -34,5 +34,13 @@ namespace DAL.App.EF.Repositories
 
             return participant;
         }
+
+        public Task<ReceiptParticipant> FindOrAddAsync(int receiptId, int participantAppUserId)
+        {
+            var participant = RepoDbSet
+                .FirstAsync(obj => obj.AppUserId == participantAppUserId && obj.ReceiptId == receiptId);
+            if (participant != null) return participant;
+            return null;
+        }
     }
 }

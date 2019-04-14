@@ -52,11 +52,16 @@ namespace WebApp.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ReceiptRowAllDTO receiptRowDTO)
+        //Only used for initial row adding
+        public async Task<IActionResult> AddReceiptRow(ReceiptRowAllDTO receiptRowDTO)
         {
+            if (receiptRowDTO.ReceiptRowId != null) return BadRequest();
+            if (receiptRowDTO.ReceiptId == null) return BadRequest();
+            var receipt = await _uow.Receipts.FindAsync(receiptRowDTO.ReceiptId);
+            
             //Make sure data is valid
-            if (receiptRowDTO.ReceiptId == null || 
-                await _uow.Receipts.FindAsync(receiptRowDTO.ReceiptId) == null ||
+            if (
+                receipt == null ||
                 receiptRowDTO.Product?.ProductId == null ||
                 await _uow.Products.FindAsync(receiptRowDTO.Product.ProductId) == null ||
                 receiptRowDTO.Amount == null ||
@@ -78,7 +83,7 @@ namespace WebApp.ApiControllers
             var row = await _uow.ReceiptRows.AddAsync(rowMin);
             
             //TODO: saving here to get row id, maybe remove to keep UnitOfWork happy
-            await _uow.SaveChangesAsync();
+//            await _uow.SaveChangesAsync();
             
             //Add row changes (optional)
             if (receiptRowDTO.Changes != null && receiptRowDTO.Changes.Count > 0)
@@ -95,6 +100,16 @@ namespace WebApp.ApiControllers
                     await _uow.ReceiptRowChanges.AddAsync(changeDTO);
                 }
             }
+            //Add participants (optional)
+            /*
+            if (receiptRowDTO.Participants != null && receiptRowDTO.Participants.Count > 0)
+            {   
+                foreach (var participant in receiptRowDTO.Participants)
+                {
+                    _uow.ReceiptParticipants.FindOrAddAsync(receipt.Id, participant.AppUserId);
+                }
+            }
+            */
             
             await _uow.SaveChangesAsync();
             return Ok();
