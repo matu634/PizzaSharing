@@ -14,6 +14,9 @@ dotnet aspnet-codegenerator controller -name PersonsController -actions -m Perso
 dotnet aspnet-codegenerator controller -name ContactTypesController -actions -m ContactType -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name ContactsController -actions -m Contact -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 
+dotnet aspnet-codegenerator controller -name SubjectsController -actions -m Subject -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name CodeReposController -actions -m CodeRepo -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+dotnet aspnet-codegenerator controller -name AppUserInSubjectsController -actions -m AppUserInSubject -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 
 API controller
 -------------
@@ -22,6 +25,10 @@ dotnet aspnet-codegenerator controller -name CONTROLLER_NAME -actions -m MODEL_N
 dotnet aspnet-codegenerator controller -name PersonsController -actions -m Person -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 dotnet aspnet-codegenerator controller -name ContactsController -actions -m Contact -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 dotnet aspnet-codegenerator controller -name ContactTypesController -actions -m ContactType -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+
+dotnet aspnet-codegenerator controller -name SubjectsController -actions -m Subject -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+dotnet aspnet-codegenerator controller -name CodeReposController -actions -m CodeRepo -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
+dotnet aspnet-codegenerator controller -name AppUserInSubjectsController -actions -m AppUserInSubject -dc AppDbContext -outDir ApiControllers -api --useAsyncActions -f
 
 DB connection string
 ---------------------

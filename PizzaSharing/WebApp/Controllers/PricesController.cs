@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace WebApp.Controllers
     public class PricesController : Controller
     {
         private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
-        public PricesController(IAppUnitOfWork uow)
+        public PricesController(IAppUnitOfWork uow, IAppBLL bll)
         {
             _uow = uow;
+            this._bll = bll;
         }
 
 
@@ -23,7 +26,8 @@ namespace WebApp.Controllers
         {
 //            var appDbContext = _context.Prices.Include(p => p.Change).Include(p => p.Product);
 //            return View(await appDbContext.ToListAsync());
-            var prices = await _uow.Prices.AllAsync();
+//            var prices = await _uow.Prices.AllAsync();
+            var prices = await _bll.Prices.AllAsync();
             return View(prices);
         }
 

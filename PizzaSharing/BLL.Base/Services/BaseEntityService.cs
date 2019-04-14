@@ -7,42 +7,43 @@ using DAL.Base.EF.Repositories;
 
 namespace BLL.Base.Services
 {
-    public class BaseEntityService<TEntity> : BaseService, IBaseEntityService<TEntity> 
+    public class BaseEntityService<TEntity, TUnitOfWork> : BaseService, IBaseEntityService<TEntity> 
         where TEntity : class, IBaseEntity, new()
+        where TUnitOfWork : IBaseUnitOfWork
     {
-        protected IBaseUnitOfWork Uow;
+        protected TUnitOfWork Uow;
 
-        public BaseEntityService(IBaseUnitOfWork uow)
+        public BaseEntityService(TUnitOfWork uow)
         {
             Uow = uow;
         }
 
-        public TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
             return Uow.BaseRepository<TEntity>().Update(entity);
         }
 
-        public void Remove(TEntity entity)
+        public virtual void Remove(TEntity entity)
         {
             Uow.BaseRepository<TEntity>().Remove(entity);
         }
 
-        public void Remove(params object[] id)
+        public virtual void Remove(params object[] id)
         {
             Uow.BaseRepository<TEntity>().Remove(id);
         }
 
-        public async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
             return await Uow.BaseRepository<TEntity>().AllAsync();
         }
 
-        public async Task AddAsync(TEntity entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             await Uow.BaseRepository<TEntity>().AddAsync(entity);
         }
 
-        public async Task<TEntity> FindAsync(params object[] id)
+        public virtual async Task<TEntity> FindAsync(params object[] id)
         {
             return await Uow.BaseRepository<TEntity>().FindAsync(id);
         }

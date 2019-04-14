@@ -6,31 +6,31 @@ using Contracts.DAL.Base;
 
 namespace BLL.Base.Helpers
 {
-    public class BaseServiceFactory : IBaseServiceFactory
+    public class BaseServiceFactory<TUnitOfWork> : IBaseServiceFactory<TUnitOfWork> where TUnitOfWork : IBaseUnitOfWork
     {
-        protected readonly Dictionary<Type, Func<IBaseUnitOfWork, object>> ServiceFactoryMethods;
+        protected readonly Dictionary<Type, Func<TUnitOfWork, object>> ServiceFactoryMethods;
 
         //-------------------------------------------------Constructors-------------------------------------------------
         public BaseServiceFactory()
         {
-            ServiceFactoryMethods = new Dictionary<Type, Func<IBaseUnitOfWork, object>>();
+            ServiceFactoryMethods = new Dictionary<Type, Func<TUnitOfWork, object>>();
         }
         
-        public BaseServiceFactory(Dictionary<Type, Func<IBaseUnitOfWork, object>> serviceFactoryMethods)
+        public BaseServiceFactory(Dictionary<Type, Func<TUnitOfWork, object>> serviceFactoryMethods)
         {
             ServiceFactoryMethods = serviceFactoryMethods;
         }
 
         //------------------------------------------Repository factory methods------------------------------------------
-        public Func<IBaseUnitOfWork, object> GetServiceFactory<TService>()
+        public Func<TUnitOfWork, object> GetServiceFactory<TService>()
         {
             ServiceFactoryMethods.TryGetValue(typeof(TService), out var serviceCreationMethod);
             return serviceCreationMethod;
         }
 
-        public Func<IBaseUnitOfWork, object> GetServiceFactoryForEntity<TEntity>() where TEntity : class, IBaseEntity, new()
+        public Func<TUnitOfWork, object> GetServiceFactoryForEntity<TEntity>() where TEntity : class, IBaseEntity, new()
         {
-            return (uow) => new BaseEntityService<TEntity>(uow);
+            return (uow) => new BaseEntityService<TEntity, TUnitOfWork>(uow);
         }
     }
 }

@@ -1,6 +1,11 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using BLL.App;
+using BLL.App.Helpers;
+using BLL.Base.Helpers;
+using Contracts.BLL.App;
+using Contracts.BLL.Base.Helpers;
 using Contracts.DAL.App;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
@@ -67,6 +72,10 @@ namespace WebApp
             services.AddSingleton<IBaseRepositoryFactory, AppRepositoryFactory>();
             services.AddScoped<IBaseRepositoryProvider, BaseRepositoryProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            
+            services.AddSingleton<IBaseServiceFactory<IAppUnitOfWork>, AppServiceFactory>();
+            services.AddScoped<IBaseServiceProvider, BaseServiceProvider<IAppUnitOfWork>>();
+            services.AddScoped<IAppBLL, AppBLL>();
 
             services.AddCors(options =>
             {

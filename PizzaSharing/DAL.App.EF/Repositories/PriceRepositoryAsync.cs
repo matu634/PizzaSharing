@@ -34,5 +34,7 @@ namespace DAL.App.EF.Repositories
 
             return price;
         }
+        
+        
     }
 }

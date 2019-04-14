@@ -3,13 +3,14 @@ using Contracts.DAL.Base;
 
 namespace Contracts.BLL.Base.Helpers
 {
-    public interface IBaseServiceFactory
+    public interface IBaseServiceFactory<TUnitOfWork>
+        where TUnitOfWork : IBaseUnitOfWork
     {
-        Func<IBaseUnitOfWork, object> GetServiceFactory<TService>();
+        Func<TUnitOfWork, object> GetServiceFactory<TService>();
         
         
 
-        Func<IBaseUnitOfWork, object> GetServiceFactoryForEntity<TEntity>()
+        Func<TUnitOfWork, object> GetServiceFactoryForEntity<TEntity>()
             where TEntity: class, IBaseEntity, new();
     }
 }

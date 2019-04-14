@@ -7,12 +7,13 @@ using Contracts.DAL.Base;
 
 namespace BLL.Base
 {
-    public class BaseBLL : IBaseBLL
+    public class BaseBLL<TUnitOfWork> : IBaseBLL 
+        where TUnitOfWork : IBaseUnitOfWork
     {
-        protected readonly IBaseUnitOfWork Uow;
+        protected readonly TUnitOfWork Uow;
         protected readonly IBaseServiceProvider ServiceProvider;
 
-        public BaseBLL(IBaseUnitOfWork uow, IBaseServiceProvider serviceProvider)
+        public BaseBLL(TUnitOfWork uow, IBaseServiceProvider serviceProvider)
         {
             Uow = uow;
             ServiceProvider = serviceProvider;

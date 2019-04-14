@@ -1,7 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BLL.Base\BLL.Base.csproj" />
+      <ProjectReference Include="..\Contracts.BLL.App\Contracts.BLL.App.csproj" />
+      <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
+    </ItemGroup>
 
 </Project>

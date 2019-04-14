@@ -6,13 +6,15 @@ using Contracts.DAL.Base;
 
 namespace BLL.Base.Helpers
 {
-    public class BaseServiceProvider : IBaseServiceProvider
+    public class BaseServiceProvider<TUnitOfWork> : IBaseServiceProvider 
+        where TUnitOfWork : IBaseUnitOfWork
     {
         protected readonly Dictionary<Type, object> ServiceCache = new Dictionary<Type, object>();
-        protected readonly IBaseServiceFactory ServiceFactory;
-        protected readonly IBaseUnitOfWork Uow;
+        
+        protected readonly IBaseServiceFactory<TUnitOfWork> ServiceFactory;
+        protected readonly TUnitOfWork Uow;
 
-        public BaseServiceProvider(IBaseUnitOfWork uow, IBaseServiceFactory serviceFactory)
+        public BaseServiceProvider(TUnitOfWork uow, IBaseServiceFactory<TUnitOfWork> serviceFactory)
         {
             Uow = uow;
             ServiceFactory = serviceFactory;
@@ -27,7 +29,7 @@ namespace BLL.Base.Helpers
 
             var serviceCreationMethod = ServiceFactory.GetServiceFactory<TService>();
             if (serviceCreationMethod == null)
-                throw new NullReferenceException("No factory found for repo: " + typeof(TService).Name);
+                throw new NullReferenceException("No factory found for service: " + typeof(TService).Name);
 
             serviceObject = serviceCreationMethod(Uow);
             ServiceCache[typeof(TService)] = serviceObject;
