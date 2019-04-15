@@ -1,3 +1,4 @@
+using System;
 using BLL.App.Services;
 using BLL.Base.Helpers;
 using Contracts.BLL.App.Services;
@@ -9,7 +10,7 @@ namespace BLL.App.Helpers
     {
         public AppServiceFactory()
         {
-            ServiceFactoryMethods.Add(typeof(IPriceService), uow => new PriceService(uow));
+            Add<IPriceService>(uow => new PriceService(uow));
         }
     }
 }

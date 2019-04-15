@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.Base", "BLL.Base\BLL.Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.App", "BLL.App\BLL.App.csproj", "{7622F925-CBC5-4584-9C42-04FB5DA76230}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicApi.DTO", "PublicApi.DTO\PublicApi.DTO.csproj", "{2B5B3FCB-7F75-48AF-83F4-F9B6E9F25C30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +92,9 @@ Global
 		{7622F925-CBC5-4584-9C42-04FB5DA76230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7622F925-CBC5-4584-9C42-04FB5DA76230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7622F925-CBC5-4584-9C42-04FB5DA76230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5B3FCB-7F75-48AF-83F4-F9B6E9F25C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5B3FCB-7F75-48AF-83F4-F9B6E9F25C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5B3FCB-7F75-48AF-83F4-F9B6E9F25C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5B3FCB-7F75-48AF-83F4-F9B6E9F25C30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

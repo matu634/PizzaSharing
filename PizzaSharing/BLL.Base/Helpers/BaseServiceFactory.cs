@@ -32,5 +32,14 @@ namespace BLL.Base.Helpers
         {
             return (uow) => new BaseEntityService<TEntity, TUnitOfWork>(uow);
         }
+
+        protected virtual void Add<TService>(Func<TUnitOfWork, TService> creationMethod)
+            where TService : class
+        {
+            ServiceFactoryMethods.Add(typeof(TService), creationMethod);
+        }
+
+
+
     }
 }

@@ -34,5 +34,12 @@ namespace DAL.Base.EF.Helpers
         {
             return (context) => new BaseRepositoryAsync<TEntity>(context);
         }
+        
+        public void Add<TRepository>(Func<IDataContext, TRepository> creationMethod)
+            where TRepository : class
+        {
+            RepoFactoryMethods.Add(typeof(TRepository), creationMethod);
+        }
+
     }
 }

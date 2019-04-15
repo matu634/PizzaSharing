@@ -11,29 +11,29 @@ namespace DAL.App.EF.Helpers
     {
         public AppRepositoryFactory()
         {
-            RepoFactoryMethods.Add(typeof(IOrganizationRepository), context => new OrganizationRepositoryAsync(context));
+            Add<IOrganizationRepository>(context => new OrganizationRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(ICategoryRepository), context => new CategoryRepositoryAsync(context));
+            Add<ICategoryRepository>(context => new CategoryRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(IProductRepository), context => new ProductRepositoryAsync(context));
+            Add<IProductRepository>(context => new ProductRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(IProductInCategoryRepository), context => new ProductInCategoryRepositoryAsync(context));
+            Add<IProductInCategoryRepository>(context => new ProductInCategoryRepositoryAsync(context));
 
-            RepoFactoryMethods.Add(typeof(IChangeRepository), context => new ChangeRepositoryAsync(context));
+            Add<IChangeRepository>(context => new ChangeRepositoryAsync(context));
 
-            RepoFactoryMethods.Add(typeof(ILoanRepository), context => new LoanRepositoryAsync(context));
+            Add<ILoanRepository>(context => new LoanRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(ILoanRowRepository), context => new LoanRowRepositoryAsync(context));
+            Add<ILoanRowRepository>(context => new LoanRowRepositoryAsync(context));
 
-            RepoFactoryMethods.Add(typeof(IPriceRepository), context => new PriceRepositoryAsync(context));
+            Add<IPriceRepository>(context => new PriceRepositoryAsync(context));
 
-            RepoFactoryMethods.Add(typeof(IReceiptRepository), context => new ReceiptRepositoryAsync(context));
+            Add<IReceiptRepository>(context => new ReceiptRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(IReceiptRowRepository), context => new ReceiptRowRepositoryAsync(context));
+            Add<IReceiptRowRepository>(context => new ReceiptRowRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(IReceiptRowChangeRepository), context => new ReceiptRowChangeRepositoryAsync(context));
+            Add<IReceiptRowChangeRepository>(context => new ReceiptRowChangeRepositoryAsync(context));
             
-            RepoFactoryMethods.Add(typeof(IReceiptParticipantRepository), context => new ReceiptParticipantRepositoryAsync(context));
+            Add<IReceiptParticipantRepository>(context => new ReceiptParticipantRepositoryAsync(context));
         }
     }
 }
