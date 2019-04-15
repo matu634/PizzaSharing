@@ -10,6 +10,7 @@
   "dependencies": {
     "@types/bootstrap": "^4.3.0",
     "@types/jquery": "^3.3.29",
+    "@types/jwt-decode": "^2.2.1",
     "admin-lte": "^3.0.0-alpha.2",
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.3.0",
@@ -19,6 +20,7 @@
     "bluebird": "^3.5.2",
     "bootstrap": "^4.3.1",
     "jquery": "^3.3.1",
+    "jwt-decode": "^2.2.0",
     "popper.js": "^1.14.7"
   },
   "peerDependencies": {},

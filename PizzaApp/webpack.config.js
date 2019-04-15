@@ -148,6 +148,9 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
     ...when(!karma, new DuplicatePackageCheckerPlugin()),
     new AureliaPlugin(),
     new ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery',
       'Promise': 'bluebird'
     }),
     new ModuleDependenciesPlugin({

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -35,6 +36,11 @@ namespace DAL.App.EF.Repositories
             }
             
             return productInCategory;
+        }
+
+        public async Task<List<int>> CategoryIdsAsync(int productId)
+        {
+            return await RepoDbSet.Where(obj => obj.ProductId == productId).Select(obj => obj.CategoryId).ToListAsync();
         }
     }
 }

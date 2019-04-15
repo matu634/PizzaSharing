@@ -103,6 +103,7 @@ namespace DAL.App.EF.Repositories
                 {
                     sum += loanRow.Involvement * loanRow.ReceiptRow.RowSumCost();
                 }
+                if (sum == decimal.Zero) continue; 
                 result.Add(new LoanGivenDTO()
                 {
                     LoanTakerName = loan.LoanTaker.UserNickname,

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
@@ -14,7 +15,7 @@ namespace WebApp.ApiControllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-//    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppController : ControllerBase
     {
         private readonly IAppUnitOfWork _uow;
@@ -59,6 +60,7 @@ namespace WebApp.ApiControllers
             if (receiptRowDTO.ReceiptRowId != null) return BadRequest("This action is not used to edit existing rows.");
             if (receiptRowDTO.ReceiptId == null) return BadRequest("Receipt Id not specified");
             var receipt = await _uow.Receipts.FindAsync(receiptRowDTO.ReceiptId);
+            //TODO: Security check
             
             //Make sure data is valid
             if (
@@ -86,14 +88,14 @@ namespace WebApp.ApiControllers
             //2. Add row changes (optional)
             if (receiptRowDTO.Changes != null && receiptRowDTO.Changes.Count > 0)
             {
+                var validChangeCategoryIds = await _uow.ProductsInCategories.CategoryIdsAsync(productId: receiptRow.ProductId);
+                
                 foreach (var changeDTO in receiptRowDTO.Changes)
                 {
-                    if (changeDTO.ChangeId == null ||
-                        await _uow.Changes.FindAsync(changeDTO.ChangeId) == null)
-                    {
-                        return BadRequest("Change could not be found");
-                    }
-
+                    if (changeDTO.ChangeId == null) return BadRequest("Change Id not be found");
+                    var change = await _uow.Changes.FindAsync(changeDTO.ChangeId);
+                    if (!validChangeCategoryIds.Contains(change.CategoryId)) return BadRequest($"ChangeId: {change.Id} not allowed for this product.");
+                    
                     changeDTO.ReceiptRowId = receiptRow.Id;
                     await _uow.ReceiptRowChanges.AddAsync(changeDTO);
                 }
@@ -134,5 +136,8 @@ namespace WebApp.ApiControllers
             await _uow.SaveChangesAsync();
             return Ok();
         }
+        
+//        [HttpGet]
+//        public async Task<ActionResult<List<>>> Receipt(int id)
     }
 }

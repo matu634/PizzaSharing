@@ -1,6 +1,8 @@
 import { AppConfig } from './../app-config';
 import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
+import * as jwt_decode from 'jwt-decode';
+import {JWTPayload} from "../interfaces/JWTPayload";
 
 export var log = LogManager.getLogger('Dashboard');
 
@@ -8,7 +10,7 @@ export var log = LogManager.getLogger('Dashboard');
 export class Home {
 
   constructor(
-    private appConfig: AppConfig,
+    public appConfig: AppConfig,
     private router: Router
   ) {
     log.debug('constructor');
@@ -54,5 +56,14 @@ export class Home {
 
   deactivate() {
     log.debug('deactivate');
+  }
+
+  //===================================View methods===================================
+
+  getName(){
+    if (this.appConfig.jwt == null) return 'ERROR'; 
+    console.log(jwt_decode(this.appConfig.jwt));
+    let t : JWTPayload = jwt_decode(this.appConfig.jwt);
+    return t["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
   }
 }
