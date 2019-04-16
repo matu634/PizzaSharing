@@ -8,5 +8,6 @@ namespace DAL.App.DTO
         public DateTime CreatedTime { get; set; }
         public bool IsFinalized { get; set; }
         public decimal SumCost { get; set; }
+        public int ReceiptManagerId { get; set; }
     }
 }

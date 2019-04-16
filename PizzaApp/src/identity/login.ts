@@ -10,7 +10,7 @@ export var log = LogManager.getLogger('Identity.Login');
 export class Login {
 
   //TODO: remove fixed pw and email
-  private email: string = "@gmail.com";
+  private email: string = "matu@gmail.com";
   private password: string = "Password";
 
   constructor(

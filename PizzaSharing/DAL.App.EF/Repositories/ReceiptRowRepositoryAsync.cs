@@ -87,6 +87,7 @@ namespace DAL.App.EF.Repositories
                         Name = loanRow.Loan.LoanTaker.UserNickname,
                         Involvement = loanRow.Involvement,
                         ReceiptRowId = row.Id,
+                        LoanId = loanRow.LoanId,
                         AppUserId = loanRow.Loan.LoanTakerId,
                         LoanRowId = loanRow.Id
                     });
@@ -100,6 +101,7 @@ namespace DAL.App.EF.Repositories
                     Discount = row.RowDiscount,
                     ReceiptId = receiptId,
                     ReceiptRowId = row.Id,
+                    CurrentCost = row.RowSumCost(),
                     Participants = participants
                 });
             }

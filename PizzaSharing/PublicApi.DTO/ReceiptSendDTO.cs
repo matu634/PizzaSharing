@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using DAL.App.DTO;
-using Domain;
+﻿using System;
 
-namespace BLL.App.DTO
+namespace PublicApi.DTO
 {
-    public class ReceiptAllDTO
+    public class ReceiptSendDTO
     {
         public int ReceiptId { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsFinalized { get; set; }
-
-        public List<ReceiptRowAllDTO> Rows { get; set; }
         public decimal SumCost { get; set; }
     }
 }

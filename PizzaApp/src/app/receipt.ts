@@ -1,18 +1,18 @@
-import { AppConfig } from '../app-config';
 import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
-import {IDashboardDTO} from "../interfaces/IDashboardDTO";
-import {DashboardService} from "../services/dashboard-service";
+import {ReceiptService} from "../services/receipt-service";
+import {IReceiptDTO} from "../interfaces/IReceiptDTO";
+import {AppConfig} from "../app-config";
 
-export var log = LogManager.getLogger('Dashboard');
+export var log = LogManager.getLogger('Receipt');
 
 @autoinject
-export class Dashboard {
-  
-  private dashboardDTO: IDashboardDTO;
+export class Receipt {
 
+  private receiptDTO: IReceiptDTO;
+  
   constructor(
-    private service: DashboardService,
+    private receiptService: ReceiptService,
     private appConfig: AppConfig,
     private router: Router
   ) {
@@ -30,16 +30,6 @@ export class Dashboard {
 
   attached() {
     log.debug('attached');
-    if(this.appConfig.jwt == null) {
-      return;
-    }
-    this.service.fetch().then(jsonData => {
-      log.debug("jsonData", jsonData);
-      this.dashboardDTO = jsonData;
-      log.debug("DASHBOARD: ", this.dashboardDTO)
-    }).catch(reason => {
-      log.debug('catch reason', reason)
-    });
   }
 
   detached() {
@@ -55,11 +45,19 @@ export class Dashboard {
     log.debug('canActivate');
   }
 
-  activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {    
+  activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
     if(this.appConfig.jwt == null) {
       this.router.navigateToRoute("identityLogin");
+      return;
     }
+    
+    this.receiptService.fetch(params.id)
+      .then(value => {
+        log.debug("price", value);
+        this.receiptDTO = value;
+        log.debug("receiptDTO object: ", this.receiptDTO)
+      })
   }
 
   canDeactivate() {
@@ -69,8 +67,4 @@ export class Dashboard {
   deactivate() {
     log.debug('deactivate');
   }
-
-  //===================================View methods===================================
-
-  
 }

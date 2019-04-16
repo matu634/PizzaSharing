@@ -69,5 +69,16 @@ namespace DAL.App.EF.Repositories
 
             return result;
         }
+
+        public async Task<Receipt> AddAsync(ReceiptDTO receiptDTO)
+        {
+            var receipt = new Receipt()
+            {
+                ReceiptManagerId = receiptDTO.ReceiptManagerId,
+                CreatedTime = receiptDTO.CreatedTime,
+                IsFinalized = receiptDTO.IsFinalized
+            };
+            return (await RepoDbSet.AddAsync(receipt)).Entity;
+        }
     }
 }

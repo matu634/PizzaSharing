@@ -1,10 +1,10 @@
 import {ILoanGivenDTO} from "./ILoanGivenDTO";
-import {IReceiptDTO} from "./IReceiptDTO";
+import {IReceiptMinDTO} from "./IReceiptMinDTO";
 import {ILoanTakenDTO} from "./ILoanTakenDTO";
 
 export interface IDashboardDTO {
-  openReceipts : IReceiptDTO[]
-  closedReceipts : IReceiptDTO[]
+  openReceipts : IReceiptMinDTO[]
+  closedReceipts : IReceiptMinDTO[]
   loans: ILoanGivenDTO[] 
   debts: ILoanTakenDTO[] 
 }

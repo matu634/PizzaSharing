@@ -1,14 +1,12 @@
-import { AppConfig } from './../app-config';
+import { AppConfig } from '../app-config';
 import {PLATFORM, LogManager, autoinject} from "aurelia-framework";
 import {HttpClient} from "aurelia-fetch-client";
-import {RouterConfiguration, Router} from "aurelia-router";
-import {IPrice} from "../interfaces/IPrice";
-import {IDashboardDTO} from "../interfaces/IDashboardDTO";
+import {IReceiptDTO} from "../interfaces/IReceiptDTO";
 
-export var log = LogManager.getLogger('DashboardService');
+export var log = LogManager.getLogger('ReceiptService');
 
 @autoinject()
-export class DashboardService {
+export class ReceiptService {
 
 
   constructor(
@@ -17,8 +15,8 @@ export class DashboardService {
     log.debug('constructor');
   }
 
-  fetch() : Promise<IDashboardDTO> {
-    let url = this.appConfig.apiUrl + "app/dashboard";
+  fetch(id: number) : Promise<IReceiptDTO> {
+    let url = this.appConfig.apiUrl + "app/receipt/" + id.toString();
 
     return this.httpClient.fetch(url, {
       cache: "no-store",
@@ -29,5 +27,4 @@ export class DashboardService {
       .then(response => response.json())
       .then(jsonData => jsonData);
   }
-
 }

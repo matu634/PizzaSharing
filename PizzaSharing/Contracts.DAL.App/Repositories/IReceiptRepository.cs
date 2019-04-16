@@ -9,5 +9,7 @@ namespace Contracts.DAL.App.Repositories
     public interface IReceiptRepository : IBaseRepositoryAsync<Receipt> 
     {
         Task<List<ReceiptDTO>> AllUserReceipts(int userId, bool isFinalized);
+
+        Task<Receipt> AddAsync(ReceiptDTO receiptDTO);
     }
 }
