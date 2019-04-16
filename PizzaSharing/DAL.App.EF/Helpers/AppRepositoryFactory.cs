@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.App.Repositories.Identity;
 using Contracts.DAL.Base;
 using DAL.App.EF.Repositories;
+using DAL.App.EF.Repositories.Identity;
 using DAL.Base.EF.Helpers;
 
 namespace DAL.App.EF.Helpers
@@ -34,6 +36,8 @@ namespace DAL.App.EF.Helpers
             Add<IReceiptRowChangeRepository>(context => new ReceiptRowChangeRepositoryAsync(context));
             
             Add<IReceiptParticipantRepository>(context => new ReceiptParticipantRepositoryAsync(context));
+            
+            Add<IAppUserRepository>(context => new AppUserRepository(context));
         }
     }
 }

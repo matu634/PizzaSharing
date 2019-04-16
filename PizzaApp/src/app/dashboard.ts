@@ -32,6 +32,9 @@ export class Dashboard {
 
   attached() {
     log.debug('attached');
+    if(this.appConfig.jwt == null) {
+      return;
+    }
     this.service.fetch().then(jsonData => {
       log.debug("jsonData", jsonData);
       this.dashboardDTO = jsonData;
@@ -55,7 +58,6 @@ export class Dashboard {
   }
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {    
-    log.debug('activate');
     log.debug('activate');
     if(this.appConfig.jwt == null) {
       this.router.navigateToRoute("identityLogin");

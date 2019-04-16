@@ -1,7 +1,7 @@
-import { LogManager, autoinject } from "aurelia-framework";
-import { HttpClient } from 'aurelia-fetch-client';
-import { IBaseEntity } from "../interfaces/IBaseEntity";
-import { AppConfig } from "../app-config";
+import {LogManager, autoinject} from "aurelia-framework";
+import {HttpClient} from 'aurelia-fetch-client';
+import {IBaseEntity} from "../interfaces/IBaseEntity";
+import {AppConfig} from "../app-config";
 
 export var log = LogManager.getLogger('IdentityService');
 
@@ -25,7 +25,7 @@ export class IdentityService {
       password: password
     };
 
-    return this.httpClient.post(url, JSON.stringify(loginDTO), { cache: 'no-store' }).then(
+    return this.httpClient.post(url, JSON.stringify(loginDTO), {cache: 'no-store'}).then(
       response => {
         log.debug('response', response);
         return response.json();
@@ -37,7 +37,32 @@ export class IdentityService {
     );
   }
 
-  register(): void {
-
+  register(
+    email: string,
+    nickname: string,
+    password: string, 
+    confirmPassword: string, 
+    firstName: string, 
+    lastName: string): Promise<any>
+  {
+    let url = this.appConfig.apiUrl + "account/register";
+    let registerDTO = {
+      email: email,
+      nickname : nickname,
+      password: password,
+      confirmPassword: confirmPassword,
+      firstName: firstName,
+      lastName: lastName
+    };
+    return this.httpClient.post(url, JSON.stringify(registerDTO), {cache: 'no-store'}).then(
+      response => {
+        log.debug('response', response);
+        return response.json();
+      }
+    ).catch(
+      reason => {
+        log.debug('catch reason', reason);
+      }
+    );
   }
 }

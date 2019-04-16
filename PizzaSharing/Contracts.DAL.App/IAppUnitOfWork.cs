@@ -1,4 +1,5 @@
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.App.Repositories.Identity;
 using Contracts.DAL.Base;
 
 namespace Contracts.DAL.App
@@ -17,5 +18,6 @@ namespace Contracts.DAL.App
         IReceiptParticipantRepository ReceiptParticipants { get; }
         IReceiptRowRepository ReceiptRows { get; }
         IReceiptRowChangeRepository ReceiptRowChanges { get; }
+        IAppUserRepository AppUsers { get; }
     }
 }

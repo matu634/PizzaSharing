@@ -1,4 +1,61 @@
 <template>
-  <h1>Register</h1>
+  <div class="register-box">
+    <div class="register-logo">
+      <span>Pizza Sharing</span>
+      <hr/>
+    </div>
 
+    <div class="card">
+      <div class="card-body register-card-body">
+        <p class="login-box-msg">Register a new account</p>
+
+        <form method="post" submit.trigger="submit()">
+          <div class="text-danger"></div>
+          <div class="form-group mb-3">
+            <input class="form-control" placeholder="Nickname" value.bind="nickname"/>
+          </div>
+
+          <div class="form-group mb-3">
+            <input class="form-control" placeholder="First Name" value.bind="firstName"/>
+          </div>
+
+          <div class="form-group mb-3">
+            <input class="form-control" placeholder="Last Name" value.bind="lastName"/>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Email" value.bind="email">
+            <div class="input-group-append">
+              <span class="fa fa-envelope input-group-text"></span>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" value.bind="password">
+            <div class="input-group-append">
+              <span class="fa fa-lock input-group-text"></span>
+            </div>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" placeholder="Password" value.bind="confirmPassword">
+            <div class="input-group-append">
+              <span class="fa fa-lock input-group-text"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button type="submit" class="btn btn-primary btn-block btn-flat">Register</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+        <div class="text-center">
+          <a route-href="route: identityLogin">Log in instead</a>
+        </div>
+      </div>
+      <!-- /.form-box -->
+    </div><!-- /.card -->
+  </div>
+  <!-- /.register-box -->
 </template>

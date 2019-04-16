@@ -10,13 +10,13 @@ export var log = LogManager.getLogger('Identity.Login');
 export class Login {
 
   //TODO: remove fixed pw and email
-  private email: string = "matu@sirg.com";
+  private email: string = "@gmail.com";
   private password: string = "Password";
 
   constructor(
     private IdentityService: IdentityService,
-    private AppConfig: AppConfig,
-    private Router: Router) {
+    private appConfig: AppConfig,
+    private router: Router) {
   }
 
   // ============ View LifeCycle events ==============
@@ -47,6 +47,9 @@ export class Login {
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
+    if(this.appConfig.jwt != null) {
+      this.router.navigateToRoute("dashboard");
+    }
   }
 
   canDeactivate() {
@@ -64,8 +67,8 @@ export class Login {
     .then(jwtDTO => {
       if (jwtDTO.token !== undefined) {
         log.debug("Submit token", jwtDTO.token);
-        this.AppConfig.jwt = jwtDTO.token;
-        this.Router.navigateToRoute("dashboard");
+        this.appConfig.jwt = jwtDTO.token;
+        this.router.navigateToRoute("dashboard");
       }
     })
   }

@@ -1,6 +1,7 @@
 using System;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Contracts.DAL.App.Repositories.Identity;
 using Contracts.DAL.Base;
 using Contracts.DAL.Base.Helpers;
 using DAL.Base.EF;
@@ -41,5 +42,7 @@ namespace DAL.App.EF
         public IReceiptRowRepository ReceiptRows =>RepositoryProvider.GetRepository<IReceiptRowRepository>();
 
         public IReceiptRowChangeRepository ReceiptRowChanges =>RepositoryProvider.GetRepository<IReceiptRowChangeRepository>();
+        
+        public IAppUserRepository AppUsers => RepositoryProvider.GetRepository<IAppUserRepository>();
     }
 }

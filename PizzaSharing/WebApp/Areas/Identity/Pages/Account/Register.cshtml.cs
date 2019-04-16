@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -20,17 +21,20 @@ namespace WebApp.Areas.Identity.Pages.Account
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IAppUnitOfWork _uow;
 
         public RegisterModel(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, 
+            IAppUnitOfWork uow)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _uow = uow;
         }
 
         [BindProperty]
@@ -82,6 +86,18 @@ namespace WebApp.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                if (await _uow.AppUsers.NicknameExists(userName: Input.Nickname))
+                {
+                    ModelState.AddModelError("Nickname", "Nickname already exists. Please use a different nickname");
+                    return Page();
+                }
+
+                if (await _uow.AppUsers.EmailExists(email: Input.Email))
+                {
+                    ModelState.AddModelError("Nickname", "Email already exists. Please use a different email");
+                    return Page();
+                }
+                
                 var user = new AppUser
                 {
                     UserName = Input.Email, 
@@ -90,17 +106,17 @@ namespace WebApp.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     UserNickname = Input.Nickname
                 };
-                //--------------------------------TODO: Handle unique nickname better-----------------------------------
+                
                 IdentityResult result;
                 //
+                
                 try
                 {
                     result = await _userManager.CreateAsync(user, Input.Password);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("UNIQUE NICKNAME FOUND");
-                    ModelState.AddModelError("Nickname", "Nickname already taken. Please choose a different nickname");
+                    ModelState.AddModelError("Error", "An unknown error occurred");
                     return Page();
                 }
                 //------------------------------------------------------------------------------------------------------
