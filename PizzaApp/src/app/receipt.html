@@ -13,7 +13,7 @@
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </div>
-  
+
   <div class="row">
     <!-- Product selection column -->
     <div class="col-lg-6">
@@ -24,11 +24,18 @@
         <!-- /.card-header -->
         <div class="card-body">
           <form role="form" submit.delegate="submit()">
-            
+
             <!-- select -->
             <div class="form-group">
               <label>Select Organization</label>
-              <select class="form-control"></select>
+              <select class="form-control" value.bind="selectedOrganization">
+                <option model.bind="null">Choose...</option>
+                <option 
+                  repeat.for="organization of organizations"
+                  model.bind="organization.id">
+                  ${organization.name}
+                </option>
+            </select>
             </div>
             <div class="form-group">
               <label>Select Category</label>
@@ -112,7 +119,8 @@
               <td>${participant.name}</td>
               <td>
                 <div class="progress mb-3">
-                  <div class="progress-bar bg-success" role="progressbar" aria-valuenow="${participant.involvement * 100}" aria-valuemin="0"
+                  <div class="progress-bar bg-success" role="progressbar"
+                       aria-valuenow="${participant.involvement * 100}" aria-valuemin="0"
                        aria-valuemax="100" style="width: ${participant.involvement * 100}%">
                     ${participant.involvement * 100} %
                   </div>

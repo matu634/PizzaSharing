@@ -164,5 +164,11 @@ namespace WebApp.ApiControllers
                 SumCost = decimal.Zero
             };
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<OrganizationDTO>>> Organizations()
+        {
+            return await _uow.Organizations.AllDtoAsync();
+        }
     }
 }

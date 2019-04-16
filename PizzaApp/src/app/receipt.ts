@@ -3,6 +3,7 @@ import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
 import {ReceiptService} from "../services/receipt-service";
 import {IReceiptDTO} from "../interfaces/IReceiptDTO";
 import {AppConfig} from "../app-config";
+import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -10,6 +11,8 @@ export var log = LogManager.getLogger('Receipt');
 export class Receipt {
 
   private receiptDTO: IReceiptDTO;
+  private organizations: IOrganizationDTO[];
+  private selectedOrganization = null;
   
   constructor(
     private receiptService: ReceiptService,
@@ -54,10 +57,15 @@ export class Receipt {
     
     this.receiptService.fetch(params.id)
       .then(value => {
-        log.debug("price", value);
         this.receiptDTO = value;
         log.debug("receiptDTO object: ", this.receiptDTO)
-      })
+      });
+
+    this.receiptService.fetchOrganizations()
+      .then(value => {
+        this.organizations = value;
+        log.debug("organizations: ", this.receiptDTO)
+      });
   }
 
   canDeactivate() {
