@@ -17,7 +17,6 @@ export class PricesService {
   }
 
   fetchAll(): Promise<IPrice[]> {
-    //TODO: use config
     let url = 'https://localhost:5001/api/prices';
 
     return this.httpClient.fetch(url, {

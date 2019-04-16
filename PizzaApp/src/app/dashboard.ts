@@ -1,15 +1,20 @@
-import { AppConfig } from './../app-config';
+import { AppConfig } from '../app-config';
 import {LogManager, View, autoinject} from "aurelia-framework";
 import {RouteConfig, NavigationInstruction, Router} from "aurelia-router";
 import * as jwt_decode from 'jwt-decode';
 import {JWTPayload} from "../interfaces/JWTPayload";
+import {IDashboardDTO} from "../interfaces/IDashboardDTO";
+import {DashboardService} from "../services/dashboard-service";
 
 export var log = LogManager.getLogger('Dashboard');
 
 @autoinject
-export class Home {
+export class Dashboard {
+  
+  private dashboardDTO: IDashboardDTO;
 
   constructor(
+    private service: DashboardService,
     public appConfig: AppConfig,
     private router: Router
   ) {
@@ -27,6 +32,13 @@ export class Home {
 
   attached() {
     log.debug('attached');
+    this.service.fetch().then(jsonData => {
+      log.debug("jsonData", jsonData);
+      this.dashboardDTO = jsonData;
+      log.debug("DASHBOARD: ", this.dashboardDTO)
+    }).catch(reason => {
+      log.debug('catch reason', reason)
+    });
   }
 
   detached() {

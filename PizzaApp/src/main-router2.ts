@@ -3,9 +3,9 @@
 import 'admin-lte/dist/js/adminlte.js'
 
 
-import 'admin-lte/plugins/chart.js/Chart.min.js'
+// import 'admin-lte/plugins/chart.js/Chart.min.js'
 import 'admin-lte/dist/js/demo.js'
-import 'admin-lte/dist/js/pages/dashboard3.js'
+// import 'admin-lte/dist/js/pages/dashboard3.js'
 
 import { AppConfig } from './app-config';
 import {PLATFORM, LogManager, autoinject} from "aurelia-framework";
