@@ -44,8 +44,6 @@ namespace DAL.App.EF.Repositories
             var rows = await RepoDbSet
                 .Include(row => row.Product)
                     .ThenInclude(product => product.Prices)
-                .Include(row => row.Product)
-                    .ThenInclude(product => product.ProductInCategories)
                 .Include(row => row.ReceiptRowChanges)
                     .ThenInclude(receiptRowChange => receiptRowChange.Change)
                         .ThenInclude(change => change.Prices)
@@ -60,9 +58,7 @@ namespace DAL.App.EF.Repositories
                 var product = new ProductDTO()
                 {
                     ProductId = row.ProductId,
-                    Categories = row.Product.ProductInCategories.Select(category => category.CategoryId).ToList(),
                     ProductName = row.Product.ProductName,
-                    OrganizationId = row.Product.OrganizationId,
                     ProductPrice = row.Product.GetPriceAtTime(time)
                     
                 };
@@ -118,7 +114,22 @@ namespace DAL.App.EF.Repositories
                 RowDiscount = rowMin.Discount,
                 ReceiptId = rowMin.ReceiptId
             };
-            return (await RepoDbSet.AddAsync(receiptRow)).Entity;
+            /*
+             *  .Include(row => row.Product)
+                    .ThenInclude(product => product.Prices)
+                .Include(row => row.ReceiptRowChanges)
+                    .ThenInclude(receiptRowChange => receiptRowChange.Change)
+                        .ThenInclude(change => change.Prices)
+                .Include(row => row.RowParticpantLoanRows)
+                    .ThenInclude(row => row.Loan)
+                        .ThenInclude(loan => loan.LoanTaker)
+             */
+            
+            var result = (await RepoDbSet.AddAsync(receiptRow)).Entity;
+            await RepoDbContext.Entry(result).Reference(row => row.Product).LoadAsync();
+            await RepoDbContext.Entry(result.Product).Collection(product => product.Prices).LoadAsync();
+            await RepoDbContext.Entry(result).Collection(row => row.ReceiptRowChanges).LoadAsync();
+            return result;
         }
     }
 }

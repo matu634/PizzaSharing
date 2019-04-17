@@ -33,6 +33,11 @@ namespace BLL.Base.Services
             Uow.BaseRepository<TEntity>().Remove(id);
         }
 
+        public Task<bool> Exists(int id)
+        {
+            return Uow.BaseRepository<TEntity>().Exists(id);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
             return await Uow.BaseRepository<TEntity>().AllAsync();

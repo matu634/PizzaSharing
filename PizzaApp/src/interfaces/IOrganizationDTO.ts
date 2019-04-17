@@ -1,4 +1,7 @@
+import {ICategoryDTO} from "./ICategoryDTO";
+
 export interface IOrganizationDTO {
   id: number,
-  name: string
+  name: string,
+  categories: ICategoryDTO[]
 }

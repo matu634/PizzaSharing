@@ -49,5 +49,9 @@ namespace DAL.Base.EF.Repositories
             RepoDbSet.Remove(RepoDbSet.Find(id));
         }
 
+        public async Task<bool> Exists(int id)
+        {
+            return await RepoDbSet.AnyAsync(entity => entity.Id == id);
+        }
     }
 }

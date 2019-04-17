@@ -22,6 +22,7 @@ namespace Domain
 
         public decimal GetPriceAtTime(DateTime dateTime)
         {
+            if (Prices == null) return -1;
             Price currentPrice = Prices
                 .FirstOrDefault(p => p.ValidTo.Ticks > dateTime.Ticks && p.ValidFrom.Ticks < dateTime.Ticks);
             if (currentPrice == null) throw new Exception($"Price for Product {ProductName}(id: {Id}) at {dateTime} was not found!");

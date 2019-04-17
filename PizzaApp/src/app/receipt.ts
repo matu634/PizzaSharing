@@ -4,6 +4,8 @@ import {ReceiptService} from "../services/receipt-service";
 import {IReceiptDTO} from "../interfaces/IReceiptDTO";
 import {AppConfig} from "../app-config";
 import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
+import {ICategoryDTO} from "../interfaces/ICategoryDTO";
+import {IProductDTO} from "../interfaces/IProductDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -12,7 +14,8 @@ export class Receipt {
 
   private receiptDTO: IReceiptDTO;
   private organizations: IOrganizationDTO[];
-  private selectedOrganization = null;
+  private selectedOrganization : IOrganizationDTO | null = null;
+  private selectedCategory : ICategoryDTO | null = null;
   
   constructor(
     private receiptService: ReceiptService,
@@ -61,10 +64,10 @@ export class Receipt {
         log.debug("receiptDTO object: ", this.receiptDTO)
       });
 
-    this.receiptService.fetchOrganizations()
+    this.receiptService.fetchOrganizations(params.id)
       .then(value => {
         this.organizations = value;
-        log.debug("organizations: ", this.receiptDTO)
+        log.debug("organizations: ", this.organizations)
       });
   }
 
@@ -74,5 +77,28 @@ export class Receipt {
 
   deactivate() {
     log.debug('deactivate');
+  }
+  
+  // ---------------------------View methods---------------------------
+  organizationOnChange() {
+    log.debug('Change. Organization: ', typeof this.selectedOrganization);
+    if (this.selectedOrganization !== null){
+      $("#categorySelect").prop("disabled", false);
+      
+    } else {
+      $("#categorySelect").prop("disabled", true)
+    }
+  }
+
+  categoryOnChange() {
+    log.debug('Change. Organization: ', typeof this.selectedOrganization);
+    if (this.selectedOrganization !== null){
+      $("#products").prop("hidden", false);
+    } else {
+      $("#products").prop("hidden", true)
+    }
+  }
+  addToCartClicked(product: IProductDTO){
+    log.debug("Product clicked: ", product)
   }
 }

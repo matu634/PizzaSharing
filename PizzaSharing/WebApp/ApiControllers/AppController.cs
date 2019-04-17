@@ -58,7 +58,7 @@ namespace WebApp.ApiControllers
 
         [HttpPost]
         //Only used for initial row adding
-        public async Task<IActionResult> AddReceiptRow(ReceiptRowAllDTO receiptRowDTO)
+        public async Task<ActionResult<ReceiptRowAllDTO>> AddReceiptRow(ReceiptRowAllDTO receiptRowDTO)
         {
             if (receiptRowDTO.ReceiptRowId != null) return BadRequest("This action is not used to edit existing rows.");
             if (receiptRowDTO.ReceiptId == null) return BadRequest("Receipt Id not specified");
@@ -139,8 +139,27 @@ namespace WebApp.ApiControllers
 
                 if (involvementSum > decimal.One) return BadRequest("Involvement sum over 1.00");
             }
-
-
+            
+            //Loaded - receipt, receipt row, product
+            
+//            var result = new ReceiptRowAllDTO()
+//            {
+//                Amount = receiptRow.Amount,
+//                Product = new ProductDTO()
+//                {
+//                    ProductId = receiptRow.Product.Id,
+//                    ProductName = receiptRow.Product.ProductName,
+//                    ProductPrice = receiptRow.Product.GetPriceAtTime(receipt.CreatedTime)                    
+//                },
+//                CurrentCost = receiptRow.RowSumCost(),
+//                Changes = new List<ChangeDTO>(),
+//                Participants = new List<RowParticipantDTO>(),
+//                ReceiptId = receiptRow.ReceiptId,
+//                ReceiptRowId = receiptRow.Id,
+//                Discount = receiptRow.RowDiscount
+//            };
+            var row = await _uow.ReceiptRows.FindAsync(receiptRow.Id);
+            
             await _uow.SaveChangesAsync();
             return Ok();
         }
@@ -156,6 +175,7 @@ namespace WebApp.ApiControllers
             };
             var receipt = await _uow.Receipts.AddAsync(receiptDTO);
             await _uow.SaveChangesAsync();
+            
             return new ReceiptSendDTO()
             {
                 ReceiptId = receipt.Id,
@@ -165,10 +185,13 @@ namespace WebApp.ApiControllers
             };
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<OrganizationDTO>>> Organizations()
+        [HttpGet("{receiptId}")]
+        public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)
         {
-            return await _uow.Organizations.AllDtoAsync();
+            //TODO: get date time from receipt 
+            var receipt = await _uow.Receipts.FindAsync(receiptId);
+            if (receipt == null) return BadRequest("Receipt doesn't exist!");
+            return await _uow.Organizations.AllDtoAsync(receipt.CreatedTime);
         }
     }
 }

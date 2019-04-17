@@ -1,7 +1,6 @@
 export interface IProductDTO {
-  productId: number,
+  productId: number | null,
   productName : string,
-  productPrice: number,
-  organizationId: number,
-  categories: number[]
+  productPrice: number | null,
+  organizationId: number
 }

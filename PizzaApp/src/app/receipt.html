@@ -17,36 +17,59 @@
   <div class="row">
     <!-- Product selection column -->
     <div class="col-lg-6">
-      <div class="card card-warning">
+      <div class="card card-success">
         <div class="card-header">
           <h3 class="card-title">Search products</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-          <form role="form" submit.delegate="submit()">
-
+          <form role="form" class="d-flex"> 
             <!-- select -->
-            <div class="form-group">
-              <label>Select Organization</label>
-              <select class="form-control" value.bind="selectedOrganization">
-                <option model.bind="null">Choose...</option>
-                <option 
-                  repeat.for="organization of organizations"
-                  model.bind="organization.id">
-                  ${organization.name}
-                </option>
-            </select>
+            <div class="input-group col-md-6">
+              <label>
+                Select Organization
+                <select class="form-control" 
+                        value.bind="selectedOrganization" change.delegate="organizationOnChange()">
+                  <option model.bind="null">Choose...</option>
+                  <option 
+                    repeat.for="organization of organizations"
+                    model.bind="organization">
+                    ${organization.name}
+                  </option>
+              </select>
+              </label>
             </div>
-            <div class="form-group">
-              <label>Select Category</label>
-              <select class="form-control" disabled></select>
-            </div>
-            <div class="form-group">
-              <input type="submit" class="form-control btn btn-primary" disabled/>
+            <div class="input-group ml-auto col-md-6">
+              <label>
+                Select category
+                <select id="categorySelect" class="form-control" disabled
+                        value.bind="selectedCategory" change.delegate="categoryOnChange()">
+                  <option model.bind="null">Choose...</option>
+                  <option
+                    repeat.for="category of selectedOrganization.categories"
+                    model.bind="category">
+                    ${category.name}
+                  </option>
+                </select>
+              </label>
             </div>
           </form>
         </div>
         <!-- /.card-body -->
+      </div>
+      <div id="products">
+
+        <div class="small-box bg-success" repeat.for="product of selectedCategory.products">
+          <div class="inner">
+            <h3>${product.productName} - ${product.productPrice}€</h3>
+
+            <p>New Orders</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-bag"></i>
+          </div>
+          <p style="cursor: pointer" class="small-box-footer" click.delegate="addToCartClicked(product)">Add to cart <i class="fa fa-arrow-circle-right"></i></p>
+        </div>
       </div>
     </div>
     <!-- Receipt viewing column -->

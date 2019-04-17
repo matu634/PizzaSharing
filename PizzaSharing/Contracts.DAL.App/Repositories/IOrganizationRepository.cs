@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.Base.Repositories;
@@ -8,6 +9,6 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IOrganizationRepository : IBaseRepositoryAsync<Organization>
     {
-        Task<List<OrganizationDTO>> AllDtoAsync();
+        Task<List<OrganizationDTO>> AllDtoAsync(DateTime dateTime);
     }
 }
