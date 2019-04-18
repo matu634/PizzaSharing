@@ -153,4 +153,13 @@ export class Receipt {
         log.debug("Current rows: ", this.receiptDTO.rows)
       })
   }
+
+  removeReceipt(){
+    this.receiptService.removeReceipt(this.receiptDTO.receiptId)
+      .then(value => {
+        if (value){
+          this.router.navigateToRoute("dashboard");
+        }
+      })
+  }
 }

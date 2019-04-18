@@ -47,4 +47,21 @@ export class DashboardService {
       });
   }
 
+  removeReceipt(receiptId: number) : Promise<boolean> {
+    let url = this.appConfig.apiUrl + "receipts/removeReceipt/" + receiptId.toString();
+
+    return this.httpClient.post(url, "",
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(response => true)
+      .catch(reason => {
+        log.debug("removeReceipt error:", reason);
+        return false;
+      });
+  }
+
 }

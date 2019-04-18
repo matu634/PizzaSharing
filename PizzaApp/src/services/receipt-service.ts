@@ -97,4 +97,21 @@ export class ReceiptService {
       .then(updatedReceiptRow => updatedReceiptRow.json())
       .catch(reason => log.debug("changeReceiptRowAmount error:", reason));
   }
+
+  removeReceipt(receiptId: number) : Promise<boolean> {
+    let url = this.appConfig.apiUrl + "receipts/removeReceipt/" + receiptId.toString();
+
+    return this.httpClient.post(url, "",
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(response => true)
+      .catch(reason => {
+        log.debug("removeReceipt error:", reason);
+        return false;
+      });
+  }
 }

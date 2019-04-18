@@ -78,4 +78,22 @@ export class Dashboard {
         this.router.navigateToRoute("receiptView",{id: value});
       })
   }
+  
+  removeReceipt(receiptId: number){
+    this.service.removeReceipt(receiptId)
+      .then(value => {
+        if (value){
+          let index = this.dashboardDTO.openReceipts.findIndex(receipt => receipt.receiptId === receiptId);
+          if (index < 0) {
+            log.debug("Index not found. ");
+            return;
+          }
+          this.dashboardDTO.openReceipts.splice(index, 1);
+        }
+      })
+  }
+  
+  viewButtonClicked(receiptId: number){
+    this.router.navigateToRoute("receiptView",{id: receiptId});
+  }
 }

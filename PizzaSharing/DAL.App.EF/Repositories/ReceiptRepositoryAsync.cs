@@ -24,6 +24,11 @@ namespace DAL.App.EF.Repositories
                 .ToListAsync();
         }
 
+        public Task<Receipt> FindMinAsync(int receiptId)
+        {
+            return base.FindAsync(receiptId);
+        }
+
         public override async Task<Receipt> FindAsync(params object[] id)
         {
             var receipt = await RepoDbSet.FindAsync(id);

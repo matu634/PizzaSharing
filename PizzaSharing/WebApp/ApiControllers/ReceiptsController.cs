@@ -41,5 +41,13 @@ namespace WebApp.ApiControllers
         {
             return await _bll.ReceiptsService.NewReceipt(User.GetUserId());
         }
+
+        [HttpPost("{receiptId}")]
+        public async Task<ActionResult> RemoveReceipt(int receiptId)
+        {
+            var result = await _bll.ReceiptsService.RemoveReceipt(receiptId, User.GetUserId());
+            if (result == false) return BadRequest();
+            return Ok();
+        }
     }
 }

@@ -52,6 +52,15 @@ namespace BLL.App.Services
             return receipt.Id;
         }
 
+        public async Task<bool> RemoveReceipt(int receiptId, int currentUserId)
+        {
+            var receipt = await Uow.Receipts.FindMinAsync(receiptId);
+            if (receipt == null || receipt.IsFinalized || receipt.ReceiptManagerId != currentUserId) return false;
+            Uow.Receipts.Remove(receipt);
+            await Uow.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<ReceiptRowAllDTO> AddRow(ReceiptRowMinDTO receiptRowDTO, int currentUserId)
         {
             if (receiptRowDTO.ReceiptId == null) return null;
