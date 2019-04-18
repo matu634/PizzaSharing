@@ -12,5 +12,7 @@ namespace Contracts.DAL.App.Repositories
         Task<List<ReceiptRowAllDTO>> AllReceiptsRows(int receiptId, DateTime time);
         
         Task<ReceiptRow> AddAsync(ReceiptRowMinDTO rowMin);
+
+        Task<ReceiptRow> FindRowAndRelatedDataAsync(int id);
     }
 }

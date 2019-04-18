@@ -43,13 +43,13 @@ namespace DAL.App.EF.Repositories
         {
             var rows = await RepoDbSet
                 .Include(row => row.Product)
-                    .ThenInclude(product => product.Prices)
+                .ThenInclude(product => product.Prices)
                 .Include(row => row.ReceiptRowChanges)
-                    .ThenInclude(receiptRowChange => receiptRowChange.Change)
-                        .ThenInclude(change => change.Prices)
+                .ThenInclude(receiptRowChange => receiptRowChange.Change)
+                .ThenInclude(change => change.Prices)
                 .Include(row => row.RowParticpantLoanRows)
-                    .ThenInclude(row => row.Loan)
-                        .ThenInclude(loan => loan.LoanTaker)
+                .ThenInclude(row => row.Loan)
+                .ThenInclude(loan => loan.LoanTaker)
                 .Where(row => row.ReceiptId == receiptId)
                 .ToListAsync();
             var result = new List<ReceiptRowAllDTO>();
@@ -60,7 +60,6 @@ namespace DAL.App.EF.Repositories
                     ProductId = row.ProductId,
                     ProductName = row.Product.ProductName,
                     ProductPrice = row.Product.GetPriceAtTime(time)
-                    
                 };
                 var changes = new List<ChangeDTO>();
                 foreach (var rowChange in row.ReceiptRowChanges)
@@ -75,6 +74,7 @@ namespace DAL.App.EF.Repositories
                         ReceiptRowId = row.Id
                     });
                 }
+
                 var participants = new List<RowParticipantDTO>();
                 foreach (var loanRow in row.RowParticpantLoanRows)
                 {
@@ -88,7 +88,7 @@ namespace DAL.App.EF.Repositories
                         LoanRowId = loanRow.Id
                     });
                 }
-                
+
                 result.Add(new ReceiptRowAllDTO()
                 {
                     Amount = row.Amount,
@@ -114,22 +114,22 @@ namespace DAL.App.EF.Repositories
                 RowDiscount = rowMin.Discount,
                 ReceiptId = rowMin.ReceiptId
             };
-            /*
-             *  .Include(row => row.Product)
-                    .ThenInclude(product => product.Prices)
+
+            return (await RepoDbSet.AddAsync(receiptRow)).Entity;
+        }
+        
+        public async Task<ReceiptRow> FindRowAndRelatedDataAsync(int id)
+        {
+            return await RepoDbSet
+                .Include(row => row.Product)
+                .ThenInclude(product => product.Prices)
                 .Include(row => row.ReceiptRowChanges)
-                    .ThenInclude(receiptRowChange => receiptRowChange.Change)
-                        .ThenInclude(change => change.Prices)
+                .ThenInclude(receiptRowChange => receiptRowChange.Change)
+                .ThenInclude(change => change.Prices)
                 .Include(row => row.RowParticpantLoanRows)
-                    .ThenInclude(row => row.Loan)
-                        .ThenInclude(loan => loan.LoanTaker)
-             */
-            
-            var result = (await RepoDbSet.AddAsync(receiptRow)).Entity;
-            await RepoDbContext.Entry(result).Reference(row => row.Product).LoadAsync();
-            await RepoDbContext.Entry(result.Product).Collection(product => product.Prices).LoadAsync();
-            await RepoDbContext.Entry(result).Collection(row => row.ReceiptRowChanges).LoadAsync();
-            return result;
+                .ThenInclude(row => row.Loan)
+                .ThenInclude(loan => loan.LoanTaker)
+                .FirstOrDefaultAsync(row => row.Id == id);
         }
     }
 }

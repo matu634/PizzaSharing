@@ -141,27 +141,26 @@ namespace WebApp.ApiControllers
             }
             
             //Loaded - receipt, receipt row, product
-            
-//            var result = new ReceiptRowAllDTO()
-//            {
-//                Amount = receiptRow.Amount,
-//                Product = new ProductDTO()
-//                {
-//                    ProductId = receiptRow.Product.Id,
-//                    ProductName = receiptRow.Product.ProductName,
-//                    ProductPrice = receiptRow.Product.GetPriceAtTime(receipt.CreatedTime)                    
-//                },
-//                CurrentCost = receiptRow.RowSumCost(),
-//                Changes = new List<ChangeDTO>(),
-//                Participants = new List<RowParticipantDTO>(),
-//                ReceiptId = receiptRow.ReceiptId,
-//                ReceiptRowId = receiptRow.Id,
-//                Discount = receiptRow.RowDiscount
-//            };
-            var row = await _uow.ReceiptRows.FindAsync(receiptRow.Id);
-            
             await _uow.SaveChangesAsync();
-            return Ok();
+            var row = await _uow.ReceiptRows.FindRowAndRelatedDataAsync(receiptRow.Id);
+
+            var result = new ReceiptRowAllDTO()
+            {
+                Amount = row.Amount,
+                Product = new ProductDTO()
+                {
+                    ProductId = row.Product.Id,
+                    ProductName = row.Product.ProductName,
+                    ProductPrice = row.Product.GetPriceAtTime(receipt.CreatedTime)                    
+                },
+                CurrentCost = row.RowSumCost(),
+                Changes = new List<ChangeDTO>(),
+                Participants = new List<RowParticipantDTO>(),
+                ReceiptId = row.ReceiptId,
+                ReceiptRowId = row.Id,
+                Discount = row.RowDiscount
+            };
+            return result;
         }
 
         [HttpPost]
