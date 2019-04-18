@@ -35,5 +35,11 @@ namespace WebApp.ApiControllers
             if (result == null) BadRequest();
             return result;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> NewReceipt()
+        {
+            return await _bll.ReceiptsService.NewReceipt(User.GetUserId());
+        }
     }
 }

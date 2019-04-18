@@ -32,6 +32,7 @@ namespace WebApp.ApiControllers
             return await _bll.AppService.GetUserDashboard(User.GetUserId());
         }
 
+        /*
         [HttpPost]
         public async Task<ActionResult<ReceiptAllDTO>> NewReceipt()
         {
@@ -53,6 +54,7 @@ namespace WebApp.ApiControllers
                 Rows = new List<ReceiptRowAllDTO>()
             };
         }
+        */
 
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)

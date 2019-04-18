@@ -8,7 +8,7 @@ namespace Contracts.BLL.App.Services
     {
         Task<ReceiptAllDTO> GetReceiptAndRelatedData(int receiptId, int currentUserId);
         
-        ReceiptAllDTO NewReceipt();
+        Task<int> NewReceipt(int userId);
 
         Task<ReceiptRowAllDTO> AddRow(ReceiptRowMinDTO receiptRowDTO, int currentUserId);
 

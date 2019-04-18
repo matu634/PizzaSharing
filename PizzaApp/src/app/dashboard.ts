@@ -72,5 +72,10 @@ export class Dashboard {
 
   //===================================View methods===================================
 
-  
+  newReceipt(){
+    this.service.newReceipt()
+      .then(value =>{
+        this.router.navigateToRoute("receiptView",{id: value});
+      })
+  }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,9 +37,19 @@ namespace BLL.App.Services
             return result;
         }
 
-        public ReceiptAllDTO NewReceipt()
+        public async Task<int> NewReceipt(int userId)
         {
-            throw new System.NotImplementedException();
+            //TODO: mapper
+            var receiptDTO = new ReceiptDTO()
+            {
+                ReceiptManagerId = userId,
+                CreatedTime = DateTime.Now,
+                IsFinalized = false
+            };
+            var receipt = await Uow.Receipts.AddAsync(receiptDTO);
+            await Uow.SaveChangesAsync();
+            
+            return receipt.Id;
         }
 
         public async Task<ReceiptRowAllDTO> AddRow(ReceiptRowMinDTO receiptRowDTO, int currentUserId)

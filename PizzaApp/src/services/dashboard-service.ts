@@ -29,5 +29,22 @@ export class DashboardService {
       .then(response => response.json())
       .then(jsonData => jsonData);
   }
+  
+  newReceipt(){
+    let url = this.appConfig.apiUrl + "receipts/newReceipt";
+
+    return this.httpClient.post(url, "",
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(response => response.json())
+      .catch(reason => {
+        log.debug("newReceipt error:", reason);
+        return -1;
+      });
+  }
 
 }
