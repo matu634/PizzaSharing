@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using DAL.App.DTO;
-using Domain;
 
-namespace BLL.App.DTO
+namespace PublicApi.DTO
 {
     public class ReceiptAllDTO
     {

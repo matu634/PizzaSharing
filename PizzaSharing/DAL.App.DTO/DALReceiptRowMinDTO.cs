@@ -1,6 +1,6 @@
 namespace DAL.App.DTO
 {
-    public class ReceiptRowMinDTO
+    public class DALReceiptRowMinDTO
     {
         public int ReceiptId { get; set; }
         public int ProductId { get; set; }

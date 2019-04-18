@@ -4,6 +4,7 @@ import {HttpClient} from "aurelia-fetch-client";
 import {IReceiptDTO} from "../interfaces/IReceiptDTO";
 import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
+import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
 
 export var log = LogManager.getLogger('ReceiptService');
 
@@ -18,7 +19,7 @@ export class ReceiptService {
   }
 
   fetch(id: number): Promise<IReceiptDTO> {
-    let url = this.appConfig.apiUrl + "app/receipt/" + id.toString();
+    let url = this.appConfig.apiUrl + "receipts/get/" + id.toString();
 
     return this.httpClient.fetch(url, {
       cache: "no-store",
@@ -46,8 +47,8 @@ export class ReceiptService {
     
   }
 
-  addReceiptRow(receiptRowDTO: IReceiptRowDTO) {
-    let url = this.appConfig.apiUrl + "app/AddReceiptRow";
+  addReceiptRow(receiptRowDTO: IReceiptRowMinDTO) {
+    let url = this.appConfig.apiUrl + "receipts/AddRow";
 
     return this.httpClient.post(url, JSON.stringify(receiptRowDTO),
       {

@@ -63,7 +63,7 @@
           <div class="inner">
             <h3>${product.productName} - ${product.productPrice}€</h3>
 
-            <p>New Orders</p>
+            <p>TODO: Product description here!</p>
           </div>
           <div class="icon">
             <i class="ion ion-bag"></i>
@@ -82,6 +82,8 @@
             <button class="btn btn-outline-danger" click.trigger="changeRowAmountClicked(row.amount - 1, row)" disabled.bind="row.amount <= 1"><i class="fa fa-minus"></i></button>
              x ${row.product.productName}</h3>
           <div class="card-tools">
+            <button class="btn btn-success btn-tool">Add item</button>
+            <button class="btn btn-success btn-tool">Add participant</button>
             <button class="btn btn-danger btn-tool" click.delegate="removeRowClicked(row.receiptRowId)">Remove</button>
           </div>
         </div>
@@ -91,9 +93,7 @@
             <tr>
               <th>Item Name</th>
               <th>Cost</th>
-              <th>
-                <button class="btn btn-success btn-tool">Add item</button>
-              </th>
+              <th></th>
             </tr>
             </thead>
             <tbody>
@@ -118,23 +118,14 @@
             </tr>
             </tfoot>
             <tfoot>
-            <tr>
-              <th>
-                <button class="btn btn-outline-success">Add item</button>
-              </th>
-              <th></th>
-              <th></th>
-            </tr>
-            </tfoot>
-            <tfoot>
             <tr show.bind="row.discount != null">
               <th>Discount:</th>
               <th>${row.discount * 100}%</th>
             </tr>
             </tfoot>
           </table>
-          <table class="table table-valign-middle">
-            <thead class="bg-info-gradient">
+          <table class="table table-valign-middle" hidden.bind="row.participants === undefined || row.participants.length === 0">
+            <thead class="thead-light">
             <tr>
               <th>Name</th>
               <th>Invovlement</th>
@@ -156,15 +147,6 @@
               <td>${participant.involvement * row.currentCost} €</td>
             </tr>
             </tbody>
-            <tfoot>
-            <tr>
-              <th>
-                <button class="btn btn-outline-success">Add participant</button>
-              </th>
-              <th></th>
-              <th></th>
-            </tr>
-            </tfoot>
           </table>
         </div>
       </div>

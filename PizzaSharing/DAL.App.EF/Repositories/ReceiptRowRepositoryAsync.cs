@@ -9,6 +9,7 @@ using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PublicApi.DTO;
 
 namespace DAL.App.EF.Repositories
 {
@@ -105,7 +106,7 @@ namespace DAL.App.EF.Repositories
             return result;
         }
 
-        public async Task<ReceiptRow> AddAsync(ReceiptRowMinDTO rowMin)
+        public async Task<ReceiptRow> AddAsync(DALReceiptRowMinDTO rowMin)
         {
             var receiptRow = new ReceiptRow()
             {

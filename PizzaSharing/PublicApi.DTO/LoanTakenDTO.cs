@@ -1,7 +1,4 @@
-using System;
-using Domain.Identity;
-
-namespace DAL.App.DTO
+namespace PublicApi.DTO
 {
     public class LoanTakenDTO
     {

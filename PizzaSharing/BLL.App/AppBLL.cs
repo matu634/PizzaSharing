@@ -18,5 +18,9 @@ namespace BLL.App
         }
 
         public IPriceService Prices => ServiceProvider.GetService<IPriceService>();
+        
+        public IAppService AppService => ServiceProvider.GetService<IAppService>();
+        public IReceiptsService ReceiptsService => ServiceProvider.GetService<IReceiptsService>();
+        public ILoanService LoanService => ServiceProvider.GetService<ILoanService>();
     }
 }

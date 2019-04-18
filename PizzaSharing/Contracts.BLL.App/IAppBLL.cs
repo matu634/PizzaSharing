@@ -8,7 +8,10 @@ namespace Contracts.BLL.App
     {
         IPriceService Prices { get; }
         
-        //TODO: public facing services
-        //IPizzaOrderService PizzaOrderService
+        IAppService AppService { get; }
+        
+        IReceiptsService ReceiptsService { get; }
+        
+        ILoanService LoanService { get; }
     }
 }

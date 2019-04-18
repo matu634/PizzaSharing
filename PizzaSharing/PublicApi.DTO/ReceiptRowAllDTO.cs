@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DAL.App.DTO
+namespace PublicApi.DTO
 {
     public class ReceiptRowAllDTO
     {

@@ -1,106 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Contracts.BLL.App;
+using Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain;
+using PublicApi.DTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ReceiptsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAppBLL _bll;
 
-        public ReceiptsController(AppDbContext context)
+        public ReceiptsController(IAppBLL bll)
         {
-            _context = context;
+            _bll = bll;
         }
 
-        // GET: api/Receipts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Receipt>>> GetReceipts()
+        [HttpGet("{receiptId}")]
+        public async Task<ActionResult<ReceiptAllDTO>> Get(int receiptId)
         {
-            return await _context.Receipts.ToListAsync();
+            var result = await _bll.ReceiptsService.GetReceiptAndRelatedData(receiptId, User.GetUserId());
+            if (result == null) return Unauthorized();
+            return result;
         }
 
-        // GET: api/Receipts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Receipt>> GetReceipt(int id)
-        {
-            var receipt = await _context.Receipts.FindAsync(id);
-
-            if (receipt == null)
-            {
-                return NotFound();
-            }
-
-            return receipt;
-        }
-
-        // PUT: api/Receipts/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReceipt(int id, Receipt receipt)
-        {
-            if (id != receipt.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(receipt).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReceiptExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Receipts
         [HttpPost]
-        public async Task<ActionResult<Receipt>> PostReceipt(Receipt receipt)
+        public async Task<ActionResult<ReceiptRowAllDTO>> AddRow(ReceiptRowMinDTO receiptRowDTO)
         {
-            _context.Receipts.Add(receipt);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetReceipt", new { id = receipt.Id }, receipt);
-        }
-
-        // DELETE: api/Receipts/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Receipt>> DeleteReceipt(int id)
-        {
-            var receipt = await _context.Receipts.FindAsync(id);
-            if (receipt == null)
-            {
-                return NotFound();
-            }
-
-            _context.Receipts.Remove(receipt);
-            await _context.SaveChangesAsync();
-
-            return receipt;
-        }
-
-        private bool ReceiptExists(int id)
-        {
-            return _context.Receipts.Any(e => e.Id == id);
+            var result = await _bll.ReceiptsService.AddRow(receiptRowDTO, User.GetUserId());
+            if (result == null) BadRequest();
+            return result;
         }
     }
 }

@@ -7,15 +7,12 @@ using DAL.Base.EF.Repositories;
 
 namespace BLL.Base.Services
 {
-    public class BaseEntityService<TEntity, TUnitOfWork> : BaseService, IBaseEntityService<TEntity> 
+    public class BaseEntityService<TEntity, TUnitOfWork> : BaseService<TUnitOfWork>, IBaseEntityService<TEntity> 
         where TEntity : class, IBaseEntity, new()
         where TUnitOfWork : IBaseUnitOfWork
     {
-        protected TUnitOfWork Uow;
-
-        public BaseEntityService(TUnitOfWork uow)
+        public BaseEntityService(TUnitOfWork uow) : base(uow)
         {
-            Uow = uow;
         }
 
         public virtual TEntity Update(TEntity entity)

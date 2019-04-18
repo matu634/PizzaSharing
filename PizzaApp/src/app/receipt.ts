@@ -7,6 +7,7 @@ import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 import {ICategoryDTO} from "../interfaces/ICategoryDTO";
 import {IProductDTO} from "../interfaces/IProductDTO";
 import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
+import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -102,17 +103,15 @@ export class Receipt {
 
   addToCartClicked(product: IProductDTO) {
     log.debug("Product clicked: ", product);
-    let kek : IReceiptRowDTO = {
-      product: product,
+    if (product === null || product.productId === null) return;
+    
+    let rowDTO : IReceiptRowMinDTO = {
       amount: 1,
-      receiptId: this.receiptDTO.receiptId,
-      changes : null,
-      currentCost: null,
-      discount : null,
-      participants: null,
-      receiptRowId: null,
+      productId : product.productId,
+      receiptId : this.receiptDTO.receiptId,
+      discount : null
     };
-    this.receiptService.addReceiptRow(kek)
+    this.receiptService.addReceiptRow(rowDTO)
       .then(value => {
         log.debug("Returned row", value);
         this.receiptDTO.rows.push(value);

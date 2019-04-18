@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using DAL.App.DTO;
-using Domain;
+﻿using System.Collections.Generic;
 
 //BLL to Controller
-namespace BLL.App.DTO
+namespace PublicApi.DTO
 {
     public class UserDashboardDTO
     {

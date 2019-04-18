@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
-using DAL.App.DTO;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using PublicApi.DTO;
 
 namespace DAL.App.EF.Repositories
 {
@@ -31,6 +31,7 @@ namespace DAL.App.EF.Repositories
             if (receipt != null)
             {
                 await RepoDbContext.Entry(receipt).Reference(r => r.ReceiptManager).LoadAsync();
+                await RepoDbContext.Entry(receipt).Collection(r => r.ReceiptParticipants).LoadAsync();
             }
 
             return receipt;

@@ -1,6 +1,6 @@
 using System;
 
-namespace DAL.App.DTO
+namespace PublicApi.DTO
 {
     public class ReceiptDTO
     {
