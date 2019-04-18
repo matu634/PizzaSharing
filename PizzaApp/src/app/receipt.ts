@@ -136,4 +136,22 @@ export class Receipt {
     this.receiptDTO.rows.forEach(value => 
       this.receiptDTO.sumCost += value.currentCost !== null ? value.currentCost : 0)
   }
+  
+  changeRowAmountClicked(newAmount: number, rowDto : IReceiptRowDTO) {
+    if (rowDto.receiptRowId === null) return;
+    this.receiptService.changeReceiptRowAmount(newAmount, rowDto.receiptRowId)
+      .then(updatedRow => {
+        log.debug("Updated row:", updatedRow);
+        let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === rowDto.receiptRowId);
+        if (index < 0) {
+          log.debug("Index not found. ");
+          return;
+        }
+        
+        // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
+        this.receiptDTO.rows.splice(index, 1, updatedRow);
+        this.updateTotalPrice();
+        log.debug("Current rows: ", this.receiptDTO.rows)
+      })
+  }
 }

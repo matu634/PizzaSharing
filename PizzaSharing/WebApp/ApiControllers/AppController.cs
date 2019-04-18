@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BLL.App.DTO;
 using Contracts.DAL.App;
 using DAL.App.DTO;
-using Domain;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -143,7 +142,9 @@ namespace WebApp.ApiControllers
             //Loaded - receipt, receipt row, product
             await _uow.SaveChangesAsync();
             var row = await _uow.ReceiptRows.FindRowAndRelatedDataAsync(receiptRow.Id);
-
+            
+            
+            //TODO: mapper
             var result = new ReceiptRowAllDTO()
             {
                 Amount = row.Amount,
@@ -194,14 +195,54 @@ namespace WebApp.ApiControllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UpdateAmount(ReceiptRowAmountChangeDTO dto)
+        public async Task<ActionResult<ReceiptRowAllDTO>> UpdateRowAmount(ReceiptRowAmountChangeDTO dto)
         {
             //TODO: security check
-            var row = await _uow.ReceiptRows.FindAsync(dto.ReceiptRowId);
+            var row = await _uow.ReceiptRows.FindRowAndRelatedDataAsync(dto.ReceiptRowId);
             if (row == null) return BadRequest("ReceiptRow not found");
             row.Amount = dto.NewAmount;
             await _uow.SaveChangesAsync();
-            return Ok();
+            
+            //TODO: mapper
+            var result = new ReceiptRowAllDTO()
+            {
+                Amount = row.Amount,
+                Product = new ProductDTO()
+                {
+                    ProductId = row.Product.Id,
+                    ProductName = row.Product.ProductName,
+                    ProductPrice = row.Product.GetPriceAtTime(row.Receipt.CreatedTime)                    
+                },
+                CurrentCost = row.RowSumCost(),
+                Changes = row.ReceiptRowChanges.Select(rowChange =>
+                {
+                    return new ChangeDTO()
+                    {
+                        Name = rowChange.Change.ChangeName,
+                        Price = rowChange.Change.GetPriceAtTime(row.Receipt.CreatedTime),
+                        ChangeId = rowChange.ChangeId,
+                        CategoryId = rowChange.Change.CategoryId,
+                        OrganizationId = rowChange.Change.OrganizationId,
+                        ReceiptRowId = rowChange.ReceiptRowId
+                    };
+                }).ToList(),
+                Participants = row.RowParticpantLoanRows.Select(loanRow =>
+                {
+                    return new RowParticipantDTO()
+                    {
+                        Name = loanRow.Loan.LoanTaker.UserNickname,
+                        Involvement = loanRow.Involvement,
+                        ReceiptRowId = row.Id,
+                        LoanId = loanRow.LoanId,
+                        AppUserId = loanRow.Loan.LoanTakerId,
+                        LoanRowId = loanRow.Id
+                    };
+                }).ToList(),
+                ReceiptId = row.ReceiptId,
+                ReceiptRowId = row.Id,
+                Discount = row.RowDiscount
+            };
+            return result;
         }
         
         [HttpPost("{rowId}")]

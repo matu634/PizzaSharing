@@ -21,6 +21,7 @@ namespace Domain
 
         public List<ReceiptRowChange> ReceiptRowChanges { get; set; }
 
+        //TODO: move to bll
         public decimal RowSumCost()
         {
             if (RowDiscount != null && (RowDiscount > 1.0M || RowDiscount < decimal.Zero))
@@ -45,5 +46,6 @@ namespace Domain
             }
             return price * (1.0m - RowDiscount) ?? price;
         }
+        
     }
 }

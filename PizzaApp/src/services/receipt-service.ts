@@ -77,4 +77,23 @@ export class ReceiptService {
         return -1;
       });
   }
+  
+  changeReceiptRowAmount(newAmount: number, receiptRowId: number) {
+    let url = this.appConfig.apiUrl + "app/UpdateRowAmount" ;
+
+    let body = JSON.stringify({ReceiptRowId: receiptRowId, NewAmount: newAmount});
+    log.debug("changeReceiptRowAmount request body: ", body);
+    
+    return this.httpClient.post(
+      url, 
+      body,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(updatedReceiptRow => updatedReceiptRow.json())
+      .catch(reason => log.debug("changeReceiptRowAmount error:", reason));
+  }
 }

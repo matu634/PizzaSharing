@@ -76,7 +76,11 @@
     <div class="col-lg-6">
       <div class="card card-dark" repeat.for="row of receiptDTO.rows">
         <div class="card-header no-border">
-          <h3 class="card-title text-light">${row.amount} x ${row.product.productName}</h3>
+          <h3 class="card-title text-light">
+            <button class="btn btn-outline-success" click.delegate="changeRowAmountClicked(row.amount + 1, row)"><i class="fa fa-plus"></i></button>
+            ${row.amount}
+            <button class="btn btn-outline-danger" click.trigger="changeRowAmountClicked(row.amount - 1, row)" disabled.bind="row.amount <= 1"><i class="fa fa-minus"></i></button>
+             x ${row.product.productName}</h3>
           <div class="card-tools">
             <button class="btn btn-danger btn-tool" click.delegate="removeRowClicked(row.receiptRowId)">Remove</button>
           </div>

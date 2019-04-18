@@ -71,7 +71,7 @@ namespace DAL.App.EF.Repositories
                         ChangeId = rowChange.ChangeId,
                         CategoryId = rowChange.Change.CategoryId,
                         OrganizationId = rowChange.Change.OrganizationId,
-                        ReceiptRowId = row.Id
+                        ReceiptRowId = rowChange.ReceiptRowId
                     });
                 }
 
@@ -121,6 +121,7 @@ namespace DAL.App.EF.Repositories
         public async Task<ReceiptRow> FindRowAndRelatedDataAsync(int id)
         {
             return await RepoDbSet
+                .Include(row => row.Receipt)
                 .Include(row => row.Product)
                 .ThenInclude(product => product.Prices)
                 .Include(row => row.ReceiptRowChanges)
