@@ -3,12 +3,12 @@ import {IProductDTO} from "./IProductDTO";
 import {IChangeDTO} from "./IChangeDTO";
 
 export interface IReceiptRowDTO {
-  receiptRowId: number,
-  receiptId: number,
-  amount: number,
-  currentCost: number,
-  discount: number,
-  product: IProductDTO
-  changes: IChangeDTO[]
-  participants: IParticipantDTO[]
+  receiptRowId: number | null;
+  receiptId: number;
+  amount: number;
+  currentCost: number | null;
+  discount: number | null;
+  product: IProductDTO;
+  changes: IChangeDTO[] | null;
+  participants: IParticipantDTO[] | null;
 }

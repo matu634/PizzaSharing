@@ -192,5 +192,27 @@ namespace WebApp.ApiControllers
             if (receipt == null) return BadRequest("Receipt doesn't exist!");
             return await _uow.Organizations.AllDtoAsync(receipt.CreatedTime);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateAmount(ReceiptRowAmountChangeDTO dto)
+        {
+            //TODO: security check
+            var row = await _uow.ReceiptRows.FindAsync(dto.ReceiptRowId);
+            if (row == null) return BadRequest("ReceiptRow not found");
+            row.Amount = dto.NewAmount;
+            await _uow.SaveChangesAsync();
+            return Ok();
+        }
+        
+        [HttpPost("{rowId}")]
+        public async Task<ActionResult> DeleteRow(int rowId)
+        {
+            //TODO: security check
+            var rowExists = await _uow.ReceiptRows.Exists(rowId);
+            if (!rowExists) return BadRequest("ReceiptRow not found");
+            _uow.ReceiptRows.Remove(id: rowId);
+            await _uow.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

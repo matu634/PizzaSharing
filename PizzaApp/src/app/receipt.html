@@ -78,7 +78,7 @@
         <div class="card-header no-border">
           <h3 class="card-title text-light">${row.amount} x ${row.product.productName}</h3>
           <div class="card-tools">
-            <button class="btn btn-danger btn-tool">Remove</button>
+            <button class="btn btn-danger btn-tool" click.delegate="removeRowClicked(row.receiptRowId)">Remove</button>
           </div>
         </div>
         <div class="card-body p-1">

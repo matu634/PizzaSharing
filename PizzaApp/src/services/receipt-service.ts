@@ -27,7 +27,8 @@ export class ReceiptService {
       }
     })
       .then(response => response.json())
-      .then(jsonData => jsonData);
+      .then(jsonData => jsonData)
+      .catch(reason => log.debug("fetch error:", reason));
   }
 
   fetchOrganizations(receiptId: number): Promise<IOrganizationDTO[]> {
@@ -40,7 +41,9 @@ export class ReceiptService {
       }
     })
       .then(response => response.json())
-      .then(jsonData => jsonData);
+      .then(jsonData => jsonData)
+      .catch(reason => log.debug("fetchOrganizations error:", reason));
+    
   }
 
   addReceiptRow(receiptRowDTO: IReceiptRowDTO) {
@@ -54,6 +57,24 @@ export class ReceiptService {
         }
       })
       .then(response => response.json())
-      .then(jsonData => jsonData);
+      .then(jsonData => jsonData)
+      .catch(reason => log.debug("addReceiptRow error:", reason));
+  }
+
+  removeReceiptRow(receiptRowId: number) : Promise<number> {
+    let url = this.appConfig.apiUrl + "app/DeleteRow/" + receiptRowId.toString();
+
+    return this.httpClient.post(url, "",
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(response => receiptRowId)
+      .catch(reason => {
+        log.debug("addReceiptRow error:", reason);
+        return -1;
+      });
   }
 }

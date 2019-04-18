@@ -6,6 +6,7 @@ import {AppConfig} from "../app-config";
 import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 import {ICategoryDTO} from "../interfaces/ICategoryDTO";
 import {IProductDTO} from "../interfaces/IProductDTO";
+import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -14,9 +15,9 @@ export class Receipt {
 
   private receiptDTO: IReceiptDTO;
   private organizations: IOrganizationDTO[];
-  private selectedOrganization : IOrganizationDTO | null = null;
-  private selectedCategory : ICategoryDTO | null = null;
-  
+  private selectedOrganization: IOrganizationDTO | null = null;
+  private selectedCategory: ICategoryDTO | null = null;
+
   constructor(
     private receiptService: ReceiptService,
     private appConfig: AppConfig,
@@ -53,11 +54,11 @@ export class Receipt {
 
   activate(params: any, routerConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
     log.debug('activate');
-    if(this.appConfig.jwt == null) {
+    if (this.appConfig.jwt == null) {
       this.router.navigateToRoute("identityLogin");
       return;
     }
-    
+
     this.receiptService.fetch(params.id)
       .then(value => {
         this.receiptDTO = value;
@@ -78,13 +79,13 @@ export class Receipt {
   deactivate() {
     log.debug('deactivate');
   }
-  
+
   // ---------------------------View methods---------------------------
   organizationOnChange() {
     log.debug('Change. Organization: ', typeof this.selectedOrganization);
-    if (this.selectedOrganization !== null){
+    if (this.selectedOrganization !== null) {
       $("#categorySelect").prop("disabled", false);
-      
+
     } else {
       $("#categorySelect").prop("disabled", true)
     }
@@ -92,13 +93,47 @@ export class Receipt {
 
   categoryOnChange() {
     log.debug('Change. Organization: ', typeof this.selectedOrganization);
-    if (this.selectedOrganization !== null){
+    if (this.selectedOrganization !== null) {
       $("#products").prop("hidden", false);
     } else {
       $("#products").prop("hidden", true)
     }
   }
-  addToCartClicked(product: IProductDTO){
-    log.debug("Product clicked: ", product)
+
+  addToCartClicked(product: IProductDTO) {
+    log.debug("Product clicked: ", product);
+    let kek : IReceiptRowDTO = {
+      product: product,
+      amount: 1,
+      receiptId: this.receiptDTO.receiptId,
+      changes : null,
+      currentCost: null,
+      discount : null,
+      participants: null,
+      receiptRowId: null,
+    };
+    this.receiptService.addReceiptRow(kek)
+      .then(value => {
+        log.debug("Returned row", value);
+        this.receiptDTO.rows.push(value);
+        this.updateTotalPrice();
+      });
+  }
+  
+  removeRowClicked(id: number){
+    this.receiptService.removeReceiptRow(id).then(value => {
+      if (value !== -1) {
+        this.receiptDTO.rows = this.receiptDTO.rows.filter(function (obj) {
+          return obj.receiptRowId !== value;
+        });
+        this.updateTotalPrice()
+      }
+    })
+  }
+  
+  updateTotalPrice(){
+    this.receiptDTO.sumCost = 0;
+    this.receiptDTO.rows.forEach(value => 
+      this.receiptDTO.sumCost += value.currentCost !== null ? value.currentCost : 0)
   }
 }
