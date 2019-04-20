@@ -63,7 +63,7 @@ export class ReceiptService {
   }
 
   removeReceiptRow(receiptRowId: number) : Promise<number> {
-    let url = this.appConfig.apiUrl + "app/DeleteRow/" + receiptRowId.toString();
+    let url = this.appConfig.apiUrl + "receipts/removeRow/" + receiptRowId.toString();
 
     return this.httpClient.post(url, "",
       {

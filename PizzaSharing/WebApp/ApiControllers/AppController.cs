@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
 using Contracts.DAL.App;
+using Domain.Identity;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,30 +32,6 @@ namespace WebApp.ApiControllers
         {
             return await _bll.AppService.GetUserDashboard(User.GetUserId());
         }
-
-        /*
-        [HttpPost]
-        public async Task<ActionResult<ReceiptAllDTO>> NewReceipt()
-        {
-            var receiptDTO = new ReceiptDTO()
-            {
-                ReceiptManagerId = User.GetUserId(),
-                CreatedTime = DateTime.Now,
-                IsFinalized = false
-            };
-            var receipt = await _uow.Receipts.AddAsync(receiptDTO);
-            await _uow.SaveChangesAsync();
-            
-            return new ReceiptAllDTO()
-            {
-                ReceiptId = receipt.Id,
-                CreatedTime = receipt.CreatedTime,
-                IsFinalized = receipt.IsFinalized,
-                SumCost = decimal.Zero,
-                Rows = new List<ReceiptRowAllDTO>()
-            };
-        }
-        */
 
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)
@@ -116,29 +93,7 @@ namespace WebApp.ApiControllers
             return result;
         }
         
-        [HttpPost("{rowId}")]
-        public async Task<ActionResult> DeleteRow(int rowId)
-        {
-            //TODO: security check
-            var rowExists = await _uow.ReceiptRows.Exists(rowId);
-            if (!rowExists) return BadRequest("ReceiptRow not found");
-            _uow.ReceiptRows.Remove(id: rowId);
-            await _uow.SaveChangesAsync();
-            return Ok();
-        }
-
-        //Submit receipt(mark finalized)
-
-        //Add participant
-        //Add change
         
-        //Get all products changes
-        //Get all participants
-
-        //Mark debt paid
-        //confirm loan paid
-        //decline loan paid
-        //mark loan paid
 
     }
 }

@@ -16,7 +16,7 @@ namespace Contracts.BLL.App.Services
 
         ReceiptRowAllDTO UpdateRowAmount();
 
-        bool DeleteRow();
+        Task<bool> RemoveRow(int rowId, int userId);
 
         ReceiptRowAllDTO AddRowChange();
 

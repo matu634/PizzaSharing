@@ -70,6 +70,7 @@ namespace BLL.App.Services
             if (
                 receipt == null ||
                 receipt.ReceiptManagerId != currentUserId ||
+                receipt.IsFinalized ||
                 receiptRowDTO.ProductId == null ||
                 await Uow.Products.FindAsync(receiptRowDTO.ProductId) == null ||
                 receiptRowDTO.Amount == null ||
@@ -120,9 +121,13 @@ namespace BLL.App.Services
             throw new System.NotImplementedException();
         }
 
-        public bool DeleteRow()
+        public async Task<bool> RemoveRow(int rowId, int userId)
         {
-            throw new System.NotImplementedException();
+            var row = await Uow.ReceiptRows.FindAsync(rowId);
+            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized ) return false;
+            Uow.ReceiptRows.Remove(row);
+            await Uow.SaveChangesAsync();
+            return true;
         }
 
         public ReceiptRowAllDTO AddRowChange()

@@ -49,5 +49,13 @@ namespace WebApp.ApiControllers
             if (result == false) return BadRequest();
             return Ok();
         }
+        
+        [HttpPost("{rowId}")]
+        public async Task<ActionResult> RemoveRow(int rowId)
+        {
+            var result = await _bll.ReceiptsService.RemoveRow(rowId: rowId, userId: User.GetUserId());
+            if (result == false) return BadRequest();
+            return Ok();
+        }
     }
 }
