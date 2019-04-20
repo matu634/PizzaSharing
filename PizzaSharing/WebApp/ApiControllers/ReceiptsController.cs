@@ -57,5 +57,13 @@ namespace WebApp.ApiControllers
             if (result == false) return BadRequest();
             return Ok();
         }
+        
+        [HttpPost]
+        public async Task<ActionResult<ReceiptRowAllDTO>> UpdateRowAmount(ReceiptRowAmountChangeDTO dto)
+        {
+            var result = await _bll.ReceiptsService.UpdateRowAmount(dto, User.GetUserId());
+            if (result == null) return BadRequest();
+            return result;
+        }
     }
 }

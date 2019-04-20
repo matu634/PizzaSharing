@@ -116,9 +116,53 @@ namespace BLL.App.Services
             return result;
         }
 
-        public ReceiptRowAllDTO UpdateRowAmount()
+        public async Task<ReceiptRowAllDTO> UpdateRowAmount(ReceiptRowAmountChangeDTO dto, int userId)
         {
-            throw new System.NotImplementedException();
+            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(dto.ReceiptRowId);
+            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized) return null;
+            row.Amount = dto.NewAmount;
+            await Uow.SaveChangesAsync();
+            
+            //TODO: mapper
+            var result = new ReceiptRowAllDTO()
+            {
+                Amount = row.Amount,
+                Product = new ProductDTO()
+                {
+                    ProductId = row.Product.Id,
+                    ProductName = row.Product.ProductName,
+                    ProductPrice = row.Product.GetPriceAtTime(row.Receipt.CreatedTime)                    
+                },
+                CurrentCost = row.RowSumCost(),
+                Changes = row.ReceiptRowChanges.Select(rowChange =>
+                {
+                    return new ChangeDTO()
+                    {
+                        Name = rowChange.Change.ChangeName,
+                        Price = rowChange.Change.GetPriceAtTime(row.Receipt.CreatedTime),
+                        ChangeId = rowChange.ChangeId,
+                        CategoryId = rowChange.Change.CategoryId,
+                        OrganizationId = rowChange.Change.OrganizationId,
+                        ReceiptRowId = rowChange.ReceiptRowId
+                    };
+                }).ToList(),
+                Participants = row.RowParticpantLoanRows.Select(loanRow =>
+                {
+                    return new RowParticipantDTO()
+                    {
+                        Name = loanRow.Loan.LoanTaker.UserNickname,
+                        Involvement = loanRow.Involvement,
+                        ReceiptRowId = row.Id,
+                        LoanId = loanRow.LoanId,
+                        AppUserId = loanRow.Loan.LoanTakerId,
+                        LoanRowId = loanRow.Id
+                    };
+                }).ToList(),
+                ReceiptId = row.ReceiptId,
+                ReceiptRowId = row.Id,
+                Discount = row.RowDiscount
+            };
+            return result;
         }
 
         public async Task<bool> RemoveRow(int rowId, int userId)

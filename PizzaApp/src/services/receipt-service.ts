@@ -80,7 +80,7 @@ export class ReceiptService {
   }
   
   changeReceiptRowAmount(newAmount: number, receiptRowId: number) {
-    let url = this.appConfig.apiUrl + "app/UpdateRowAmount" ;
+    let url = this.appConfig.apiUrl + "receipts/UpdateRowAmount" ;
 
     let body = JSON.stringify({ReceiptRowId: receiptRowId, NewAmount: newAmount});
     log.debug("changeReceiptRowAmount request body: ", body);
