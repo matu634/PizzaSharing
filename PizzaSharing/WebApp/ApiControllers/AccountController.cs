@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Domain.Identity;
 using Identity;
@@ -20,15 +21,15 @@ namespace WebApp.ApiControllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
-        private readonly IAppUnitOfWork _uow;
+        private readonly IAppBLL _bll;
 
         public AccountController(SignInManager<AppUser> signInManager, IConfiguration configuration,
-            UserManager<AppUser> userManager, IAppUnitOfWork uow, IEmailSender emailSender)
+            UserManager<AppUser> userManager, IAppBLL bll, IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _configuration = configuration;
             _userManager = userManager;
-            _uow = uow;
+            _bll = bll;
             _emailSender = emailSender;
         }
 
@@ -63,8 +64,8 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<string>> Register([FromBody] RegisterDTO registerDto)
         {
-            if (await _uow.AppUsers.NicknameExists(registerDto.Nickname)) return BadRequest("Nickname already in user");
-            if (await _uow.AppUsers.EmailExists(registerDto.Email)) return BadRequest("Email already in user");
+            if (await _bll.AppUserService. NicknameExistsAsync(registerDto.Nickname)) return BadRequest("Nickname already in user");
+            if (await _bll.AppUserService.EmailExistsAsync(registerDto.Email)) return BadRequest("Email already in user");
             
             var user = new AppUser
             {

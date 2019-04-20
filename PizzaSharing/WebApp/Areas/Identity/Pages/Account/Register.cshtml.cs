@@ -86,13 +86,13 @@ namespace WebApp.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if (await _uow.AppUsers.NicknameExists(userName: Input.Nickname))
+                if (await _uow.AppUsers.NicknameExistsAsync(userName: Input.Nickname))
                 {
                     ModelState.AddModelError("Nickname", "Nickname already exists. Please use a different nickname");
                     return Page();
                 }
 
-                if (await _uow.AppUsers.EmailExists(email: Input.Email))
+                if (await _uow.AppUsers.EmailExistsAsync(email: Input.Email))
                 {
                     ModelState.AddModelError("Nickname", "Email already exists. Please use a different email");
                     return Page();

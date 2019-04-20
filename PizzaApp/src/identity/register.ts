@@ -8,12 +8,12 @@ export var log = LogManager.getLogger('Identity.Register');
 //-----------Dependency injection-----------
 @autoinject()
 export class Index {
-  private email: string = "anka@gmail.com";
-  private password: string = "Password";
-  private confirmPassword : string = "Password";
-  private firstName : string = "Anka";
-  private lastName : string = "EiÜtle";
-  private nickname : string = "Anka123";
+  private email: string;
+  private password: string;
+  private confirmPassword : string;
+  private firstName : string;
+  private lastName : string;
+  private nickname : string;
 
   constructor(
     private appConfig: AppConfig,

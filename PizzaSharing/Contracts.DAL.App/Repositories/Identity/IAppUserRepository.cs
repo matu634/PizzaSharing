@@ -6,7 +6,7 @@ namespace Contracts.DAL.App.Repositories.Identity
 {
     public interface IAppUserRepository : IBaseRepositoryAsync<AppUser>
     {
-        Task<bool> NicknameExists(string userName);
-        Task<bool> EmailExists(string email);
+        Task<bool> NicknameExistsAsync(string userName);
+        Task<bool> EmailExistsAsync(string email);
     }
 }

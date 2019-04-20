@@ -13,13 +13,13 @@ namespace DAL.App.EF.Repositories.Identity
         {
         }
 
-        public async Task<bool> NicknameExists(string userName)
+        public async Task<bool> NicknameExistsAsync(string userName)
         {
             return await RepoDbSet.AnyAsync(user =>
                 userName.ToLower().Equals(user.UserNickname.ToLower()));
         }
 
-        public async Task<bool> EmailExists(string email)
+        public async Task<bool> EmailExistsAsync(string email)
         {
             return await RepoDbSet.AnyAsync(user =>
                 user.Email.ToLower().Equals(email.ToLower()));

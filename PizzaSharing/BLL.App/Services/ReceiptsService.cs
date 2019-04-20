@@ -256,5 +256,15 @@ namespace BLL.App.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public ReceiptRowAllDTO AddRowDiscount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReceiptRowAllDTO RemoveRowDiscount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
