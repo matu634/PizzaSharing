@@ -25,9 +25,11 @@ namespace BLL.App.Services
             };
         }
 
-        public List<OrganizationDTO> GetOrganizationsCategoriesAndProducts()
+        public async Task<List<OrganizationDTO>> GetOrganizationsCategoriesAndProductsAsync(int receiptId)
         {
-            throw new System.NotImplementedException();
+            var receipt = await Uow.Receipts.FindAsync(receiptId);
+            if (receipt == null) return null;
+            return await Uow.Organizations.AllDtoAsync(receipt.CreatedTime);
         }
 
         public List<ChangeDTO> GetValidProductsChanges()

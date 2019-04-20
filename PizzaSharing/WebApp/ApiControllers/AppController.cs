@@ -18,12 +18,10 @@ namespace WebApp.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
         private readonly IAppBLL _bll;
 
-        public AppController(IAppUnitOfWork uow, IAppBLL bll)
+        public AppController(IAppBLL bll)
         {
-            _uow = uow;
             _bll = bll;
         }
 
@@ -36,10 +34,9 @@ namespace WebApp.ApiControllers
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)
         {
-            //TODO: get date time from receipt 
-            var receipt = await _uow.Receipts.FindAsync(receiptId);
-            if (receipt == null) return BadRequest("Receipt doesn't exist!");
-            return await _uow.Organizations.AllDtoAsync(receipt.CreatedTime);
+            var result = await _bll.AppService.GetOrganizationsCategoriesAndProductsAsync(receiptId);
+            if (result == null) return BadRequest();
+            return result;
         }
     }
 }

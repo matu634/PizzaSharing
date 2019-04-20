@@ -40,6 +40,7 @@ namespace DAL.App.EF.Repositories
                                     ProductPrice = inCategory.Product.Prices.FirstOrDefault(p =>
                                         p.ValidTo.Ticks > time.Ticks && p.ValidFrom.Ticks < time.Ticks).Value
                                 })
+                                .Where(dto => dto.ProductPrice != null)
                                 .ToList()
                         })
                         .ToList()
