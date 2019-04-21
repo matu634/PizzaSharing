@@ -14,7 +14,7 @@ namespace Domain
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
-        public List<Change> Changes { get; set; }
+        public List<ChangeInCategory> Changes { get; set; }
 
         public List<ProductInCategory> ProductsInCategory { get; set; }
 

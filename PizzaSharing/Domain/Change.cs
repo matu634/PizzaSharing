@@ -16,8 +16,7 @@ namespace Domain
 
         public List<Price> Prices { get; set; }
 
-        public int CategoryId { get; set; }
-        public Category Category { get; set; } 
+        public List<ChangeInCategory> ChangeInCategories { get; set; }
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }

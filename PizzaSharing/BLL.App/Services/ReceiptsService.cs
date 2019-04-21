@@ -141,7 +141,6 @@ namespace BLL.App.Services
                         Name = rowChange.Change.ChangeName,
                         Price = rowChange.Change.GetPriceAtTime(row.Receipt.CreatedTime),
                         ChangeId = rowChange.ChangeId,
-                        CategoryId = rowChange.Change.CategoryId,
                         OrganizationId = rowChange.Change.OrganizationId,
                         ReceiptRowId = rowChange.ReceiptRowId
                     };

@@ -70,7 +70,6 @@ namespace DAL.App.EF.Repositories
                         Name = rowChange.Change.ChangeName,
                         Price = rowChange.Change.GetPriceAtTime(time),
                         ChangeId = rowChange.ChangeId,
-                        CategoryId = rowChange.Change.CategoryId,
                         OrganizationId = rowChange.Change.OrganizationId,
                         ReceiptRowId = rowChange.ReceiptRowId
                     });

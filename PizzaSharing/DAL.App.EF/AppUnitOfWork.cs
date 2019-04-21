@@ -44,5 +44,7 @@ namespace DAL.App.EF
         public IReceiptRowChangeRepository ReceiptRowChanges =>RepositoryProvider.GetRepository<IReceiptRowChangeRepository>();
         
         public IAppUserRepository AppUsers => RepositoryProvider.GetRepository<IAppUserRepository>();
+
+        public IChangeInCategoryRepository ChangesInCategories => RepositoryProvider.GetRepository<IChangeInCategoryRepository>();
     }
 }

@@ -19,5 +19,6 @@ namespace Contracts.DAL.App
         IReceiptRowRepository ReceiptRows { get; }
         IReceiptRowChangeRepository ReceiptRowChanges { get; }
         IAppUserRepository AppUsers { get; }
+        IChangeInCategoryRepository ChangesInCategories { get; }
     }
 }

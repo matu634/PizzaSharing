@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -19,18 +20,16 @@ namespace DAL.App.EF.Repositories
         public override async Task<IEnumerable<Change>> AllAsync()
         {
             return await RepoDbSet
-                .Include(change => change.Category)
                 .Include(change => change.Organization)
                 .ToListAsync();
         }
 
 
-        public override async Task<Change> FindAsync(params object[] id)
+        public async Task<Change> FindAsync(int id)
         {
             var change = await RepoDbSet.FindAsync(id);
             if (change != null)
             {
-                await RepoDbContext.Entry(change).Reference(c => c.Category).LoadAsync();
                 await RepoDbContext.Entry(change).Reference(c => c.Organization).LoadAsync();
             }
 

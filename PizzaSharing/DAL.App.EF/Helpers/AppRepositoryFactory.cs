@@ -38,6 +38,8 @@ namespace DAL.App.EF.Helpers
             Add<IReceiptParticipantRepository>(context => new ReceiptParticipantRepositoryAsync(context));
             
             Add<IAppUserRepository>(context => new AppUserRepository(context));
+            
+            Add<IChangeInCategoryRepository>(context => new ChangeInCategoryRepository(context));
         }
     }
 }

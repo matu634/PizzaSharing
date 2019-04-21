@@ -40,8 +40,6 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<string>("ChangeName")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -50,11 +48,27 @@ namespace DAL.App.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Changes");
+                });
+
+            modelBuilder.Entity("Domain.ChangeInCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("ChangeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ChangeId");
+
+                    b.ToTable("ChangeInCategories");
                 });
 
             modelBuilder.Entity("Domain.Identity.AppRole", b =>
@@ -430,14 +444,22 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
+                    b.HasOne("Domain.Organization", "Organization")
+                        .WithMany("Changes")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.ChangeInCategory", b =>
+                {
                     b.HasOne("Domain.Category", "Category")
                         .WithMany("Changes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.Organization", "Organization")
-                        .WithMany("Changes")
-                        .HasForeignKey("OrganizationId")
+                    b.HasOne("Domain.Change", "Change")
+                        .WithMany("ChangeInCategories")
+                        .HasForeignKey("ChangeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

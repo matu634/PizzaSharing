@@ -8,6 +8,5 @@ namespace PublicApi.DTO
 
         public int? ReceiptRowId { get; set; }
         public int? OrganizationId { get; set; }
-        public int? CategoryId { get; set; }
     }
 }

@@ -94,6 +94,7 @@ dotnet aspnet-codegenerator controller -name PricesController -actions -m Price 
 
 UoW not implemented
 -------------------
+dotnet aspnet-codegenerator controller -name ChangeInCategoriesController -actions -m ChangeInCategory -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name OrganizationsController -actions -m Organization -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name ProductsController -actions -m Product -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name ChangesController -actions -m Change -dc AppDbContext -outDir Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
