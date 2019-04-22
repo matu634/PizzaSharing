@@ -12,22 +12,23 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class LoanRowsController : Controller
+    [Area("Admin")]
+    public class ReceiptRowsController : Controller
     {
         private readonly IAppUnitOfWork _uow;
 
-        public LoanRowsController(IAppUnitOfWork uow)
+        public ReceiptRowsController(IAppUnitOfWork uow)
         {
             _uow = uow;
         }
 
-        // GET: LoanRows
+        // GET: ReceiptRows
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.LoanRows.AllAsync());
+            return View(await _uow.ReceiptRows.AllAsync());
         }
 
-        // GET: LoanRows/Details/5
+        // GET: ReceiptRows/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,53 +36,53 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loanRow = await _uow.LoanRows.FindAsync(id);
-            if (loanRow == null)
+            var receiptRow = await _uow.ReceiptRows.FindAsync(id);
+            if (receiptRow == null)
             {
                 return NotFound();
             }
 
-            return View(loanRow);
+            return View(receiptRow);
         }
 
-        // GET: LoanRows/Create
+        // GET: ReceiptRows/Create
         public async Task<IActionResult> Create()
         {
-            var viewModel = new LoanRowViewModel
+            var viewModel = new ReceiptRowViewModel
             {
-                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
-                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
-                    nameof(ReceiptRow.Id))
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
             };
             return View(viewModel);
         }
 
-        // POST: LoanRows/Create
+        // POST: ReceiptRows/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")]
-            LoanRow loanRow)
+        public async Task<IActionResult> Create([Bind("Amount,RowDiscount,ProductId,ReceiptId,Id")]
+            ReceiptRow receiptRow)
         {
             if (ModelState.IsValid)
             {
-                await _uow.LoanRows.AddAsync(loanRow);
+                await _uow.ReceiptRows.AddAsync(receiptRow);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new LoanRowViewModel
+            var viewModel = new ReceiptRowViewModel
             {
-                LoanRow = loanRow,
-                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
-                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
-                    nameof(ReceiptRow.Id))
+                ReceiptRow = receiptRow,
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
             };
             return View(viewModel);
         }
 
-        // GET: LoanRows/Edit/5
+        // GET: ReceiptRows/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,54 +90,53 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loanRow = await _uow.LoanRows.FindAsync(id);
-            if (loanRow == null)
+            var receiptRow = await _uow.ReceiptRows.FindAsync(id);
+            if (receiptRow == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new LoanRowViewModel
+            var viewModel = new ReceiptRowViewModel
             {
-                LoanRow = loanRow,
-                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
-                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
-                    nameof(ReceiptRow.Id))
+                ReceiptRow = receiptRow,
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
             };
             return View(viewModel);
         }
 
-        // POST: LoanRows/Edit/5
+        // POST: ReceiptRows/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")]
-            LoanRow loanRow)
+        public async Task<IActionResult> Edit(int id, [Bind("Amount,RowDiscount,ProductId,ReceiptId,Id")]
+            ReceiptRow receiptRow)
         {
-            if (id != loanRow.Id)
+            if (id != receiptRow.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _uow.LoanRows.Update(loanRow);
+                _uow.ReceiptRows.Update(receiptRow);
                 await _uow.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new LoanRowViewModel
+            var viewModel = new ReceiptRowViewModel
             {
-                LoanRow = loanRow,
-                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
-                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
-                    nameof(ReceiptRow.Id))
+                ReceiptRow = receiptRow,
+                Products = new SelectList(await _uow.Products.AllAsync(), nameof(Product.Id),
+                    nameof(Product.ProductName)),
+                Receipts = new SelectList(await _uow.Receipts.AllAsync(), nameof(Receipt.Id), nameof(Receipt.Id))
             };
             return View(viewModel);
         }
 
-        // GET: LoanRows/Delete/5
+        // GET: ReceiptRows/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,24 +144,23 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var loanRow = await _uow.LoanRows.FindAsync(id);
-            if (loanRow == null)
+            var receiptRow = await _uow.ReceiptRows.FindAsync(id);
+            if (receiptRow == null)
             {
                 return NotFound();
             }
 
-            return View(loanRow);
+            return View(receiptRow);
         }
 
-        // POST: LoanRows/Delete/5
+        // POST: ReceiptRows/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _uow.LoanRows.Remove(id);
+            _uow.ReceiptRows.Remove(id);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

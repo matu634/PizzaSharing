@@ -8,27 +8,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using Domain.Identity;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class ReceiptsController : Controller
+    [Area("Admin")]
+    public class ProductsController : Controller
     {
         private readonly IAppUnitOfWork _uow;
 
-        public ReceiptsController(IAppUnitOfWork uow)
+        public ProductsController(IAppUnitOfWork uow)
         {
             _uow = uow;
         }
 
-        // GET: Receipts
+        // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Receipts.AllAsync());
+            return View(await _uow.Products.AllAsync());
         }
 
-        // GET: Receipts/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,51 +36,50 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _uow.Receipts.FindAsync(id);
-            if (receipt == null)
+            var product = await _uow.Products.FindAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(receipt);
+            return View(product);
         }
 
-        // GET: Receipts/Create
+        // GET: Products/Create
         public async Task<IActionResult> Create()
         {
-            var viewModel = new ReceiptViewModel
+            var viewModel = new ProductViewModel
             {
-                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
-                    nameof(AppUser.UserNickname))
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
             return View(viewModel);
         }
 
-        // POST: Receipts/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")]
-            Receipt receipt)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                await _uow.Receipts.AddAsync(receipt);
+                await _uow.Products.AddAsync(product);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new ReceiptViewModel
+            var viewModel = new ProductViewModel
             {
-                Receipt = receipt,
-                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
-                    nameof(AppUser.UserNickname))
+                Product = product,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
             return View(viewModel);
         }
 
-        // GET: Receipts/Edit/5
+        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,50 +87,50 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _uow.Receipts.FindAsync(id);
-            if (receipt == null)
+            var product = await _uow.Products.FindAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new ReceiptViewModel
+            var viewModel = new ProductViewModel
             {
-                Receipt = receipt,
-                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
-                    nameof(AppUser.UserNickname))
+                Product = product,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
             return View(viewModel);
         }
 
-        // POST: Receipts/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IsFinalized,CreatedTime,ReceiptManagerId,Id")]
-            Receipt receipt)
+        public async Task<IActionResult> Edit(int id, Product product)
         {
-            if (id != receipt.Id)
+            if (id != product.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _uow.Receipts.Update(receipt);
+                _uow.Products.Update(product);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            var viewModel = new ReceiptViewModel
+
+            var viewModel = new ProductViewModel
             {
-                Receipt = receipt,
-                AppUsers = new SelectList(await _uow.BaseRepository<AppUser>().AllAsync(), nameof(AppUser.Id),
-                    nameof(AppUser.UserNickname))
+                Product = product,
+                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
+                    nameof(Organization.OrganizationName))
             };
             return View(viewModel);
         }
 
-        // GET: Receipts/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,21 +138,22 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var receipt = await _uow.Receipts.FindAsync(id);
-            if (receipt == null)
+            var product = await _uow.Products.FindAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(receipt);
+            return View(product);
         }
 
-        // POST: Receipts/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _uow.Receipts.Remove(id);
+            var product = await _uow.Products.FindAsync(id);
+            _uow.Products.Remove(product);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

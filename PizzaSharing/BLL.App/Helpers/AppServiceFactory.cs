@@ -15,6 +15,7 @@ namespace BLL.App.Helpers
             Add<ILoanService>(uow => new LoanService(uow));
             Add<IReceiptsService>(uow => new ReceiptsService(uow));
             Add<IAppUserService>(uow => new AppUserService(uow));
+            Add<IOrganizationsService>(uow => new OrganizationsService(uow));
         }
     }
 }

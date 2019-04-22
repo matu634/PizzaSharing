@@ -11,6 +11,7 @@ using Domain;
 
 namespace WebApp.Controllers
 {
+    [Area("Admin")]
     public class OrganizationsController : Controller
     {
         private readonly IAppUnitOfWork _uow;

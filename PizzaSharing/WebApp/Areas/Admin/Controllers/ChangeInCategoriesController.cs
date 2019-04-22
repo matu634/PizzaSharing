@@ -10,6 +10,7 @@ using Domain;
 
 namespace WebApp.Controllers
 {
+    [Area("Admin")]
     public class ChangeInCategoriesController : Controller
     {
         private readonly AppDbContext _context;

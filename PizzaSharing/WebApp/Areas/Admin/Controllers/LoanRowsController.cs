@@ -6,31 +6,29 @@ using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL;
 using DAL.App.EF;
 using Domain;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class CategoriesController : Controller
+    [Area("Admin")]
+    public class LoanRowsController : Controller
     {
         private readonly IAppUnitOfWork _uow;
 
-
-        public CategoriesController(IAppUnitOfWork uow)
+        public LoanRowsController(IAppUnitOfWork uow)
         {
             _uow = uow;
         }
 
-        // GET: Categories
+        // GET: LoanRows
         public async Task<IActionResult> Index()
         {
-            var categories = await _uow.Categories.AllAsync();
-            return View(categories);
+            return View(await _uow.LoanRows.AllAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: LoanRows/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,53 +36,53 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _uow.Categories.FindAsync(id);
-
-            if (category == null)
+            var loanRow = await _uow.LoanRows.FindAsync(id);
+            if (loanRow == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(loanRow);
         }
 
-        // GET: Categories/Create
+        // GET: LoanRows/Create
         public async Task<IActionResult> Create()
         {
-            var viewModel = new CategoryViewModel
+            var viewModel = new LoanRowViewModel
             {
-                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
-                    nameof(Organization.OrganizationName))
+                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
+                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
+                    nameof(ReceiptRow.Id))
             };
             return View(viewModel);
         }
 
-        // POST: Categories/Create
+        // POST: LoanRows/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")]
-            Category category)
+        public async Task<IActionResult> Create([Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")]
+            LoanRow loanRow)
         {
-            category.Organization = await _uow.Organizations.FindAsync(category.OrganizationId);
             if (ModelState.IsValid)
             {
-                await _uow.Categories.AddAsync(category);
+                await _uow.LoanRows.AddAsync(loanRow);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new CategoryViewModel
+            var viewModel = new LoanRowViewModel
             {
-                Category = category,
-                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
-                    nameof(Organization.OrganizationName))
+                LoanRow = loanRow,
+                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
+                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
+                    nameof(ReceiptRow.Id))
             };
             return View(viewModel);
         }
 
-        // GET: Categories/Edit/5
+        // GET: LoanRows/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,52 +90,54 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _uow.Categories.FindAsync(id);
-            if (category == null)
+            var loanRow = await _uow.LoanRows.FindAsync(id);
+            if (loanRow == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new CategoryViewModel
+            var viewModel = new LoanRowViewModel
             {
-                Category = category,
-                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
-                    nameof(Organization.OrganizationName))
+                LoanRow = loanRow,
+                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
+                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
+                    nameof(ReceiptRow.Id))
             };
             return View(viewModel);
         }
 
-        // POST: Categories/Edit/5
+        // POST: LoanRows/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,OrganizationId")]
-            Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("IsPaid,LoanId,ReceiptRowId,Involvement,Id")]
+            LoanRow loanRow)
         {
-            if (id != category.Id)
+            if (id != loanRow.Id)
             {
-                Console.WriteLine("Form id doesn't match url id");
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _uow.Categories.Update(category);
+                _uow.LoanRows.Update(loanRow);
                 await _uow.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new CategoryViewModel
+            var viewModel = new LoanRowViewModel
             {
-                Category = category,
-                Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
-                    nameof(Organization.OrganizationName))
+                LoanRow = loanRow,
+                Loans = new SelectList(await _uow.Loans.AllAsync(), nameof(Loan.Id), nameof(Loan.Id)),
+                ReceiptRows = new SelectList(await _uow.ReceiptRows.AllAsync(), nameof(ReceiptRow.Id),
+                    nameof(ReceiptRow.Id))
             };
             return View(viewModel);
         }
 
-        // GET: Categories/Delete/5
+        // GET: LoanRows/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,23 +145,24 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var category = await _uow.Categories.FindAsync(id);
-            if (category == null)
+            var loanRow = await _uow.LoanRows.FindAsync(id);
+            if (loanRow == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(loanRow);
         }
 
-        // POST: Categories/Delete/5
+        // POST: LoanRows/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _uow.Categories.Remove(id);
+            _uow.LoanRows.Remove(id);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

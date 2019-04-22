@@ -13,6 +13,7 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    [Area("Admin")]
     public class LoansController : Controller
     {
         private readonly IAppUnitOfWork _uow;

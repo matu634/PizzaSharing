@@ -15,5 +15,7 @@ namespace Contracts.BLL.App
         ILoanService LoanService { get; }
 
         IAppUserService AppUserService { get; }
+
+        IOrganizationsService OrganizationsService { get; }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
+using DAL.App.EF.Helpers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -60,15 +61,18 @@ namespace DAL.App.EF.Repositories
                 {
                     ProductId = row.ProductId,
                     ProductName = row.Product.ProductName,
-                    ProductPrice = row.Product.GetPriceAtTime(time)
+                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, time)
                 };
                 var changes = new List<ChangeDTO>();
                 foreach (var rowChange in row.ReceiptRowChanges)
                 {
+                    var price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices, time);
+                    if (price == null) continue;
+                    
                     changes.Add(new ChangeDTO()
                     {
                         Name = rowChange.Change.ChangeName,
-                        Price = rowChange.Change.GetPriceAtTime(time),
+                        Price = price.Value,
                         ChangeId = rowChange.ChangeId,
                         OrganizationId = rowChange.Change.OrganizationId,
                         ReceiptRowId = rowChange.ReceiptRowId
@@ -101,7 +105,6 @@ namespace DAL.App.EF.Repositories
                     Participants = participants
                 });
             }
-
             return result;
         }
 

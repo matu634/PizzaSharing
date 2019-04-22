@@ -13,7 +13,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="~/AdminLTE/plugins/font-awesome/css/font-awesome.min.css">
     <!-- IonIcons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -87,8 +87,51 @@ to get the desired effect
                     <li class="nav-header">All Tables</li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Dashboard"
-                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Dashboard</p></a>
+                        <a class="nav-link" asp-area="Admin" asp-controller="Organizations"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Organizations</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Categories</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Products"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Products</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ProductInCategories"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ProductInCategories</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Prices" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Prices</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Receipts"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Receipts</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ReceiptRows" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptRows</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Changes"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Changes</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ReceiptRowChanges" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptRowChanges</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ReceiptParticipants"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ReceiptParticipants</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Loans" asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Loans</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="LoanRows"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>LoanRows</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Admin" asp-controller="ChangeInCategories"
+                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>ChangesInCategories</p></a>
                     </li>
                 </ul>
             </nav>

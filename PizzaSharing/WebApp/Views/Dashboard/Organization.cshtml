@@ -1,0 +1,115 @@
+@model WebApp.ViewModels.Dashboard.OrganizationViewModel
+
+<h1 class="text-center center">@Model.Organization.Name</h1>
+<hr/>
+<div class="row">
+    <div class="col-lg-6">
+        <h1>Categories</h1>
+        <hr/>
+        @foreach (var category in Model.Categories)
+        {
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h4> @category.CategoryName </h4>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#products@(category.CategoryId)">
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Products
+                            </button>
+                            <div class="collapse " id="products@(category.CategoryId)">
+                                <ul>
+                                    @foreach (var productName in category.ProductNames)
+                                    {
+                                        <li>@productName</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#changes@(category.CategoryId)">
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Changes
+                            </button>
+                            <div class="collapse " id="changes@(category.CategoryId)">
+                                <ul>
+                                    @foreach (var changeName in category.ChangeNames)
+                                    {
+                                        <li>@changeName</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        }
+    </div>
+    <div class="col-lg-6">
+        <h1>Products</h1>
+        <hr/>
+        @foreach (var product in Model.Products)
+        {
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span> </h4>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#productCategories@(product.Id)">
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
+                            </button>
+                            <div class="collapse " id="productCategories@(product.Id)">
+                                <ul>
+                                    @foreach (var categoryName in product.Categories)
+                                    {
+                                        <li>@categoryName</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pizza"></i>
+                </div>
+                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        }
+    </div>
+</div>
+<h1>Changes</h1>
+<hr/>
+<div class="row">
+    <div class="col-lg-6">
+        @foreach (var change in Model.Changes)
+        {
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h4> @change.Name - <span>@($"{change.CurrentPrice:N2}") €</span> </h4>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#changeCategories@(change.Id)">
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
+                            </button>
+                            <div class="collapse " id="changeCategories@(change.Id)">
+                                <ul>
+                                    @foreach (var categoryName in change.CategoryNames)
+                                    {
+                                        <li>@categoryName</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-plus-circle"></i>
+                </div>
+                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        }
+    </div>
+
+</div>

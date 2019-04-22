@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -16,6 +17,9 @@ namespace Domain
 
         public List<Price> Prices { get; set; }
 
+        [DefaultValue(false)]
+        public bool IsDeleted { get; set; }
+
         public List<ChangeInCategory> ChangeInCategories { get; set; }
 
         public int OrganizationId { get; set; }
@@ -23,7 +27,7 @@ namespace Domain
 
         public string ChangeAndOrganizationName =>
             $"{ChangeName} ({Organization?.OrganizationName ?? "Organization not loaded"})";
-        
+        /*
         public decimal GetPriceAtTime(DateTime dateTime)
         {
             Price currentPrice = Prices
@@ -32,5 +36,6 @@ namespace Domain
                 throw new Exception($"Price for change {ChangeName}(id:{Id}) at {dateTime} was not found!");
             return currentPrice.Value;
         }
+        */
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Domain
@@ -15,5 +16,8 @@ namespace Domain
         public List<Product> Products { get; set; }
 
         public List<Change> Changes { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsDeleted { get; set; }
     }
 }

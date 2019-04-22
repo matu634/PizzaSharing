@@ -26,6 +26,8 @@ namespace DAL.App.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<int>("OrganizationId");
 
                     b.HasKey("Id");
@@ -43,6 +45,8 @@ namespace DAL.App.EF.Migrations
                     b.Property<string>("ChangeName")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<int>("OrganizationId");
 
@@ -208,6 +212,8 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<string>("OrganizationName")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -245,6 +251,8 @@ namespace DAL.App.EF.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<int>("OrganizationId");
 
@@ -453,7 +461,7 @@ namespace DAL.App.EF.Migrations
             modelBuilder.Entity("Domain.ChangeInCategory", b =>
                 {
                     b.HasOne("Domain.Category", "Category")
-                        .WithMany("Changes")
+                        .WithMany("ChangesInCategory")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 

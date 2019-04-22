@@ -9,19 +9,149 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
               integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
     </environment>
-    <link rel="stylesheet" href="~/css/site.css"/>
+
+    @* <!-- Font Awesome --> *@
+    <link rel="stylesheet" href="~/AdminLTE/plugins/font-awesome/css/font-awesome.min.css">
+    
+    @* <!-- Ionicons --> *@
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    
+    @* <!-- Theme style --> *@
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
+    
+    @* <!-- Google Font: Source Sans Pro --> *@
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    
+    @* <!-- <link rel="stylesheet" href="~/css/site.css" /> --> *@
 </head>
-<body>
+<body class="hold-transition sidebar-mini">
+@* <!-- Navbar --> *@
+<nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+    @* <!-- Left navbar links --> *@
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#">
+                <i class="fa fa-bars"></i>
+            </a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApp</a>
+    </ul>
+    @* <!-- Right navbar links --> *@
+    <ul class="navbar-nav ml-auto">
+        <partial name="_LoginPartial"/>
+    </ul>
+</nav>
+@* <!-- Main Sidebar Container --> *@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    @* <!-- Brand Logo --> *@
+    <a href="index3.html" class="brand-link">
+        <img src="AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
 
+    @* <!-- Sidebar --> *@
+    <div class="sidebar">
+        @* <!-- Sidebar user panel (optional) --> *@
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">Alexander Pierce</a>
+            </div>
+        </div>
 
-@RenderBody()
+        @* <!-- Sidebar Menu --> *@
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="pages/widgets.html" class="nav-link">
+                        <i class="nav-icon fa fa-th"></i>
+                        <p>
+                            Widgets
+                            <span class="right badge badge-danger">New</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Organizations" asp-action="Index">Organizations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Products"
+                       asp-action="Index">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="ProductInCategories"
+                       asp-action="Index">ProductInCategories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Receipts"
+                       asp-action="Index">Receipts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="ReceiptRows" asp-action="Index">ReceiptRows</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Changes"
+                       asp-action="Index">Changes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="ReceiptRowChanges" asp-action="Index">ReceiptRowChanges</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="ReceiptParticipants"
+                       asp-action="Index">ReceiptParticipants</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Loans" asp-action="Index">Loans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="LoanRows"
+                       asp-action="Index">LoanRows</a>
+                </li>
 
+            </ul>
+        </nav>
+    </div>
+    @* <!-- /.sidebar --> *@
+</aside>
+
+@* <!-- Content Wrapper --> *@
+<div class="content-wrapper">
+    <partial name="_CookieConsentPartial"/>
+    <main role="main" class="pb-3 container">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2019 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+
+<!-- ----------------------------------------------------Scripts---------------------------------------------------- -->
 
 <environment include="Development">
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -41,6 +171,14 @@
             integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
     </script>
 </environment>
+<!-- jQuery -->
+<script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="~/AdminLTE/dist/js/adminlte.js"></script>
+
+
 <script src="~/js/site.js" asp-append-version="true"></script>
 
 @RenderSection("Scripts", required: false)

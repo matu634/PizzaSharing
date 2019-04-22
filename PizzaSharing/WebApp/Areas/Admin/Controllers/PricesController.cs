@@ -9,6 +9,7 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    [Area("Admin")]
     public class PricesController : Controller
     {
         private readonly IAppUnitOfWork _uow;

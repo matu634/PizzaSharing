@@ -6,6 +6,7 @@ using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using DAL.App.DTO;
+using DAL.App.EF.Helpers;
 using PublicApi.DTO;
 
 namespace BLL.App.Services
@@ -103,7 +104,7 @@ namespace BLL.App.Services
                 {
                     ProductId = row.Product.Id,
                     ProductName = row.Product.ProductName,
-                    ProductPrice = row.Product.GetPriceAtTime(receipt.CreatedTime)                    
+                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, receipt.CreatedTime)                    
                 },
                 CurrentCost = row.RowSumCost(),
                 Changes = new List<ChangeDTO>(),
@@ -131,7 +132,7 @@ namespace BLL.App.Services
                 {
                     ProductId = row.Product.Id,
                     ProductName = row.Product.ProductName,
-                    ProductPrice = row.Product.GetPriceAtTime(row.Receipt.CreatedTime)                    
+                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, row.Receipt.CreatedTime)                    
                 },
                 CurrentCost = row.RowSumCost(),
                 Changes = row.ReceiptRowChanges.Select(rowChange =>
@@ -139,12 +140,14 @@ namespace BLL.App.Services
                     return new ChangeDTO()
                     {
                         Name = rowChange.Change.ChangeName,
-                        Price = rowChange.Change.GetPriceAtTime(row.Receipt.CreatedTime),
+                        Price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices, row.Receipt.CreatedTime) ?? -1.0m,
                         ChangeId = rowChange.ChangeId,
                         OrganizationId = rowChange.Change.OrganizationId,
                         ReceiptRowId = rowChange.ReceiptRowId
                     };
-                }).ToList(),
+                })
+                    .Where(changeDTO => changeDTO.Price != -1.0m)
+                    .ToList(),
                 Participants = row.RowParticpantLoanRows.Select(loanRow =>
                 {
                     return new RowParticipantDTO()

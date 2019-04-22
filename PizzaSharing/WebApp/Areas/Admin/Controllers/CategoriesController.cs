@@ -1,28 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using DAL;
+using DAL.App.EF;
 using Domain;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class ChangesController : Controller
+    [Area("Admin")]
+    public class CategoriesController : Controller
     {
         private readonly IAppUnitOfWork _uow;
 
-        public ChangesController(IAppUnitOfWork uow)
+
+        public CategoriesController(IAppUnitOfWork uow)
         {
             _uow = uow;
         }
 
-        // GET: Changes
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Changes.AllAsync());
+            var categories = await _uow.Categories.AllAsync();
+            return View(categories);
         }
 
-        // GET: Changes/Details/5
+        // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -30,56 +39,53 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id);
-            if (change == null)
+            var category = await _uow.Categories.FindAsync(id);
+
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(change);
+            return View(category);
         }
 
-        // GET: Changes/Create
+        // GET: Categories/Create
         public async Task<IActionResult> Create()
         {
-            var viewModel = new ChangeViewModel
+            var viewModel = new CategoryViewModel
             {
-                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
                 Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
                     nameof(Organization.OrganizationName))
             };
-
             return View(viewModel);
         }
 
-        // POST: Changes/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind] Change change)
+        public async Task<IActionResult> Create([Bind("Id,CategoryName,OrganizationId")]
+            Category category)
         {
+            category.Organization = await _uow.Organizations.FindAsync(category.OrganizationId);
             if (ModelState.IsValid)
             {
-                await _uow.Changes.AddAsync(change);
+                await _uow.Categories.AddAsync(category);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new ChangeViewModel
+            var viewModel = new CategoryViewModel
             {
-                Change = change,
-                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                Category = category,
                 Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
                     nameof(Organization.OrganizationName))
             };
-
             return View(viewModel);
         }
 
-        // GET: Changes/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -87,56 +93,52 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id);
-            if (change == null)
+            var category = await _uow.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            var viewModel = new ChangeViewModel
+            var viewModel = new CategoryViewModel
             {
-                Change = change,
-                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                Category = category,
                 Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
                     nameof(Organization.OrganizationName))
             };
-
             return View(viewModel);
         }
 
-        // POST: Changes/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind] Change change)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,OrganizationId")]
+            Category category)
         {
-            if (id != change.Id)
+            if (id != category.Id)
             {
+                Console.WriteLine("Form id doesn't match url id");
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _uow.Changes.Update(change);
+                _uow.Categories.Update(category);
                 await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new ChangeViewModel
+            var viewModel = new CategoryViewModel
             {
-                Change = change,
-                Categories = new SelectList(await _uow.Categories.AllAsync(), nameof(Category.Id),
-                    nameof(Category.CategoryName)),
+                Category = category,
                 Organizations = new SelectList(await _uow.Organizations.AllAsync(), nameof(Organization.Id),
                     nameof(Organization.OrganizationName))
             };
-
             return View(viewModel);
         }
 
-        // GET: Changes/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,21 +146,21 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var change = await _uow.Changes.FindAsync(id);
-            if (change == null)
+            var category = await _uow.Categories.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(change);
+            return View(category);
         }
 
-        // POST: Changes/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            _uow.Changes.Remove(id);
+            _uow.Categories.Remove(id);
             await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

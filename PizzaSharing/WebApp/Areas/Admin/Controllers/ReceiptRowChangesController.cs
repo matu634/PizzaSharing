@@ -12,6 +12,7 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    [Area("Admin")]
     public class ReceiptRowChangesController : Controller
     {
         private readonly IAppUnitOfWork _uow;
