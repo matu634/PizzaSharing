@@ -63,40 +63,5 @@ namespace BLL.App.Services
                 Categories = organization.Categories.Select(dto => new BLLCategoryMinDTO(dto.Id, dto.Name)).ToList()
             };
         }
-
-        public async Task<bool> AddProductAsync(BLLProductDTO productDTO)
-        {
-            var organization = await Uow.Organizations.FindWithCategoriesAsync(productDTO.OrganizationId);
-            if (organization?.Categories == null || organization.Categories.Count == 0) return false;
-
-            var organizationCategoryIds = organization.Categories.Select(dto => dto.Id).ToList();
-
-            foreach (var category in productDTO.Categories)
-            {
-                if (!organizationCategoryIds.Contains(category.Id)) return false;
-            }
-
-            //1.Add product
-            var product = await Uow.Products.AddAsync(new DALProductDTO()
-                {Name = productDTO.ProductName, OrganizationId = productDTO.OrganizationId});
-
-            //2. Add product categories
-            foreach (var category in productDTO.Categories)
-            {
-                await Uow.ProductsInCategories.AddAsync(product.Id, category.Id);
-            }
-            
-            //3. Add price
-            var priceDTO = new DALPriceDTO()
-            {
-                Value = productDTO.CurrentPrice,
-                ProductId = product.Id,
-                ValidFrom = DateTime.MinValue,
-                ValidTo = DateTime.MaxValue,
-            };
-            await Uow.Prices.AddAsync(priceDTO);
-            await Uow.SaveChangesAsync();
-            return true;
-        }
     }
 }

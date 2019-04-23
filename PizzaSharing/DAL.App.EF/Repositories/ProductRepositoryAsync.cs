@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
@@ -77,6 +78,31 @@ namespace DAL.App.EF.Repositories
                 Name = product.ProductName,
                 OrganizationId = product.OrganizationId
             };
+        }
+
+        public async Task<DALProductDTO> FindDTOAsync(int productId)
+        {
+            var product = await RepoDbSet.FindAsync(productId);
+            if (product == null || product.IsDeleted) return null;
+            await RepoDbContext.Entry(product).Collection(p => p.Prices).LoadAsync();
+            var currentPrice = PriceFinder.ForProduct(product, product.Prices, DateTime.Now);
+            if (currentPrice == null) return null;
+            
+            return new DALProductDTO()
+            {
+                Id = product.Id,
+                Name = product.ProductName,
+                CurrentPrice = currentPrice.Value,
+                OrganizationId = product.OrganizationId
+            };
+        }
+
+        public async Task<bool> RemoveSoft(int productId)
+        {
+            var product = await RepoDbSet.FindAsync(productId);
+            if (product == null) return false;
+            product.IsDeleted = true;
+            return true;
         }
     }
 }

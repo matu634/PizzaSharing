@@ -21,5 +21,6 @@ namespace BLL.App
         public ILoanService LoanService => ServiceProvider.GetService<ILoanService>();
         public IAppUserService AppUserService => ServiceProvider.GetService<IAppUserService>();
         public IOrganizationsService OrganizationsService => ServiceProvider.GetService<IOrganizationsService>();
+        public IProductService ProductService => ServiceProvider.GetService<IProductService>();
     }
 }

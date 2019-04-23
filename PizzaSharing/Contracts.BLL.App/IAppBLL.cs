@@ -15,5 +15,7 @@ namespace Contracts.BLL.App
         IAppUserService AppUserService { get; }
 
         IOrganizationsService OrganizationsService { get; }
+        
+        IProductService ProductService { get; }
     }
 }

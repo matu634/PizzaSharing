@@ -78,13 +78,16 @@
         }
     </div>
     <div class="col-lg-6">
-        <h1>Products <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.Organization.Id" >Create</a></h1>
+        <h1>Products <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.Organization.Id">Create</a></h1>
         <hr/>
         @foreach (var product in Model.Products)
         {
             <div class="small-box bg-primary">
                 <div class="inner">
-                    <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span> </h4>
+                    <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span></h4>
+                    <a class="btn btn-danger mb-2" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
+                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Categories
+                    </a>
                     <div class="row">
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#productCategories@(product.Id)">

@@ -48,10 +48,51 @@ namespace WebApp.Controllers
                     Categories = vm.SelectedCategories.Select(id => new BLLCategoryMinDTO(id)).ToList()
                 };
                 
-                var result = await _bll.OrganizationsService.AddProductAsync(productDTO);
+                var result = await _bll.ProductService.AddProductAsync(productDTO);
                 if (result == false) return BadRequest("Something went wrong while adding");
             }
             return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
+        }
+        
+        // GET: Products/Delete/5
+        [HttpGet("product/delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _bll.ProductService.GetProductAsync(productId: id.Value);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var vm = new DeleteProductViewModel()
+            {
+                Price = product.CurrentPrice,
+                Description = "TODO: description",
+                ProductId = product.Id,
+                OrganizationId = product.OrganizationId,
+                ProductName = product.ProductName
+            };
+            
+
+            return View(vm);
+        }
+
+        // POST: Products/Delete/5
+        [HttpPost("product/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(DeleteProductViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _bll.ProductService.DeleteProductAsync(vm.ProductId);
+                if (result == false) return BadRequest("Error while deleting entry");
+                return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
+            }
+            return BadRequest();
         }
     }
 }
