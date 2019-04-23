@@ -34,9 +34,9 @@ namespace WebApp.Controllers
             };
             return View(vm);
         }
-        
+
         [HttpPost("product/create/{id}")]
-        public async Task<IActionResult> Create( CreateProductViewModel vm)
+        public async Task<IActionResult> Create(CreateProductViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -47,13 +47,14 @@ namespace WebApp.Controllers
                     CurrentPrice = vm.Price,
                     Categories = vm.SelectedCategories.Select(id => new BLLCategoryMinDTO(id)).ToList()
                 };
-                
+
                 var result = await _bll.ProductService.AddProductAsync(productDTO);
                 if (result == false) return BadRequest("Something went wrong while adding");
             }
+
             return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
         }
-        
+
         // GET: Products/Delete/5
         [HttpGet("product/delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
@@ -68,6 +69,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
+
             var vm = new DeleteProductViewModel()
             {
                 Price = product.CurrentPrice,
@@ -76,7 +78,7 @@ namespace WebApp.Controllers
                 OrganizationId = product.OrganizationId,
                 ProductName = product.ProductName
             };
-            
+
 
             return View(vm);
         }
@@ -90,6 +92,61 @@ namespace WebApp.Controllers
             {
                 var result = await _bll.ProductService.DeleteProductAsync(vm.ProductId);
                 if (result == false) return BadRequest("Error while deleting entry");
+                return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
+            }
+
+            return BadRequest();
+        }
+
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _bll.ProductService.GetProductAsync(productId: id.Value);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var categories =
+                (await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(product.OrganizationId)).Categories;
+            var selectedCategoryIds = product.Categories.Select(dto => dto.Id).ToList();
+            var vm = new EditProductViewModel()
+            {
+                Price = product.CurrentPrice,
+                Description = "TODO: description",
+                ProductId = product.Id,
+                OrganizationId = product.OrganizationId,
+                ProductName = product.ProductName,
+                Categories = categories.Select(dto =>
+                    new SelectListItem(dto.Name, dto.Id.ToString(), selectedCategoryIds.Contains(dto.Id)))
+                    .ToList()
+            };
+            vm.Categories.Sort((item, item2) => int.Parse(item.Value).CompareTo(int.Parse(item2.Value)));
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditProductViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var input = new BLLProductDTO
+                {
+                    Id = vm.ProductId,
+                    OrganizationId = vm.OrganizationId,
+                    CurrentPrice = vm.Price,
+                    ProductName = vm.ProductName,
+                    Categories = vm.SelectedCategories.Select(i => new BLLCategoryMinDTO(i)).ToList()
+                };
+
+                var result = await _bll.ProductService.EditProduct(input);
+                if (result == false) return BadRequest();
                 return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
             }
             return BadRequest();

@@ -8,5 +8,7 @@ namespace Contracts.DAL.App.Repositories
     public interface IPriceRepository : IBaseRepositoryAsync<Price>
     {
         Task AddAsync(DALPriceDTO priceDTO);
+        
+        Task EditAsync(DALPriceDTO priceDTO);
     }
 }

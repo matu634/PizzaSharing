@@ -26,7 +26,8 @@ namespace BLL.App.Services
             if (receipt.ReceiptManagerId != currentUserId && !receipt.ReceiptParticipants
                     .Select(participant => participant.AppUserId).ToList().Contains(currentUserId)) return null;
 
-            var rows = await Uow.ReceiptRows.AllReceiptsRows(receipt.Id, receipt.CreatedTime);
+            var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
+            var rows = await Uow.ReceiptRows.AllReceiptsRows(receipt.Id, time);
             var result = new ReceiptAllDTO()
             {
                 ReceiptId = receipt.Id,

@@ -34,7 +34,7 @@ namespace DAL.App.EF.Repositories
             {
                 await RepoDbContext.Entry(productInCategory).Reference(obj => obj.Organization).LoadAsync();
             }
-            
+
             return productInCategory;
         }
 
@@ -71,7 +71,7 @@ namespace DAL.App.EF.Repositories
             };
 
             product = (await RepoDbSet.AddAsync(product)).Entity;
-            
+
             return new DALProductDTO()
             {
                 Id = product.Id,
@@ -82,18 +82,26 @@ namespace DAL.App.EF.Repositories
 
         public async Task<DALProductDTO> FindDTOAsync(int productId)
         {
-            var product = await RepoDbSet.FindAsync(productId);
-            if (product == null || product.IsDeleted) return null;
-            await RepoDbContext.Entry(product).Collection(p => p.Prices).LoadAsync();
+            var product = await RepoDbSet
+                .Include(p => p.ProductInCategories)
+                .ThenInclude(obj => obj.Category)
+                .Include(p => p.Prices)
+                .Where(p => p.IsDeleted == false && p.Id == productId)
+                .FirstOrDefaultAsync();
+            if (product == null) return null;
+
             var currentPrice = PriceFinder.ForProduct(product, product.Prices, DateTime.Now);
             if (currentPrice == null) return null;
-            
+
             return new DALProductDTO()
             {
                 Id = product.Id,
                 Name = product.ProductName,
                 CurrentPrice = currentPrice.Value,
-                OrganizationId = product.OrganizationId
+                OrganizationId = product.OrganizationId,
+                Categories = product.ProductInCategories
+                    .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
+                    .ToList()
             };
         }
 
@@ -103,6 +111,22 @@ namespace DAL.App.EF.Repositories
             if (product == null) return false;
             product.IsDeleted = true;
             return true;
+        }
+
+        public async Task<DALProductDTO> EditAsync(DALProductDTO dalProductDTO)
+        {
+            var product = await RepoDbSet.FindAsync(dalProductDTO.Id);
+            if (product == null) return null;
+
+            //TODO: descirption change
+            product.ProductName = dalProductDTO.Name;
+            
+            return new DALProductDTO()
+            {
+                Id = product.Id,
+                Name = product.ProductName,
+                OrganizationId = product.OrganizationId
+            };
         }
     }
 }

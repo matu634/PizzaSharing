@@ -54,5 +54,14 @@ namespace DAL.App.EF.Repositories
             await RepoDbSet.AddAsync(obj);
 
         }
+
+        public async Task RemoveByProductId(int productId)
+        {
+            var objects = await RepoDbSet
+                .Where(obj => obj.ProductId == productId)
+                .ToListAsync();
+            
+            RepoDbSet.RemoveRange(objects);
+        }
     }
 }

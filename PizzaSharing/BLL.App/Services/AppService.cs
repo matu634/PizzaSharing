@@ -29,7 +29,9 @@ namespace BLL.App.Services
         {
             var receipt = await Uow.Receipts.FindAsync(receiptId);
             if (receipt == null) return null;
-            return await Uow.Organizations.AllDtoAsync(receipt.CreatedTime);
+            var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
+            
+            return await Uow.Organizations.AllDtoAsync(time);
         }
 
         public List<ChangeDTO> GetValidProductsChanges()

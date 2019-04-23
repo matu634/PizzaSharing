@@ -1,0 +1,67 @@
+@model WebApp.ViewModels.Product.EditProductViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+
+<div class="col-md-6">
+    <div class="card card-warning">
+        
+        @* Card Header *@
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-edit"></i></h3>
+        </div>
+        <form role="form" asp-action="Edit">
+
+            @* Card Body *@
+            <div class="card-body">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="ProductName" class="control-label"></label>
+                    <input asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input type="number" asp-for="Price" class="form-control" asp-format="{0:N2}"/>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="SelectedCategories" class="control-label"></label>
+                    <select asp-for="SelectedCategories" size="@(Model.Categories.Count >= 10 ?  10 : Model.Categories.Count)" class ="form-control" asp-items="Model.Categories"></select>
+                    <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            @* Card Footer *@
+            <div class="card-footer">
+                <div class="form-group">
+                    <input type="hidden" asp-for="ProductId"/>
+                    <input type="hidden" asp-for="OrganizationId"/>
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<form >
+    <button class="btn btn-default" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
+        <i class="fa fa-list"></i>
+        Back to list
+    </button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

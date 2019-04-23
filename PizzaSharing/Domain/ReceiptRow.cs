@@ -28,9 +28,11 @@ namespace Domain
             {
                 throw new Exception($"Invalid discount value {RowDiscount}. Must be between 1.0 and 0.0");
             }
+
+            var time = Receipt.IsFinalized == false ? DateTime.Now : Receipt.CreatedTime;
             
             Price currentPrice = Product.Prices
-                .FirstOrDefault(p => p.ValidTo.Ticks > Receipt.CreatedTime.Ticks && p.ValidFrom.Ticks < Receipt.CreatedTime.Ticks);
+                .FirstOrDefault(p => p.ValidTo > time && p.ValidFrom < time);
             if (currentPrice == null) throw new Exception("Couldn't find price for product!");
             
             decimal price = Amount * currentPrice.Value;
@@ -38,7 +40,7 @@ namespace Domain
             foreach (var rowChange in ReceiptRowChanges)
             {
                 Price changePrice = rowChange.Change.Prices
-                    .FirstOrDefault(p => p.ValidTo.Ticks > Receipt.CreatedTime.Ticks && p.ValidFrom.Ticks < Receipt.CreatedTime.Ticks);
+                    .FirstOrDefault(p => p.ValidTo > time && p.ValidFrom < time);
                 
                 if (changePrice == null) throw new Exception($"Couldn't find price for row change! Change: {rowChange.Change.ChangeName}, Prices Loaded: {rowChange.Change.Prices.Count}");
                 price += Amount * changePrice.Value;

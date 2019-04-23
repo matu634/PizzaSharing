@@ -86,7 +86,10 @@
                 <div class="inner">
                     <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span></h4>
                     <a class="btn btn-danger mb-2" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
-                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Categories
+                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Remove
+                    </a>
+                    <a class="btn btn-warning mb-2" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">
+                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>Edit
                     </a>
                     <div class="row">
                         <div class="col-lg-4">

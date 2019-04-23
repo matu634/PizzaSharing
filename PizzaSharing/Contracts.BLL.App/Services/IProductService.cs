@@ -11,5 +11,7 @@ namespace Contracts.BLL.App.Services
         Task<BLLProductDTO> GetProductAsync(int productId);
         
         Task<bool> DeleteProductAsync(int productId);
+        
+        Task<bool> EditProduct(BLLProductDTO productDTO);
     }
 }

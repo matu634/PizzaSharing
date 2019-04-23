@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
@@ -52,6 +53,45 @@ namespace DAL.App.EF.Repositories
             };
 
             await RepoDbSet.AddAsync(price);
+        }
+
+        public async Task EditAsync(DALPriceDTO priceDTO)
+        {
+            if ((priceDTO.ChangeId != null && priceDTO.ProductId != null) ||
+                (priceDTO.ChangeId == null && priceDTO.ProductId == null))
+                throw new ArgumentException("Both priceId and product id can't be null or both can't have a value");
+            
+            var time = priceDTO.ValidFrom;
+            
+            if (priceDTO.ProductId != null)
+            {
+                var oldPrice = await RepoDbSet
+                    .Where(price => price.ValidTo > time && price.ValidFrom < time &&
+                                    price.ProductId == priceDTO.ProductId)
+                    .SingleOrDefaultAsync();
+                oldPrice.ValidTo = time;
+            }
+            else
+            {
+                var oldPrice = await RepoDbSet
+                    .Where(price => price.ValidTo > time && price.ValidFrom < time &&
+                                    price.ChangeId == priceDTO.ChangeId)
+                    .SingleOrDefaultAsync();
+                oldPrice.ValidTo = time;
+            }
+            
+            
+            
+            var newPrice = new Price()
+            {
+                Value = priceDTO.Value,
+                ChangeId = priceDTO.ChangeId,
+                ProductId = priceDTO.ProductId,
+                ValidTo = priceDTO.ValidTo,
+                ValidFrom = priceDTO.ValidFrom
+            };
+
+            await RepoDbSet.AddAsync(newPrice);
         }
     }
 }

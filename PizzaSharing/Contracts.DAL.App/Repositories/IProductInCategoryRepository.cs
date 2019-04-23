@@ -10,5 +10,7 @@ namespace Contracts.DAL.App.Repositories
         Task<List<int>> CategoryIdsAsync(int productId);
         
         Task AddAsync(int productId, int categoryId);
+        
+        Task RemoveByProductId(int productId);
     }
 }
