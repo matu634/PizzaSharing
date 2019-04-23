@@ -42,5 +42,17 @@ namespace DAL.App.EF.Repositories
         {
             return await RepoDbSet.Where(obj => obj.ProductId == productId).Select(obj => obj.CategoryId).ToListAsync();
         }
+
+        public async Task AddAsync(int productId, int categoryId)
+        {
+            var obj = new ProductInCategory()
+            {
+                ProductId = productId,
+                CategoryId = categoryId
+            };
+
+            await RepoDbSet.AddAsync(obj);
+
+        }
     }
 }

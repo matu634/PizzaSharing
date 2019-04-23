@@ -54,11 +54,29 @@ namespace DAL.App.EF.Repositories
                     CurrentPrice = PriceFinder.ForProduct(product, product.Prices, DateTime.Now) ?? -1.0m,
                     Categories = product.ProductInCategories
                         .Where(obj => obj.Category.IsDeleted == false)
-                        .Select(obj => obj.Category.CategoryName)
+                        .Select(obj => new DALCategoryMinDTO(obj.Category.Id, obj.Category.CategoryName))
                         .ToList()
                 })
                 .Where(dto => dto.CurrentPrice != -1.0m)
                 .ToList();
+        }
+
+        public async Task<DALProductDTO> AddAsync(DALProductDTO dto)
+        {
+            var product = new Product()
+            {
+                OrganizationId = dto.OrganizationId,
+                ProductName = dto.Name
+            };
+
+            product = (await RepoDbSet.AddAsync(product)).Entity;
+            
+            return new DALProductDTO()
+            {
+                Id = product.Id,
+                Name = product.ProductName,
+                OrganizationId = product.OrganizationId
+            };
         }
     }
 }

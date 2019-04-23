@@ -69,5 +69,24 @@ namespace DAL.App.EF.Repositories
             
             return new DALOrganizationMinDTO(organization.Id, organization.OrganizationName);
         }
+
+        public async Task<DALOrganizationDTO> FindWithCategoriesAsync(int id)
+        {
+            var organization = await RepoDbSet
+                .Include(o => o.Categories)
+                .FirstOrDefaultAsync(o => o.IsDeleted == false && o.Id == id);
+            if (organization == null) return null;
+            
+            return new DALOrganizationDTO()
+            {
+                Id = organization.Id,
+                Name = organization.OrganizationName,
+                Categories = organization.Categories.Select(category => new DALCategoryDTO()
+                {
+                    Id = category.Id,
+                    Name = category.CategoryName
+                }).ToList()
+            };
+        }
     }
 }

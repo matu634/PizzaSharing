@@ -2,6 +2,7 @@
 
 <h1 class="text-center center">@Model.Organization.Name</h1>
 <hr/>
+@* TODO: create buttons if no categories are present *@
 <div class="row">
     <div class="col-lg-6">
         <h1>Categories</h1>
@@ -46,43 +47,8 @@
                 <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
-    </div>
-    <div class="col-lg-6">
-        <h1>Products</h1>
+        <h1>Changes</h1>
         <hr/>
-        @foreach (var product in Model.Products)
-        {
-            <div class="small-box bg-primary">
-                <div class="inner">
-                    <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span> </h4>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#productCategories@(product.Id)">
-                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
-                            </button>
-                            <div class="collapse " id="productCategories@(product.Id)">
-                                <ul>
-                                    @foreach (var categoryName in product.Categories)
-                                    {
-                                        <li>@categoryName</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-pizza"></i>
-                </div>
-                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        }
-    </div>
-</div>
-<h1>Changes</h1>
-<hr/>
-<div class="row">
-    <div class="col-lg-6">
         @foreach (var change in Model.Changes)
         {
             <div class="small-box bg-danger">
@@ -111,5 +77,35 @@
             </div>
         }
     </div>
-
+    <div class="col-lg-6">
+        <h1>Products <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.Organization.Id" >Create</a></h1>
+        <hr/>
+        @foreach (var product in Model.Products)
+        {
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span> </h4>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#productCategories@(product.Id)">
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
+                            </button>
+                            <div class="collapse " id="productCategories@(product.Id)">
+                                <ul>
+                                    @foreach (var category in product.Categories)
+                                    {
+                                        <li>@category.Name</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-pizza"></i>
+                </div>
+                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        }
+    </div>
 </div>

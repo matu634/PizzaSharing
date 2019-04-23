@@ -15,5 +15,7 @@ namespace Contracts.DAL.App.Repositories
         Task<List<DALOrganizationMinDTO>> AllDtoMinAsync();
         
         Task<DALOrganizationMinDTO> FindMinDTOAsync(int id);
+
+        Task<DALOrganizationDTO> FindWithCategoriesAsync(int id);
     }
 }

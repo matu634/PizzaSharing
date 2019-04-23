@@ -8,5 +8,7 @@ namespace Contracts.DAL.App.Repositories
     public interface IProductInCategoryRepository : IBaseRepositoryAsync<ProductInCategory>
     {
         Task<List<int>> CategoryIdsAsync(int productId);
+        
+        Task AddAsync(int productId, int categoryId);
     }
 }

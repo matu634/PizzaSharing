@@ -6,8 +6,6 @@ namespace Contracts.BLL.App
 {
     public interface IAppBLL : IBaseBLL
     {
-        IPriceService Prices { get; }
-        
         IAppService AppService { get; }
         
         IReceiptsService ReceiptsService { get; }

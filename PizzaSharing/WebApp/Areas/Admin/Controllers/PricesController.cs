@@ -27,8 +27,8 @@ namespace WebApp.Controllers
         {
 //            var appDbContext = _context.Prices.Include(p => p.Change).Include(p => p.Product);
 //            return View(await appDbContext.ToListAsync());
-//            var prices = await _uow.Prices.AllAsync();
-            var prices = await _bll.Prices.AllAsync();
+            var prices = await _uow.Prices.AllAsync();
+//            var prices = await _bll.Prices.AllAsync();
             return View(prices);
         }
 

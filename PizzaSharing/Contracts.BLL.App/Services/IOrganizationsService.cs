@@ -10,5 +10,9 @@ namespace Contracts.BLL.App.Services
         Task<List<BLLOrganizationDTO>> GetOrganizationsMinDTOAsync();
         
         Task<BLLOrganizationAllDTO> GetOrganizationAllDTOAsync(int id);
+        
+        Task<BLLOrganizationWithCategoriesDTO> GetOrganizationWithCategoriesAsync(int organizationId);
+        
+        Task<bool> AddProductAsync(BLLProductDTO productDTO);
     }
 }

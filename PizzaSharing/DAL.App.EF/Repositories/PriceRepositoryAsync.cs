@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using DAL.App.DTO;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +36,22 @@ namespace DAL.App.EF.Repositories
 
             return price;
         }
-        
-        
+
+        public async Task AddAsync(DALPriceDTO priceDTO)
+        {
+            if ((priceDTO.ChangeId != null && priceDTO.ProductId != null) ||
+                (priceDTO.ChangeId == null && priceDTO.ProductId == null))
+                throw new ArgumentException("Both priceId and product id can't be null or both can't have a value");
+            var price = new Price()
+            {
+                Value = priceDTO.Value,
+                ChangeId = priceDTO.ChangeId,
+                ProductId = priceDTO.ProductId,
+                ValidFrom = priceDTO.ValidFrom,
+                ValidTo = priceDTO.ValidTo
+            };
+
+            await RepoDbSet.AddAsync(price);
+        }
     }
 }

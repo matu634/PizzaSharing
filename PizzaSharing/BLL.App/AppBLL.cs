@@ -16,9 +16,6 @@ namespace BLL.App
         public AppBLL(IAppUnitOfWork uow, IBaseServiceProvider serviceProvider) : base(uow, serviceProvider)
         {
         }
-
-        public IPriceService Prices => ServiceProvider.GetService<IPriceService>();
-        
         public IAppService AppService => ServiceProvider.GetService<IAppService>();
         public IReceiptsService ReceiptsService => ServiceProvider.GetService<IReceiptsService>();
         public ILoanService LoanService => ServiceProvider.GetService<ILoanService>();

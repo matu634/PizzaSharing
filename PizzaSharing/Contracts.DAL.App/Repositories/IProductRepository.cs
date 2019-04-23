@@ -9,5 +9,7 @@ namespace Contracts.DAL.App.Repositories
     public interface IProductRepository : IBaseRepositoryAsync<Product>
     {
         Task<List<DALProductDTO>> AllAsync(int organizationId);
+
+        Task<DALProductDTO> AddAsync(DALProductDTO dto);
     }
 }
