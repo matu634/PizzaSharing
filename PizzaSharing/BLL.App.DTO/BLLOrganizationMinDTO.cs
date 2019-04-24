@@ -1,8 +1,8 @@
 namespace BLL.App.DTO
 {
-    public class BLLOrganizationDTO
+    public class BLLOrganizationMinDTO
     {
-        public BLLOrganizationDTO(int id, string name)
+        public BLLOrganizationMinDTO(int id, string name)
         {
             Id = id;
             Name = name;

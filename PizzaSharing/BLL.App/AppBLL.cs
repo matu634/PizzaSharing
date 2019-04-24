@@ -23,5 +23,6 @@ namespace BLL.App
         public IOrganizationsService OrganizationsService => ServiceProvider.GetService<IOrganizationsService>();
         public IProductService ProductService => ServiceProvider.GetService<IProductService>();
         public IChangeService ChangeService => ServiceProvider.GetService<IChangeService>();
+        public ICategoryService CategoryService => ServiceProvider.GetService<ICategoryService>();
     }
 }

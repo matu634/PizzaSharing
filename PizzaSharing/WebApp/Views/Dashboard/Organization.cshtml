@@ -1,15 +1,15 @@
 @model WebApp.ViewModels.Dashboard.OrganizationViewModel
 
 @{
-    ViewData["Title"] =  Model.Organization.Name + " | Admin";
+    ViewData["Title"] = Model.OrganizationMin.Name + " | Admin";
 }
 
-<h1 class="text-center center">@Model.Organization.Name</h1>
+<h1 class="text-center center">@Model.OrganizationMin.Name</h1>
 <hr/>
 @* TODO: create buttons if no categories are present *@
 <div class="row">
     <div class="col-lg-6">
-        <h1>Categories</h1>
+        <h1>Categories <a class="btn btn-primary" asp-controller="Category" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">Create</a></h1>
         <hr/>
         @foreach (var category in Model.Categories)
         {
@@ -51,7 +51,15 @@
                 <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
-        <h1>Changes <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.Organization.Id">Create</a></h1>
+        <h1>
+            Changes
+            @if (Model.Categories != null && Model.Categories.Count > 0)
+            {
+                <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+                    Create
+                </a>   
+            }
+        </h1>
         <hr/>
         @foreach (var change in Model.Changes)
         {
@@ -88,7 +96,15 @@
         }
     </div>
     <div class="col-lg-6">
-        <h1>Products <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.Organization.Id">Create</a></h1>
+        <h1>
+            Products 
+            @if (Model.Categories != null && Model.Categories.Count > 0)
+            {
+                <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+                    Create
+                </a>
+            }
+        </h1>
         <hr/>
         @foreach (var product in Model.Products)
         {

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using DAL.App.EF;
 using Domain;
+using WebApp.Areas.Admin.ViewModels;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers

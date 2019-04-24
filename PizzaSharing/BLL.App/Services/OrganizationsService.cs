@@ -17,12 +17,12 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<List<BLLOrganizationDTO>> GetOrganizationsMinDTOAsync()
+        public async Task<List<BLLOrganizationMinDTO>> GetOrganizationsMinDTOAsync()
         {
-            var dtos = await Uow.Organizations.AllDtoMinAsync();
+            var dtos = await Uow.Organizations.AllMinDTOAsync();
 
             return dtos
-                .Select(dto => new BLLOrganizationDTO(dto.Id, dto.Name))
+                .Select(dto => new BLLOrganizationMinDTO(dto.Id, dto.Name))
                 .ToList();
         }
 
@@ -37,7 +37,7 @@ namespace BLL.App.Services
 
             return new BLLOrganizationAllDTO()
             {
-                Organization = new BLLOrganizationDTO(organization.Id, organization.Name),
+                OrganizationMin = new BLLOrganizationMinDTO(organization.Id, organization.Name),
                 Categories = categories
                     .Select(dto => new BLLCategoryDTO(dto.Id, dto.Name, dto.ProductNames, dto.ChangeNames))
                     .ToList(),
@@ -66,6 +66,14 @@ namespace BLL.App.Services
                 Name = organization.Name,
                 Categories = organization.Categories.Select(dto => new BLLCategoryMinDTO(dto.Id, dto.Name)).ToList()
             };
+        }
+
+        public async Task<BLLOrganizationMinDTO> GetOrganizationMinAsync(int organizationId)
+        {
+            var organization = await Uow.Organizations.FindMinDTOAsync(organizationId);
+            if (organization == null) return null;
+            return new BLLOrganizationMinDTO(organization.Id, organization.Name);
+
         }
     }
 }

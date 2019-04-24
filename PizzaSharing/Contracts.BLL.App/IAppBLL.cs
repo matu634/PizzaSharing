@@ -19,5 +19,7 @@ namespace Contracts.BLL.App
         IProductService ProductService { get; }
         
         IChangeService ChangeService { get; }
+
+        ICategoryService CategoryService { get; }
     }
 }

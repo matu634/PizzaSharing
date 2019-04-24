@@ -10,9 +10,9 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IOrganizationRepository : IBaseRepositoryAsync<Organization>
     {
-        Task<List<OrganizationDTO>> AllDtoAsync(DateTime dateTime);
+        Task<List<OrganizationDTO>> AllDTOAsync(DateTime dateTime);
         
-        Task<List<DALOrganizationMinDTO>> AllDtoMinAsync();
+        Task<List<DALOrganizationMinDTO>> AllMinDTOAsync();
         
         Task<DALOrganizationMinDTO> FindMinDTOAsync(int id);
 

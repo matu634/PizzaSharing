@@ -36,7 +36,7 @@ namespace WebApp.Controllers
 
             var vm = new OrganizationViewModel()
             {
-                Organization = dto.Organization,
+                OrganizationMin = dto.OrganizationMin,
                 Changes = dto.Changes,
                 Products = dto.Products,
                 Categories = dto.Categories

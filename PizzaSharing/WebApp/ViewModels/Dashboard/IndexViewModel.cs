@@ -5,6 +5,6 @@ namespace WebApp.ViewModels.Dashboard
 {
     public class IndexViewModel
     {
-        public List<BLLOrganizationDTO> Organizations { get; set; }
+        public List<BLLOrganizationMinDTO> Organizations { get; set; }
     }
 }

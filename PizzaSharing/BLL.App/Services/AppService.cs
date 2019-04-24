@@ -31,7 +31,7 @@ namespace BLL.App.Services
             if (receipt == null) return null;
             var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
             
-            return await Uow.Organizations.AllDtoAsync(time);
+            return await Uow.Organizations.AllDTOAsync(time);
         }
 
         public List<ChangeDTO> GetValidProductsChanges()

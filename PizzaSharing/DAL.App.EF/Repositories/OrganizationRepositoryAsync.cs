@@ -19,7 +19,7 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public async Task<List<OrganizationDTO>> AllDtoAsync(DateTime time)
+        public async Task<List<OrganizationDTO>> AllDTOAsync(DateTime time)
         {
             //TODO: optimize this
             return await RepoDbSet
@@ -54,7 +54,7 @@ namespace DAL.App.EF.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<DALOrganizationMinDTO>> AllDtoMinAsync()
+        public async Task<List<DALOrganizationMinDTO>> AllMinDTOAsync()
         {
             return await RepoDbSet
                 .Where(organization => organization.IsDeleted == false)

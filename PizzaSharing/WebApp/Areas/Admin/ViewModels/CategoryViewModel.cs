@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Domain;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace WebApp.ViewModels
+namespace WebApp.Areas.Admin.ViewModels
 {
     public class CategoryViewModel
     {
-        public Category Category { get; set; }
+        public Domain.Category Category { get; set; }
         public SelectList Organizations { get; set; }
     }
 }

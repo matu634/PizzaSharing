@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
@@ -57,6 +58,17 @@ namespace DAL.App.EF.Repositories
                         .ToList()
                 })
                 .ToListAsync();
+        }
+
+        public async Task AddAsync(BLLCategoryDTO categoryDTO)
+        {
+            var category = new Category()
+            {
+                CategoryName = categoryDTO.CategoryName,
+                OrganizationId = categoryDTO.OrganizationId
+            };
+
+            await RepoDbSet.AddAsync(category);
         }
     }
 }
