@@ -53,13 +53,31 @@ namespace DAL.App.EF.Repositories
                     Id = change.Id,
                     Name = change.ChangeName,
                     CurrentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now) ?? -1.0m,
-                    CategoryNames = change.ChangeInCategories
+                    Categories = change.ChangeInCategories
                         .Where(obj => obj.Category.IsDeleted == false)
-                        .Select(obj => obj.Category.CategoryName)
+                        .Select(obj => new DALCategoryMinDTO(obj.ChangeId, obj.Change.ChangeName))
                         .ToList()
                 })
                 .Where(dto => dto.CurrentPrice != -1.0m)
                 .ToList();
+        }
+
+        public async Task<DALChangeDTO> AddAsync(DALChangeDTO changeDTO)
+        {
+            var change = new Change()
+            {
+                OrganizationId = changeDTO.OrganizationId,
+                ChangeName = changeDTO.Name
+            };
+
+            change = (await RepoDbSet.AddAsync(change)).Entity;
+
+            return new DALChangeDTO()
+            {
+                Id = change.Id,
+                Name = change.ChangeName,
+                OrganizationId = change.OrganizationId
+            };
         }
     }
 }

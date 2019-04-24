@@ -47,7 +47,7 @@
                 <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
-        <h1>Changes</h1>
+        <h1>Changes <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.Organization.Id">Create</a></h1>
         <hr/>
         @foreach (var change in Model.Changes)
         {
@@ -61,7 +61,7 @@
                             </button>
                             <div class="collapse " id="changeCategories@(change.Id)">
                                 <ul>
-                                    @foreach (var categoryName in change.CategoryNames)
+                                    @foreach (var categoryName in change.Categories)
                                     {
                                         <li>@categoryName</li>
                                     }

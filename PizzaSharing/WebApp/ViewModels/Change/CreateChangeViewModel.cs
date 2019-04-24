@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace WebApp.ViewModels.Product
+namespace WebApp.ViewModels.Change
 {
-    public class CreateProductViewModel
+    public class CreateChangeViewModel
     {
         [Required]
         public int OrganizationId { get; set; }
@@ -14,11 +14,9 @@ namespace WebApp.ViewModels.Product
 
         [MinLength(1)]
         [MaxLength(64)]
-        [Display(Name = "Product name")]
-        [Required(ErrorMessage = "Please enter a product name")]
-        public string ProductName { get; set; }
-        
-        //TODO: product description
+        [Required(ErrorMessage = "Please enter a change name")]
+        [Display(Name = "Change Name")]
+        public string ChangeName { get; set; }
         
         [Range(0, 10000)]
         [Display(Name = "Price")]

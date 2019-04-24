@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.Base.EF.Repositories;
@@ -10,6 +11,17 @@ namespace DAL.App.EF.Repositories
         public ChangeInCategoryRepository(IDataContext dataContext) : base(dataContext)
         {
             
+        }
+
+        public async Task AddAsync(int changeId, int categoryId)
+        {
+            var obj = new ChangeInCategory()
+            {
+                ChangeId = changeId,
+                CategoryId = categoryId
+            };
+
+            await RepoDbSet.AddAsync(obj);
         }
     }
 }

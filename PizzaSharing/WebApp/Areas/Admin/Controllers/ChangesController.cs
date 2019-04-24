@@ -3,6 +3,7 @@ using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Domain;
+using WebApp.Areas.Admin.ViewModels;
 using WebApp.ViewModels;
 
 namespace WebApp.Controllers

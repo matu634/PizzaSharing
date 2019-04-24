@@ -16,6 +16,7 @@ namespace BLL.App.Helpers
             Add<IAppUserService>(uow => new AppUserService(uow));
             Add<IOrganizationsService>(uow => new OrganizationsService(uow));
             Add<IProductService>(uow => new ProductService(uow));
+            Add<IChangeService>(uow => new ChangeService(uow));
         }
     }
 }

@@ -39,13 +39,17 @@ namespace BLL.App.Services
             {
                 Organization = new BLLOrganizationDTO(organization.Id, organization.Name),
                 Categories = categories
-                    .Select(dto => new BLLCategoryDTO(dto.Id, dto.Name, dto.ProductNames, dto.ChangeNames)).ToList(),
+                    .Select(dto => new BLLCategoryDTO(dto.Id, dto.Name, dto.ProductNames, dto.ChangeNames))
+                    .ToList(),
                 Products = products
                     .Select(dto => new BLLProductDTO(dto.Id, dto.Name, dto.CurrentPrice, dto.Categories
                         .Select(minDTO => new BLLCategoryMinDTO(minDTO.Id, minDTO.Name))
                         .ToList()))
                     .ToList(),
-                Changes = changes.Select(dto => new BLLChangeDTO(dto.Id, dto.Name, dto.CurrentPrice, dto.CategoryNames))
+                Changes = changes
+                    .Select(dto => new BLLChangeDTO(dto.Id, dto.Name, dto.CurrentPrice,dto.Categories
+                            .Select(minDTO => new BLLCategoryMinDTO(minDTO.Id, minDTO.Name))
+                            .ToList()))
                     .ToList()
             };
         }
