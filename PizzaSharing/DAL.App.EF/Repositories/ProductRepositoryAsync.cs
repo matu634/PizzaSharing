@@ -87,7 +87,7 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(obj => obj.Category)
                 .Include(p => p.Prices)
                 .Where(p => p.IsDeleted == false && p.Id == productId)
-                .FirstOrDefaultAsync();
+                .SingleOrDefaultAsync();
             if (product == null) return null;
 
             var currentPrice = PriceFinder.ForProduct(product, product.Prices, DateTime.Now);

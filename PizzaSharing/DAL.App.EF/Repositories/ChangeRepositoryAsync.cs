@@ -55,7 +55,7 @@ namespace DAL.App.EF.Repositories
                     CurrentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now) ?? -1.0m,
                     Categories = change.ChangeInCategories
                         .Where(obj => obj.Category.IsDeleted == false)
-                        .Select(obj => new DALCategoryMinDTO(obj.ChangeId, obj.Change.ChangeName))
+                        .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
                         .ToList()
                 })
                 .Where(dto => dto.CurrentPrice != -1.0m)
@@ -78,6 +78,39 @@ namespace DAL.App.EF.Repositories
                 Name = change.ChangeName,
                 OrganizationId = change.OrganizationId
             };
+        }
+
+        public async Task<DALChangeDTO> FindDTOAsync(int changeId)
+        {
+            var change = await RepoDbSet
+                .Include(c => c.ChangeInCategories)
+                .ThenInclude(obj => obj.Category)
+                .Include(c => c.Prices)
+                .Where(c => c.IsDeleted == false && c.Id == changeId)
+                .SingleOrDefaultAsync();
+            if (change == null) return null;
+
+            var currentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now);
+            if (currentPrice == null) return null;
+
+            return new DALChangeDTO()
+            {
+                Id = change.Id,
+                Name = change.ChangeName,
+                CurrentPrice = currentPrice.Value,
+                OrganizationId = change.OrganizationId,
+                Categories = change.ChangeInCategories
+                    .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
+                    .ToList()
+            };
+        }
+
+        public async Task<bool> RemoveSoft(int changeId)
+        {
+            var change = await RepoDbSet.FindAsync(changeId);
+            if (change == null) return false;
+            change.IsDeleted = true;
+            return true;
         }
     }
 }

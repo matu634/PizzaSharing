@@ -55,9 +55,8 @@ namespace WebApp.Controllers
             return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
         }
 
-        /*
-        // GET: Products/Delete/5
-        [HttpGet("product/delete/{id}")]
+        
+        [HttpGet("change/delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -65,33 +64,32 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _bll.ProductService.GetProductAsync(productId: id.Value);
-            if (product == null)
+            var change = await _bll.ChangeService.GetChangeAsync(changeId: id.Value);
+            if (change == null)
             {
                 return NotFound();
             }
 
-            var vm = new DeleteProductViewModel()
+            var vm = new DeleteChangeViewModel()
             {
-                Price = product.CurrentPrice,
-                Description = "TODO: description",
-                ProductId = product.Id,
-                OrganizationId = product.OrganizationId,
-                ProductName = product.ProductName
+                Price = change.CurrentPrice,
+                ChangeId = change.Id,
+                OrganizationId = change.OrganizationId,
+                ChangeName = change.Name
             };
 
 
             return View(vm);
         }
-
-        // POST: Products/Delete/5
-        [HttpPost("product/delete")]
+        
+        
+        [HttpPost("change/delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(DeleteProductViewModel vm)
+        public async Task<IActionResult> DeleteConfirmed(DeleteChangeViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var result = await _bll.ProductService.DeleteProductAsync(vm.ProductId);
+                var result = await _bll.ChangeService.DeleteChangeAsync(vm.ChangeId);
                 if (result == false) return BadRequest("Error while deleting entry");
                 return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
             }
@@ -99,7 +97,7 @@ namespace WebApp.Controllers
             return BadRequest();
         }
 
-        // GET: Products/Edit/5
+        /*
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

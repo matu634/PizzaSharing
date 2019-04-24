@@ -49,5 +49,27 @@ namespace BLL.App.Services
             await Uow.SaveChangesAsync();
             return true;
         }
+
+        public async Task<BLLChangeDTO> GetChangeAsync(int changeId)
+        {
+            var result = await Uow.Changes.FindDTOAsync(changeId);
+            if (result == null) return null;
+            return new BLLChangeDTO()
+            {
+                Id = result.Id,
+                Name = result.Name,
+                CurrentPrice = result.CurrentPrice,
+                OrganizationId = result.OrganizationId,
+                Categories = result.Categories.Select(dto => new BLLCategoryMinDTO(dto.Id, dto.Name)).ToList()
+            };
+        }
+
+        public async Task<bool> DeleteChangeAsync(int changeId)
+        {
+            var result = await Uow.Changes.RemoveSoft(changeId);
+            if (result == false) return false;
+            await Uow.SaveChangesAsync();
+            return true;
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace BLL.App.Services
                         .ToList()))
                     .ToList(),
                 Changes = changes
-                    .Select(dto => new BLLChangeDTO(dto.Id, dto.Name, dto.CurrentPrice,dto.Categories
+                    .Select(dto => new BLLChangeDTO(dto.Id, dto.Name, dto.CurrentPrice, dto.Categories
                             .Select(minDTO => new BLLCategoryMinDTO(minDTO.Id, minDTO.Name))
                             .ToList()))
                     .ToList()

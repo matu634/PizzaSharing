@@ -54,6 +54,9 @@
             <div class="small-box bg-danger">
                 <div class="inner">
                     <h4> @change.Name - <span>@($"{change.CurrentPrice:N2}") €</span> </h4>
+                    <a class="btn btn-outline-dark mb-2" asp-controller="Change" asp-action="Delete" asp-route-id="@change.Id">
+                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Remove
+                    </a>
                     <div class="row">
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#changeCategories@(change.Id)">
@@ -61,9 +64,9 @@
                             </button>
                             <div class="collapse " id="changeCategories@(change.Id)">
                                 <ul>
-                                    @foreach (var categoryName in change.Categories)
+                                    @foreach (var category in change.Categories)
                                     {
-                                        <li>@categoryName</li>
+                                        <li>@category.Name</li>
                                     }
                                 </ul>
                             </div>

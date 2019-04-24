@@ -55,7 +55,6 @@ namespace WebApp.Controllers
             return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
         }
 
-        // GET: Products/Delete/5
         [HttpGet("product/delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -83,7 +82,6 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // POST: Products/Delete/5
         [HttpPost("product/delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(DeleteProductViewModel vm)
@@ -98,7 +96,6 @@ namespace WebApp.Controllers
             return BadRequest();
         }
 
-        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
