@@ -97,7 +97,7 @@ namespace WebApp.Controllers
             return BadRequest();
         }
 
-        /*
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,22 +105,23 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _bll.ProductService.GetProductAsync(productId: id.Value);
-            if (product == null)
+            var change = await _bll.ChangeService.GetChangeAsync(changeId: id.Value);
+            if (change == null)
             {
                 return NotFound();
             }
 
             var categories =
-                (await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(product.OrganizationId)).Categories;
-            var selectedCategoryIds = product.Categories.Select(dto => dto.Id).ToList();
-            var vm = new EditProductViewModel()
+                (await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(change.OrganizationId)).Categories;
+            
+            var selectedCategoryIds = change.Categories.Select(dto => dto.Id).ToList();
+            var vm = new EditChangeViewModel()
             {
-                Price = product.CurrentPrice,
-                Description = "TODO: description",
-                ProductId = product.Id,
-                OrganizationId = product.OrganizationId,
-                ProductName = product.ProductName,
+                
+                Price = change.CurrentPrice,
+                ChangeId = change.Id,
+                OrganizationId = change.OrganizationId,
+                ChangeName = change.Name,
                 Categories = categories.Select(dto =>
                     new SelectListItem(dto.Name, dto.Id.ToString(), selectedCategoryIds.Contains(dto.Id)))
                     .ToList()
@@ -129,27 +130,27 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditProductViewModel vm)
+        public async Task<IActionResult> Edit(EditChangeViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                var input = new BLLProductDTO
+                var input = new BLLChangeDTO()
                 {
-                    Id = vm.ProductId,
+                    Id = vm.ChangeId,
                     OrganizationId = vm.OrganizationId,
                     CurrentPrice = vm.Price,
-                    ProductName = vm.ProductName,
+                    Name = vm.ChangeName,
                     Categories = vm.SelectedCategories.Select(i => new BLLCategoryMinDTO(i)).ToList()
                 };
 
-                var result = await _bll.ProductService.EditProduct(input);
+                var result = await _bll.ChangeService.EditChange(input);
                 if (result == false) return BadRequest();
                 return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
             }
             return BadRequest();
         }
-        */
     }
 }

@@ -87,8 +87,7 @@ namespace BLL.App.Services
             //1.Edit product entity
             var product = await Uow.Products.EditAsync(new DALProductDTO()
                 {
-                    Name = productDTO.ProductName, 
-                    OrganizationId = productDTO.OrganizationId,
+                    Name = productDTO.ProductName,
                     Id = productDTO.Id
                 });
             if (product == null) return false;

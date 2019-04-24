@@ -112,5 +112,20 @@ namespace DAL.App.EF.Repositories
             change.IsDeleted = true;
             return true;
         }
+
+        public async Task<DALChangeDTO> EditAsync(DALChangeDTO changeDTO)
+        {
+            var change = await RepoDbSet.FindAsync(changeDTO.Id);
+            if (change == null) return null;
+            
+            change.ChangeName = changeDTO.Name;
+            
+            return new DALChangeDTO()
+            {
+                Id = change.Id,
+                Name = change.ChangeName,
+                OrganizationId = change.OrganizationId
+            };
+        }
     }
 }

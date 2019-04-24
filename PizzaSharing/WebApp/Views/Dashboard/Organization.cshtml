@@ -1,5 +1,9 @@
 @model WebApp.ViewModels.Dashboard.OrganizationViewModel
 
+@{
+    ViewData["Title"] =  Model.Organization.Name + " | Admin";
+}
+
 <h1 class="text-center center">@Model.Organization.Name</h1>
 <hr/>
 @* TODO: create buttons if no categories are present *@
@@ -56,6 +60,9 @@
                     <h4> @change.Name - <span>@($"{change.CurrentPrice:N2}") €</span> </h4>
                     <a class="btn btn-outline-dark mb-2" asp-controller="Change" asp-action="Delete" asp-route-id="@change.Id">
                         <i class="fa fa-times mr-1" aria-hidden="true"></i>Remove
+                    </a>
+                    <a class="btn btn-warning mb-2" asp-controller="Change" asp-action="Edit" asp-route-id="@change.Id">
+                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>Edit
                     </a>
                     <div class="row">
                         <div class="col-lg-4">

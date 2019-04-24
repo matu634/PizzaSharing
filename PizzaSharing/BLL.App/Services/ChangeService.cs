@@ -71,5 +71,46 @@ namespace BLL.App.Services
             await Uow.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> EditChange(BLLChangeDTO changeDto)
+        {
+            var organization = await Uow.Organizations.FindWithCategoriesAsync(changeDto.OrganizationId);
+            if (organization?.Categories == null || organization.Categories.Count == 0) return false;
+
+            var organizationCategoryIds = organization.Categories.Select(dto => dto.Id).ToList();
+
+            foreach (var category in changeDto.Categories)
+            {
+                if (!organizationCategoryIds.Contains(category.Id)) return false;
+            }
+
+            //1.Edit product entity
+            var change = await Uow.Changes.EditAsync(new DALChangeDTO()
+            {
+                Name = changeDto.Name,
+                Id = changeDto.Id
+            });
+            if (change == null) return false;
+            
+            //2. Edit product categories
+            await Uow.ChangesInCategories.RemoveByChangeId(change.Id);
+            
+            foreach (var category in changeDto.Categories)
+            {
+                await Uow.ChangesInCategories.AddAsync(change.Id, category.Id);
+            }
+            
+            //3. Add price
+            var priceDTO = new DALPriceDTO()
+            {
+                Value = changeDto.CurrentPrice,
+                ChangeId = change.Id,
+                ValidFrom = DateTime.Now,
+                ValidTo = DateTime.MaxValue,
+            };
+            await Uow.Prices.EditAsync(priceDTO);
+            await Uow.SaveChangesAsync();
+            return true;
+        }
     }
 }

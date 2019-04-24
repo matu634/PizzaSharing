@@ -11,5 +11,7 @@ namespace Contracts.BLL.App.Services
         Task<BLLChangeDTO> GetChangeAsync(int changeId);
         
         Task<bool> DeleteChangeAsync(int changeId);
+        
+        Task<bool> EditChange(BLLChangeDTO changeDto);
     }
 }

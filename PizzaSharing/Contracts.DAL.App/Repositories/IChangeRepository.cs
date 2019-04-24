@@ -17,5 +17,7 @@ namespace Contracts.DAL.App.Repositories
         Task<DALChangeDTO> FindDTOAsync(int changeId);
         
         Task<bool> RemoveSoft(int changeId);
+        
+        Task<DALChangeDTO> EditAsync(DALChangeDTO changeDTO);
     }
 }
