@@ -15,7 +15,7 @@ namespace BLL.App.Services
         public async Task<bool> AddCategoryAsync(BLLCategoryDTO categoryDTO)
         {
             var organization = await Uow.Organizations.FindWithCategoriesAsync(categoryDTO.OrganizationId);
-            if (organization?.Categories == null || organization.Categories.Count == 0) return false;
+            if (organization == null) return false;
 
             await Uow.Categories.AddAsync(new BLLCategoryDTO()
                 {OrganizationId = categoryDTO.OrganizationId, CategoryName = categoryDTO.CategoryName});

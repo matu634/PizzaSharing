@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.BLL.App;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 using WebApp.ViewModels;
+using WebApp.ViewModels.Category;
 using WebApp.ViewModels.Dashboard;
 
 namespace WebApp.Controllers
@@ -49,6 +51,31 @@ namespace WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+        }
+        
+        [HttpGet("dashboard/create")]
+        public async Task<IActionResult> Create()
+        {
+            return View(new CreateOrganizationViewModel());
+        }
+        
+        
+        [HttpPost("dashboard/create")]
+        public async Task<IActionResult> Create(CreateOrganizationViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var organization = new BLLOrganizationMinDTO
+                {
+                    Name = vm.Name
+                };
+
+                var result = await _bll.OrganizationsService.AddOrganizationAsync(organization);
+                if (result == false) return BadRequest("Something went wrong while adding the organization");
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            return BadRequest("Model invalid");
         }
     }
 }

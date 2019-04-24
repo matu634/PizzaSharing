@@ -88,5 +88,15 @@ namespace DAL.App.EF.Repositories
                 }).ToList()
             };
         }
+
+        public async Task AddAsync(DALOrganizationMinDTO organizationDTO)
+        {
+            var organization = new Organization()
+            {
+                OrganizationName = organizationDTO.Name
+            };
+
+            await RepoDbSet.AddAsync(organization);
+        }
     }
 }

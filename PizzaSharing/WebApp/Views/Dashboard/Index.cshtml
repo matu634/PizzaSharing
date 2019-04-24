@@ -7,7 +7,12 @@
 <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 text-center">
-        <h1>Pick an organization to edit</h1>
+        <h1>
+            Pick an organization to edit
+            <a class="btn btn-primary" asp-controller="Dashboard" asp-action="Create">
+                Create
+            </a>   
+        </h1>
         @foreach (var organization in Model.Organizations)
         {
             <div class="small-box bg-success">

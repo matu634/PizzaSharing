@@ -8,6 +8,10 @@ namespace BLL.App.DTO
             Name = name;
         }
 
+        public BLLOrganizationMinDTO()
+        {
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
     }

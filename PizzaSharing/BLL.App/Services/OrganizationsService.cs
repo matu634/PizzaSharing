@@ -75,5 +75,16 @@ namespace BLL.App.Services
             return new BLLOrganizationMinDTO(organization.Id, organization.Name);
 
         }
+
+        public async Task<bool> AddOrganizationAsync(BLLOrganizationMinDTO organization)
+        {
+            await Uow.Organizations.AddAsync(new DALOrganizationMinDTO
+                {
+                    Name = organization.Name
+                }
+            );
+            await Uow.SaveChangesAsync();
+            return true;
+        }
     }
 }

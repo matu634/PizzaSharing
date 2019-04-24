@@ -14,5 +14,7 @@ namespace Contracts.BLL.App.Services
         Task<BLLOrganizationWithCategoriesDTO> GetOrganizationWithCategoriesAsync(int organizationId);
         
         Task<BLLOrganizationMinDTO> GetOrganizationMinAsync(int organizationId);
+        
+        Task<bool> AddOrganizationAsync(BLLOrganizationMinDTO organization);
     }
 }
