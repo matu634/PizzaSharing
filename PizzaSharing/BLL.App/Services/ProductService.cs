@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
@@ -111,6 +112,26 @@ namespace BLL.App.Services
             await Uow.Prices.EditAsync(priceDTO);
             await Uow.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<BLLChangeDTO>> GetProductChangesAsync(int productId)
+        {
+            var product = await Uow.Products.FindDTOAsync(productId);
+            if (product == null) return null;
+            var categoryIds = product.Categories.Select(dto => dto.Id).ToArray();
+
+            var changes = await Uow.ChangesInCategories.GetChangesByCategoryIdsAsync(categoryIds);
+
+            if (changes == null) return null;
+
+            return changes
+                .Select(dto => new BLLChangeDTO()
+                {
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    CurrentPrice = dto.CurrentPrice
+                })
+                .ToList();
         }
     }
 }

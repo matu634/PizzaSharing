@@ -15,7 +15,7 @@ namespace WebApp.ApiControllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppController : ControllerBase
     {
         private readonly IAppBLL _bll;
@@ -37,6 +37,21 @@ namespace WebApp.ApiControllers
             var result = await _bll.AppService.GetOrganizationsCategoriesAndProductsAsync(receiptId);
             if (result == null) return BadRequest();
             return result;
+        }
+
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<List<ChangeDTO>>> ProductChanges(int productId)
+        {
+            var changes = await _bll.ProductService.GetProductChangesAsync(productId);
+            if (changes == null) return BadRequest();
+            return changes
+                .Select(dto => new ChangeDTO()
+                {
+                    Price = dto.CurrentPrice,
+                    Name = dto.Name,
+                    ChangeId = dto.Id
+                })
+                .ToList();
         }
     }
 }

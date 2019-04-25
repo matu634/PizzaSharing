@@ -9,5 +9,7 @@ namespace Domain
 
         public int ChangeId { get; set; }
         public Change Change { get; set; }
+        
+        
     }
 }

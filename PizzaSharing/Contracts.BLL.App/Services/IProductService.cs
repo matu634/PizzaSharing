@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.App.DTO;
 using Contracts.BLL.Base.Services;
@@ -13,5 +14,7 @@ namespace Contracts.BLL.App.Services
         Task<bool> DeleteProductAsync(int productId);
         
         Task<bool> EditProduct(BLLProductDTO productDTO);
+        
+        Task<List<BLLChangeDTO>> GetProductChangesAsync(int productId);
     }
 }

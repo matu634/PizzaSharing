@@ -27,15 +27,5 @@ namespace Domain
 
         public string ChangeAndOrganizationName =>
             $"{ChangeName} ({Organization?.OrganizationName ?? "Organization not loaded"})";
-        /*
-        public decimal GetPriceAtTime(DateTime dateTime)
-        {
-            Price currentPrice = Prices
-                .FirstOrDefault(p => p.ValidTo.Ticks > dateTime.Ticks && p.ValidFrom.Ticks < dateTime.Ticks);
-            if (currentPrice == null)
-                throw new Exception($"Price for change {ChangeName}(id:{Id}) at {dateTime} was not found!");
-            return currentPrice.Value;
-        }
-        */
     }
 }

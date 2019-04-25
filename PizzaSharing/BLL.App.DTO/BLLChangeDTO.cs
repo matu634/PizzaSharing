@@ -17,9 +17,9 @@ namespace BLL.App.DTO
         }
 
         public int Id { get; set; }
-        public int OrganizationId { get; set; }
         public string Name { get; set; }
         public decimal CurrentPrice { get; set; }
+        public int OrganizationId { get; set; }
         public List<BLLCategoryMinDTO> Categories { get; set; }
     }
 }
