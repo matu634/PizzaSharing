@@ -8,7 +8,7 @@
     <li class="nav-item">
         <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
             <i class="nav-icon fa fa-user"></i>
-            <p >My Account</p>
+            <p >@Resources.Default.MyAccountButton</p>
         </a>
     </li>
 }
@@ -17,7 +17,7 @@ else
     <li class="nav-item">
         <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
             <i class="nav-icon fa fa-user"></i>
-            <p> Log In</p>
+            <p> @Resources.Default.LoginButton</p>
         </a>
     </li>
 }

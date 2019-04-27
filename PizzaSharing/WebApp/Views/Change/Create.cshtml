@@ -2,12 +2,12 @@
 
 
 @{
-    ViewData["Title"] = "Add change | " + Model.OrganizationName ;
+    ViewData["Title"] = @Resources.Change.Create.PageTitle + " | " + Model.OrganizationName ;
 }
 
-<h1>Create</h1>
+<h1>@Resources.Change.Create.Title1</h1>
 
-<h4>Change</h4>
+<h4>@Resources.Change.Create.Title2</h4>
 <hr />
 
 <div class="col-md-6">
@@ -29,7 +29,7 @@
                 
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
-                    <input type="number" asp-for="Price" class="form-control" />
+                    <input type="number" asp-for="Price" min="0" max="10000" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 
@@ -44,7 +44,7 @@
             <div class="card-footer">
                 <div class="form-group">
                     <input type="hidden" asp-for="OrganizationId"/>
-                    <input type="submit" value="Create" class="btn btn-primary"/>
+                    <input type="submit" value="@Resources.Change.Create.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
         </form>
@@ -54,7 +54,7 @@
 <form >
     <button class="btn btn-default" asp-area="" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Change.Create.BackButton
     </button>
 </form>
 

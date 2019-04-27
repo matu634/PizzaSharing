@@ -4,8 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-<h4>Organization</h4>
+<h1>@Resources.Dashboard.Create.Title1</h1>
+<h4>@Resources.Dashboard.Create.Title2</h4>
 
 <div class="col-md-6">
     <div class="card card-success">
@@ -25,7 +25,7 @@
 
             <div class="card-footer">
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary"/>
+                    <input type="submit" value="@Resources.Dashboard.Create.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
         </form>
@@ -35,7 +35,7 @@
 <form >
     <button class="btn btn-default" asp-area="" asp-action="Index">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Dashboard.Create.BackButton
     </button>
 </form>
 

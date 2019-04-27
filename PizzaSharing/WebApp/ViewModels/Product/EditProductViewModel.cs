@@ -6,31 +6,32 @@ namespace WebApp.ViewModels.Product
 {
     public class EditProductViewModel
     {
-        [Required]
-        public int OrganizationId { get; set; }
         
         [Required] 
         public int ProductId { get; set; }
+
+        //TODO: required min length max length display error message
+        public string Description { get; set; }
+        
+        [Required]
+        public int OrganizationId { get; set; }
         
         public string OrganizationName { get; set; }
         public List<SelectListItem> Categories { get; set; }
 
-        [MinLength(1)]
-        [MaxLength(64)]
-        [Display(Name = "Product name")]
-        [Required(ErrorMessage = "Please enter a product name")]
+        [MinLength(1, ErrorMessageResourceName = "TooShortProductName", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
+        [MaxLength(64, ErrorMessageResourceName = "TooLongProductName", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
+        [Display(Name = "ProductName", ResourceType = typeof(Resources.Product.Edit))]
+        [Required(ErrorMessageResourceName = "MissingProductName", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
         public string ProductName { get; set; }
         
-        [Range(0, 10000)]
-        [Required(ErrorMessage = "Please enter a valid price")]
-        [Display(Name = "Price")]
+        [Range(0, 10000, ErrorMessageResourceName = "PriceRangeValidation", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
+        [Display(Name = "ProductPrice", ResourceType = typeof(Resources.Product.Edit))]
+        [Required(ErrorMessageResourceName = "MissingProductPrice", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
         public decimal Price { get; set; }
         
-        [Display(Name = "Categories")]
-        [Required(ErrorMessage = "Please select at least one category")]
+        [Display(Name = "ProductCategories" , ResourceType = typeof(Resources.Product.Edit))]
+        [Required(ErrorMessageResourceName = "CategoryNotSelected", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
         public IEnumerable<int> SelectedCategories { get; set; }
-
-        //TODO: required min length max length display error message
-        public string Description { get; set; }
     }
 }

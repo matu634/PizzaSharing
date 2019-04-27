@@ -1,12 +1,12 @@
 @model WebApp.ViewModels.Product.DeleteProductViewModel
 
 @{
-    ViewData["Title"] = "Delete Product";
+    ViewData["Title"] = @Resources.Product.Delete.PageTitle + " | " + @Model.ProductName;
 }
 
-<h1>Delete</h1>
+<h1>@Resources.Product.Delete.Title1</h1>
 
-<h4>Are you sure you want to delete this product?</h4>
+<h4>@Resources.Product.Delete.Title2</h4>
 <hr/>
 
 <div class="col-md-9">
@@ -41,7 +41,7 @@
             <form asp-action="DeleteConfirmed">
                 <input type="hidden" asp-for="ProductId" />
                 <input type="hidden" asp-for="OrganizationId" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
+                <input type="submit" value="@Resources.Product.Delete.SubmitButton" class="btn btn-danger" />
             </form>
         </div>
     </div>
@@ -51,6 +51,6 @@
 <form >
     <button class="btn btn-default" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Product.Delete.BackButton
     </button>
 </form>

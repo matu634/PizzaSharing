@@ -1,3 +1,4 @@
+﻿@using System.Globalization
 @using Domain.Identity
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
@@ -43,6 +44,7 @@ to get the desired effect
 
         @* <!-- Right navbar links --> *@
         <ul class="navbar-nav ml-auto">
+            <partial name="_LanguagePartial"/>
             <partial name="_LoginPartial"/>
         </ul>
     </nav>
@@ -75,21 +77,13 @@ to get the desired effect
                     data-accordion="false">
                     
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Index">
                             <i class="nav-icon fa fa-home"></i>
-                            <p >Home</p>
+                            <p >@Resources.Default.HomeButton</p>
                         </a>
                     </li>
                     
                     <partial name="_LoginSidebarPartial"/>
-                    
-
-                    <li class="nav-header">All Tables</li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Dashboard"
-                           asp-action="Index"><i class="nav-icon fa fa-table"></i><p>Dashboard</p></a>
-                    </li>
                 </ul>
             </nav>
         </div>
@@ -97,6 +91,7 @@ to get the desired effect
 
     @* <!-- Content Wrapper. Contains page content --> *@
     <div class="content-wrapper">
+        <partial name="_CookieConsentPartial"/>
         @* <!-- Main content --> *@
         <div class="content">
             <div class="container">
@@ -117,7 +112,9 @@ to get the desired effect
         </div>
         <!-- Default to the left -->
         &copy; 2019 - Pizza Sharing App - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        Culture:@CultureInfo.CurrentCulture.Name UICulture:@CultureInfo.CurrentUICulture.Name
         
+        Hello: @Resources.Default.Hello
     </footer>
 </div>
 

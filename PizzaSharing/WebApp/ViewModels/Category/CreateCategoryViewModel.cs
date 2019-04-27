@@ -8,10 +8,10 @@ namespace WebApp.ViewModels.Category
 
         public string OrganizationName { get; set; }
 
-        [MinLength(1)]
-        [MaxLength(64)]
-        [Required(ErrorMessage = "Please enter a category name")]
-        [Display(Name = "Category Name")]
+        [MinLength(1, ErrorMessageResourceName = "TooShortCategoryName", ErrorMessageResourceType = typeof(Resources.Category.Create))]
+        [MaxLength(64, ErrorMessageResourceName = "TooLongCategoryName", ErrorMessageResourceType = typeof(Resources.Category.Create))]
+        [Display(Name = "CategoryName", ResourceType = typeof(Resources.Category.Create))]
+        [Required(ErrorMessageResourceName = "MissingCategoryName", ErrorMessageResourceType = typeof(Resources.Category.Create))]
         public string CategoryName { get; set; }
     }
 }

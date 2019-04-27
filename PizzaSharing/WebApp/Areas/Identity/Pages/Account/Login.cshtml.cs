@@ -37,15 +37,15 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessageResourceName = "MissingEmailError", ErrorMessageResourceType = typeof(@Resources.Account.Login))]
+            [EmailAddress(ErrorMessageResourceName = "EmailError", ErrorMessageResourceType = typeof(@Resources.Account.Login))]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessageResourceName = "MissingPasswordError", ErrorMessageResourceType = typeof(@Resources.Account.Login))]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "RememberMe", ResourceType = typeof(Resources.Account.Login))]
             public bool RememberMe { get; set; }
         }
 

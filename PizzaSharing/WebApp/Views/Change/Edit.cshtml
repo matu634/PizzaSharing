@@ -2,12 +2,12 @@
 
 
 @{
-    ViewData["Title"] = "Edit Change";
+    ViewData["Title"] = @Resources.Change.Edit.PageTitle + " | " + @Model.ChangeName;
 }
 
-<h1>Edit</h1>
+<h1>@Resources.Change.Edit.Title1</h1>
 
-<h4>Change</h4>
+<h4>@Resources.Change.Edit.Title2</h4>
 <hr />
 
 <div class="col-md-6">
@@ -31,7 +31,7 @@
                 
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
-                    <input type="number" asp-for="Price" class="form-control" asp-format="{0:N2}"/>
+                    <input type="number" asp-for="Price" min="0" max="10000" class="form-control" asp-format="{0:N2}"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 
@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <input type="hidden" asp-for="ChangeId"/>
                     <input type="hidden" asp-for="OrganizationId"/>
-                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    <input type="submit" value="@Resources.Change.Edit.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
             
@@ -59,7 +59,7 @@
 <form >
     <button class="btn btn-default" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Change.Edit.BackButton
     </button>
 </form>
 

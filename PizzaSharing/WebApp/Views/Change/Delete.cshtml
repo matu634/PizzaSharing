@@ -1,12 +1,12 @@
 @model WebApp.ViewModels.Change.DeleteChangeViewModel
 
 @{
-    ViewData["Title"] = "Delete change";
+    ViewData["Title"] = @Resources.Change.Delete.PageTitle + " | " + @Model.ChangeName;
 }
 
-<h1>Delete</h1>
+<h1>@Resources.Change.Delete.Title1</h1>
 
-<h4>Are you sure you want to delete this change?</h4>
+<h4>@Resources.Change.Delete.Title2</h4>
 <hr/>
 
 <div class="col-md-9">
@@ -35,7 +35,7 @@
             <form asp-action="DeleteConfirmed" asp-controller="Change">
                 <input type="hidden" asp-for="ChangeId" />
                 <input type="hidden" asp-for="OrganizationId" />
-                <input type="submit" value="Delete" class="btn btn-danger" />
+                <input type="submit" value="@Resources.Change.Delete.SubmitButton" class="btn btn-danger" />
             </form>
         </div>
     </div>
@@ -45,6 +45,6 @@
 <form >
     <button class="btn btn-default" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Change.Delete.BackButton
     </button>
 </form>

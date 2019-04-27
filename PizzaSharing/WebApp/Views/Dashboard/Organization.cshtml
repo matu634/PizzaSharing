@@ -6,10 +6,14 @@
 
 <h1 class="text-center center">@Model.OrganizationMin.Name</h1>
 <hr/>
-@* TODO: create buttons if no categories are present *@
 <div class="row">
     <div class="col-lg-6">
-        <h1>Categories <a class="btn btn-primary" asp-controller="Category" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">Create</a></h1>
+        <h1>
+            @Resources.Dashboard.Organization.CategoriesTitle
+            <a class="btn btn-primary" asp-controller="Category" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+                @Resources.Dashboard.Organization.CategoryCreate
+            </a>
+        </h1>
         <hr/>
         @foreach (var category in Model.Categories)
         {
@@ -19,7 +23,7 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#products@(category.CategoryId)">
-                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Products
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.CategoryProducts
                             </button>
                             <div class="collapse " id="products@(category.CategoryId)">
                                 <ul>
@@ -32,7 +36,7 @@
                         </div>
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#changes@(category.CategoryId)">
-                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Changes
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.CategoryChanges
                             </button>
                             <div class="collapse " id="changes@(category.CategoryId)">
                                 <ul>
@@ -48,15 +52,15 @@
                 <div class="icon">
                     <i class="fa fa-bars"></i>
                 </div>
-                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+                <a style="cursor: pointer" class="small-box-footer">FIX THIS <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
         <h1>
-            Changes
+            @Resources.Dashboard.Organization.ChangeTitle
             @if (Model.Categories != null && Model.Categories.Count > 0)
             {
                 <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
-                    Create
+                    @Resources.Dashboard.Organization.ChangeCreate
                 </a>   
             }
         </h1>
@@ -67,15 +71,15 @@
                 <div class="inner">
                     <h4> @change.Name - <span>@($"{change.CurrentPrice:N2}") €</span> </h4>
                     <a class="btn btn-outline-dark mb-2" asp-controller="Change" asp-action="Delete" asp-route-id="@change.Id">
-                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Remove
+                        <i class="fa fa-times mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ChangeRemove
                     </a>
                     <a class="btn btn-warning mb-2" asp-controller="Change" asp-action="Edit" asp-route-id="@change.Id">
-                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>Edit
+                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ChangeEdit
                     </a>
                     <div class="row">
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#changeCategories@(change.Id)">
-                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ChangeCategories
                             </button>
                             <div class="collapse " id="changeCategories@(change.Id)">
                                 <ul>
@@ -91,17 +95,17 @@
                 <div class="icon">
                     <i class="fa fa-plus-circle"></i>
                 </div>
-                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+                <a style="cursor: pointer" class="small-box-footer">FIX THIS <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
     </div>
     <div class="col-lg-6">
         <h1>
-            Products 
+            @Resources.Dashboard.Organization.ProductTitle 
             @if (Model.Categories != null && Model.Categories.Count > 0)
             {
                 <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
-                    Create
+                    @Resources.Dashboard.Organization.ProductCreate
                 </a>
             }
         </h1>
@@ -112,15 +116,15 @@
                 <div class="inner">
                     <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span></h4>
                     <a class="btn btn-danger mb-2" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
-                        <i class="fa fa-times mr-1" aria-hidden="true"></i>Remove
+                        <i class="fa fa-times mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ProductRemove
                     </a>
                     <a class="btn btn-warning mb-2" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">
-                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>Edit
+                        <i class="fa fa-edit mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ProductEdit
                     </a>
                     <div class="row">
                         <div class="col-lg-4">
                             <button class="btn btn-light mb-2" data-toggle="collapse" data-target="#productCategories@(product.Id)">
-                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>Categories
+                                <i class="fa fa-plus mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ProductCategories
                             </button>
                             <div class="collapse " id="productCategories@(product.Id)">
                                 <ul>
@@ -136,7 +140,7 @@
                 <div class="icon">
                     <i class="ion ion-pizza"></i>
                 </div>
-                <a style="cursor: pointer" class="small-box-footer">EDIT <i class="fa fa-arrow-circle-right"></i></a>
+                <a style="cursor: pointer" class="small-box-footer">FIX THIS <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
     </div>

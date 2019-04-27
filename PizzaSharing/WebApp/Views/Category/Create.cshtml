@@ -2,12 +2,12 @@
 
 
 @{
-    ViewData["Title"] = "Add Category | " + Model.OrganizationName ;
+    ViewData["Title"] = @Resources.Category.Create.PageTitle + " | " + Model.OrganizationName ;
 }
 
-<h1>Create</h1>
+<h1>@Resources.Category.Create.Title1</h1>
 
-<h4>Category</h4>
+<h4>@Resources.Category.Create.Title2</h4>
 <hr />
 
 <div class="col-md-6">
@@ -32,7 +32,7 @@
             <div class="card-footer">
                 <div class="form-group">
                     <input type="hidden" asp-for="OrganizationId"/>
-                    <input type="submit" value="Create" class="btn btn-primary"/>
+                    <input type="submit" value="@Resources.Category.Create.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
         </form>
@@ -42,7 +42,7 @@
 <form >
     <button class="btn btn-default" asp-area="" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Category.Create.BackButton
     </button>
 </form>
 

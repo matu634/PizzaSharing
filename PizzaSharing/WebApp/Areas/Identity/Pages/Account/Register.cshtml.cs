@@ -44,35 +44,33 @@ namespace WebApp.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessageResourceName = "MissingEmailError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessageResourceName = "MissingPasswordError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
+            [Required(ErrorMessageResourceName = "MissingConfirmPasswordEmail", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessageResourceName = "PasswordsNotEqualError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             public string ConfirmPassword { get; set; }
             
-            [Required]
-            [MaxLength(64)]
-            [MinLength(1)]
+            [Required(ErrorMessageResourceName = "MissingFirstNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MaxLength(64, ErrorMessageResourceName = "TooLongFirstNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MinLength(1, ErrorMessageResourceName = "TooShortFirstNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             public string FirstName { get; set; }
             
-            [Required]
-            [MaxLength(64)]
-            [MinLength(1)]
+            [Required(ErrorMessageResourceName = "MissingLastNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MaxLength(64, ErrorMessageResourceName = "TooLongLastNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MinLength(1, ErrorMessageResourceName = "TooShortLastNameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             public string LastName { get; set; }
             
-            [Required]
-            [MaxLength(16)]
-            [MinLength(1)]
+            [Required(ErrorMessageResourceName = "MissingNicknameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MaxLength(16, ErrorMessageResourceName = "TooLongNicknameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
+            [MinLength(1, ErrorMessageResourceName = "TooShortNicknameError", ErrorMessageResourceType = typeof(Resources.Account.Register))]
             public string Nickname { get; set; }
         }
 
@@ -88,13 +86,13 @@ namespace WebApp.Areas.Identity.Pages.Account
             {
                 if (await _uow.AppUsers.NicknameExistsAsync(userName: Input.Nickname))
                 {
-                    ModelState.AddModelError("Nickname", "Nickname already exists. Please use a different nickname");
+                    ModelState.AddModelError("NicknameExists", Resources.Account.Register.NicknameAlreadyExists);
                     return Page();
                 }
 
                 if (await _uow.AppUsers.EmailExistsAsync(email: Input.Email))
                 {
-                    ModelState.AddModelError("Nickname", "Email already exists. Please use a different email");
+                    ModelState.AddModelError("EmailExists", Resources.Account.Register.EmailAlreadyExists);
                     return Page();
                 }
                 

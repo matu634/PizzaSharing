@@ -8,9 +8,9 @@
     <div class="col-lg-3"></div>
     <div class="col-lg-6 text-center">
         <h1>
-            Pick an organization to edit
+            @Resources.Dashboard.Index.Title
             <a class="btn btn-primary" asp-controller="Dashboard" asp-action="Create">
-                Create
+                @Resources.Dashboard.Index.CreateButton
             </a>   
         </h1>
         @foreach (var organization in Model.Organizations)
@@ -23,7 +23,7 @@
                 <div class="icon">
                     <i class="ion ion-bag"></i>
                 </div>
-                <a style="cursor: pointer" class="small-box-footer" asp-action="Organization" asp-route-id="@organization.Id">Add to cart <i class="fa fa-arrow-circle-right"></i></a>
+                <a style="cursor: pointer" class="small-box-footer" asp-action="Organization" asp-route-id="@organization.Id">@Resources.Dashboard.Index.EditButton <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         }
     </div>

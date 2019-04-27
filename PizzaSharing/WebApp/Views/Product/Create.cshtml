@@ -1,12 +1,12 @@
 @model WebApp.ViewModels.Product.CreateProductViewModel
 
 @{
-    ViewData["Title"] = "Add product | " + Model.OrganizationName ;
+    ViewData["Title"] = @Resources.Product.Create.PageTitle +  " | " + Model.OrganizationName ;
 }
 
-<h1>Create</h1>
+<h1>@Resources.Product.Create.Title1</h1>
 
-<h4>Product</h4>
+<h4>@Resources.Product.Create.Title2</h4>
 <hr />
 
 <div class="col-md-6">
@@ -28,7 +28,7 @@
                 
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
-                    <input type="number" asp-for="Price" class="form-control" />
+                    <input type="number" min="0" max="10000" asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 
@@ -43,7 +43,7 @@
             <div class="card-footer">
                 <div class="form-group">
                     <input type="hidden" asp-for="OrganizationId"/>
-                    <input type="submit" value="Create" class="btn btn-primary"/>
+                    <input type="submit" value="@Resources.Product.Create.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
         </form>
@@ -53,7 +53,7 @@
 <form >
     <button class="btn btn-default" asp-area="" asp-controller="Dashboard" asp-action="Organization" asp-route-id="@Model.OrganizationId">
         <i class="fa fa-list"></i>
-        Back to list
+        @Resources.Product.Create.BackButton
     </button>
 </form>
 
