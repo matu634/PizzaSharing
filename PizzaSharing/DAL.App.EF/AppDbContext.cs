@@ -46,5 +46,7 @@ namespace DAL.App.EF
         public DbSet<ReceiptRow> ReceiptRows { get; set; }
         public DbSet<ReceiptRowChange> ReceiptRowChanges { get; set; }
         public DbSet<ChangeInCategory> ChangeInCategories { get; set; }
+        public DbSet<MultiLangString> MultiLangStrings { get; set; }
+        public DbSet<Translation> Translations { get; set; }
     }
 }
