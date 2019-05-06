@@ -22,15 +22,15 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<int>("CategoryNameId");
 
                     b.Property<bool>("IsDeleted");
 
                     b.Property<int>("OrganizationId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryNameId");
 
                     b.HasIndex("OrganizationId");
 
@@ -484,6 +484,11 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Domain.Category", b =>
                 {
+                    b.HasOne("Domain.MultiLangString", "CategoryName")
+                        .WithMany()
+                        .HasForeignKey("CategoryNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Domain.Organization", "Organization")
                         .WithMany("Categories")
                         .HasForeignKey("OrganizationId")

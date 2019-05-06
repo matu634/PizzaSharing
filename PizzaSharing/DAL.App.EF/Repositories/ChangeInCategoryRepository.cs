@@ -6,6 +6,7 @@ using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
 using DAL.App.EF.Helpers;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,8 @@ namespace DAL.App.EF.Repositories
         {
             var changeInCategories = await RepoDbSet
                 .Include(obj => obj.Category)
+                .ThenInclude(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
                 .Include(obj => obj.Change)
                 .ThenInclude(change => change.ChangeName)
                 .ThenInclude(name => name.Translations)
@@ -64,7 +67,7 @@ namespace DAL.App.EF.Repositories
                         CurrentPrice = price.Value,
                         OrganizationId = change.OrganizationId,
                         Categories = change.ChangeInCategories
-                            .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
+                            .Select(obj => CategoryMapper.FromDomainToMin(obj.Category))
                             .ToList()
                     };
                 })

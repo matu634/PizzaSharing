@@ -7,10 +7,8 @@ namespace Domain
 {
     public class Category : BaseEntity
     {
-        [MaxLength(100)]
-        [MinLength(1)]
-        [Required]
-        public string CategoryName { get; set; }
+        public int CategoryNameId { get; set; }
+        public MultiLangString CategoryName { get; set; }
         
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }

@@ -22,8 +22,8 @@ namespace DAL.App.EF.Mappers
             {
                 Id = product.Id,
                 CurrentPrice = PriceFinder.ForProduct(product, product.Prices, DateTime.Now) ?? -1.0m,
-                Name = product.ProductName?.Translate(),
-                Description = product.ProductDescription?.Translate(),
+                Name = product.ProductName?.Translate() ?? "PRODUCT NAME NOT LOADED",
+                Description = product.ProductDescription?.Translate() ?? "PRODUCT DESCRIPTION NOT LOADED",
                 OrganizationId = product.OrganizationId,
                 Categories = product.ProductInCategories != null && product.ProductInCategories.Any() ?
                     product.ProductInCategories

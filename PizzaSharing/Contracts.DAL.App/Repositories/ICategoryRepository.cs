@@ -11,6 +11,6 @@ namespace Contracts.DAL.App.Repositories
     {
         Task<List<DALCategoryDTO>> AllAsync(int organizationId);
         
-        Task AddAsync(BLLCategoryDTO categoryDTO);
+        Task AddAsync(DALCategoryDTO categoryDTO);
     }
 }

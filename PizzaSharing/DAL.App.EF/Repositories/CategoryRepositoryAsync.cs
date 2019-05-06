@@ -5,6 +5,7 @@ using BLL.App.DTO;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -17,28 +18,11 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Category>> AllAsync()
-        {
-            return await RepoDbSet
-                .Include(category => category.Organization)
-                .ToListAsync();
-        }
-
-        public override async Task<Category> FindAsync(params object[] id)
-        {
-            var category = await base.FindAsync(id);
-
-            if (category != null)
-            {
-                await RepoDbContext.Entry(category).Reference(cat => cat.Organization).LoadAsync();
-            }
-
-            return category;
-        }
-
         public async Task<List<DALCategoryDTO>> AllAsync(int organizationId)
         {
             var categories = await RepoDbSet
+                .Include(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
                 .Include(category => category.ProductsInCategory)
                 .ThenInclude(obj => obj.Product)
                 .ThenInclude(product => product.ProductName)
@@ -51,29 +35,15 @@ namespace DAL.App.EF.Repositories
                 .ToListAsync();
 
             return categories
-                .Select(category => new DALCategoryDTO()
-                {
-                    Id = category.Id,
-                    Name = category.CategoryName,
-                    ChangeNames = category.ChangesInCategory
-                        .Where(obj => obj.Change.IsDeleted == false)
-                        .Select(obj => obj.Change.ChangeName.Translate())
-                        .ToList(),
-                    ProductNames = category.ProductsInCategory
-                        .Where(obj => obj.Product.IsDeleted == false)
-                        .Select(obj => obj.Product.ProductName.Translate())
-                        .ToList()
-                })
+                .Select(CategoryMapper.FromDomain)
                 .ToList();
         }
 
-        public async Task AddAsync(BLLCategoryDTO categoryDTO)
+        public async Task AddAsync(DALCategoryDTO categoryDTO)
         {
-            var category = new Category()
-            {
-                CategoryName = categoryDTO.CategoryName,
-                OrganizationId = categoryDTO.OrganizationId
-            };
+
+
+            var category = CategoryMapper.FromDAL(categoryDTO);
 
             await RepoDbSet.AddAsync(category);
         }

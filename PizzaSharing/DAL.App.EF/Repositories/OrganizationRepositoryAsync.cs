@@ -6,6 +6,7 @@ using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
 using DAL.App.EF.Helpers;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,24 @@ namespace DAL.App.EF.Repositories
         public async Task<List<OrganizationDTO>> AllDTOAsync(DateTime time)
         {
             //TODO: optimize this
-            return await RepoDbSet
+            var o = await RepoDbSet
+                .Include(organization => organization.Categories)
+                .ThenInclude(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
+                .Include(organization => organization.Categories)
+                .ThenInclude(category => category.ProductsInCategory)
+                .ThenInclude(obj => obj.Product)
+                .ThenInclude(product => product.ProductName)
+                .ThenInclude(name => name.Translations)
                 .Include(organization => organization.Categories)
                 .ThenInclude(category => category.ProductsInCategory)
                 .ThenInclude(obj => obj.Product)
                 .ThenInclude(product => product.Prices)
                 .Where(organization => organization.IsDeleted == false)
-                .Select(organization => new OrganizationDTO()
+                .ToListAsync();
+                
+                
+                return o.Select(organization => new OrganizationDTO()
                 {
                     Id = organization.Id,
                     Name = organization.OrganizationName,
@@ -37,21 +49,21 @@ namespace DAL.App.EF.Repositories
                         .Select(category => new CategoryDTO()
                         {
                             Id = category.Id,
-                            Name = category.CategoryName,
+                            Name = category.CategoryName.Translate(),
                             Products = category.ProductsInCategory
                                 .Where(inCategory => inCategory.Product.IsDeleted == false && 
                                                      inCategory.Product.Prices.Any(p => p.ValidTo > time && p.ValidFrom < time))
                                 .Select(inCategory => new ProductDTO()
                                 {
                                     ProductId = inCategory.ProductId,
-                                    ProductName = "TEMP NAME" /*TODO: inCategory.Product.ProductName*/,
+                                    ProductName = inCategory.Product.ProductName.Translate(),
                                     ProductPrice = inCategory.Product.Prices.Where(p => p.ValidTo > time && p.ValidFrom < time).ToList()[0].Value
                                 })
                                 .ToList()
                         })
                         .ToList()
                 })
-                .ToListAsync();
+                .ToList();
         }
 
         public async Task<List<DALOrganizationMinDTO>> AllMinDTOAsync()
@@ -74,6 +86,8 @@ namespace DAL.App.EF.Repositories
         {
             var organization = await RepoDbSet
                 .Include(o => o.Categories)
+                .ThenInclude(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
                 .FirstOrDefaultAsync(o => o.IsDeleted == false && o.Id == id);
             if (organization == null) return null;
             
@@ -81,11 +95,7 @@ namespace DAL.App.EF.Repositories
             {
                 Id = organization.Id,
                 Name = organization.OrganizationName,
-                Categories = organization.Categories.Select(category => new DALCategoryDTO()
-                {
-                    Id = category.Id,
-                    Name = category.CategoryName
-                }).ToList()
+                Categories = organization.Categories.Select(CategoryMapper.FromDomain).ToList()
             };
         }
 

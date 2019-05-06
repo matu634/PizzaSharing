@@ -3,6 +3,7 @@ using BLL.App.DTO;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
+using DAL.App.DTO;
 
 namespace BLL.App.Services
 {
@@ -17,8 +18,11 @@ namespace BLL.App.Services
             var organization = await Uow.Organizations.FindWithCategoriesAsync(categoryDTO.OrganizationId);
             if (organization == null) return false;
 
-            await Uow.Categories.AddAsync(new BLLCategoryDTO()
-                {OrganizationId = categoryDTO.OrganizationId, CategoryName = categoryDTO.CategoryName});
+            await Uow.Categories.AddAsync(new DALCategoryDTO()
+            {
+                Name = categoryDTO.CategoryName, 
+                OrganizationId = categoryDTO.OrganizationId
+            });
             await Uow.SaveChangesAsync();
             return true;
         }

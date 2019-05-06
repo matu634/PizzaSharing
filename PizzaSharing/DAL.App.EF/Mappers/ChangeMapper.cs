@@ -15,10 +15,10 @@ namespace DAL.App.EF.Mappers
             return new DALChangeDTO()
             {
                 Id = change.Id,
-                Name = change.ChangeName?.Translate(),
+                Name = change.ChangeName?.Translate() ?? "CHANGE NAME NOT LOADED",
                 CurrentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now) ?? -1.0m,
                 OrganizationId = change.OrganizationId,
-                Categories = change.ChangeInCategories?
+                Categories = change.ChangeInCategories? 
                     .Where(obj => obj.Category.IsDeleted == false)
                     .Select(obj => CategoryMapper.FromDomainToMin(obj.Category))
                     .ToList()
