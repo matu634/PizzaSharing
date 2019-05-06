@@ -45,14 +45,21 @@ namespace WebApp.Controllers
                     OrganizationId = vm.OrganizationId,
                     ProductName = vm.ProductName,
                     CurrentPrice = vm.Price,
-                    Categories = vm.SelectedCategories.Select(id => new BLLCategoryMinDTO(id)).ToList()
+                    Categories = vm.SelectedCategories.Select(id => new BLLCategoryMinDTO(id)).ToList(),
+                    Description = vm.Description
                 };
 
                 var result = await _bll.ProductService.AddProductAsync(productDTO);
                 if (result == false) return BadRequest("Something went wrong while adding");
+                return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
             }
-
-            return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
+            var organization = await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(vm.OrganizationId);
+            if (organization == null) return BadRequest("Invalid organization id");
+            vm.Categories = organization.Categories
+                .Select(dto => new SelectListItem(dto.Name, dto.Id.ToString()))
+                .ToList();
+            return View(vm);
+            
         }
 
         [HttpGet("product/delete/{id}")]
@@ -72,7 +79,7 @@ namespace WebApp.Controllers
             var vm = new DeleteProductViewModel()
             {
                 Price = product.CurrentPrice,
-                Description = "TODO: description",
+                Description = product.Description,
                 ProductId = product.Id,
                 OrganizationId = product.OrganizationId,
                 ProductName = product.ProductName
@@ -115,7 +122,7 @@ namespace WebApp.Controllers
             var vm = new EditProductViewModel()
             {
                 Price = product.CurrentPrice,
-                Description = "TODO: description",
+                Description = product.Description,
                 ProductId = product.Id,
                 OrganizationId = product.OrganizationId,
                 ProductName = product.ProductName,
@@ -137,16 +144,24 @@ namespace WebApp.Controllers
                 {
                     Id = vm.ProductId,
                     OrganizationId = vm.OrganizationId,
+                    Description = vm.Description,
                     CurrentPrice = vm.Price,
                     ProductName = vm.ProductName,
                     Categories = vm.SelectedCategories.Select(i => new BLLCategoryMinDTO(i)).ToList()
                 };
 
                 var result = await _bll.ProductService.EditProduct(input);
-                if (result == false) return BadRequest();
+                if (result == false) return BadRequest("Edit unsuccessful");
                 return RedirectToAction("Organization", "Dashboard", new {Id = vm.OrganizationId});
             }
-            return BadRequest();
+            var categories =
+                (await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(vm.OrganizationId)).Categories;
+
+            vm.Categories = categories.Select(dto =>
+                    new SelectListItem(dto.Name, dto.Id.ToString(), vm.SelectedCategories.Contains(dto.Id)))
+                .ToList();
+            
+            return View(vm);
         }
     }
 }

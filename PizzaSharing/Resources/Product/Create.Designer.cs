@@ -79,6 +79,15 @@ namespace Resources.Product {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a product description.
+        /// </summary>
+        public static string MissingProductDescription {
+            get {
+                return ResourceManager.GetString("MissingProductDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a product name.
         /// </summary>
         public static string MissingProductName {
@@ -120,6 +129,15 @@ namespace Resources.Product {
         public static string ProductCategories {
             get {
                 return ResourceManager.GetString("ProductCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product Description.
+        /// </summary>
+        public static string ProductDescription {
+            get {
+                return ResourceManager.GetString("ProductDescription", resourceCulture);
             }
         }
         
@@ -169,11 +187,29 @@ namespace Resources.Product {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a shorter description.
+        /// </summary>
+        public static string TooLongDescriptionName {
+            get {
+                return ResourceManager.GetString("TooLongDescriptionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a shorter product name.
         /// </summary>
         public static string TooLongProductName {
             get {
                 return ResourceManager.GetString("TooLongProductName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a longer description.
+        /// </summary>
+        public static string TooShortDescriptionName {
+            get {
+                return ResourceManager.GetString("TooShortDescriptionName", resourceCulture);
             }
         }
         

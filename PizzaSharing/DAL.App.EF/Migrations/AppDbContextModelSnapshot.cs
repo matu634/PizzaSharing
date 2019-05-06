@@ -207,6 +207,20 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("LoanRows");
                 });
 
+            modelBuilder.Entity("Domain.MultiLangString", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MultiLangStrings");
+                });
+
             modelBuilder.Entity("Domain.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -256,13 +270,17 @@ namespace DAL.App.EF.Migrations
 
                     b.Property<int>("OrganizationId");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<int>("ProductDescriptionId");
+
+                    b.Property<int>("ProductNameId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
+
+                    b.HasIndex("ProductDescriptionId");
+
+                    b.HasIndex("ProductNameId");
 
                     b.ToTable("Products");
                 });
@@ -359,6 +377,28 @@ namespace DAL.App.EF.Migrations
                     b.HasIndex("ReceiptRowId");
 
                     b.ToTable("ReceiptRowChanges");
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(12);
+
+                    b.Property<int>("MultiLangStringId");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MultiLangStringId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -519,6 +559,16 @@ namespace DAL.App.EF.Migrations
                         .WithMany("Products")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.MultiLangString", "ProductDescription")
+                        .WithMany()
+                        .HasForeignKey("ProductDescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.MultiLangString", "ProductName")
+                        .WithMany()
+                        .HasForeignKey("ProductNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.ProductInCategory", b =>
@@ -578,6 +628,14 @@ namespace DAL.App.EF.Migrations
                     b.HasOne("Domain.ReceiptRow", "ReceiptRow")
                         .WithMany("ReceiptRowChanges")
                         .HasForeignKey("ReceiptRowId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.HasOne("Domain.MultiLangString", "MultiLangString")
+                        .WithMany("Translations")
+                        .HasForeignKey("MultiLangStringId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

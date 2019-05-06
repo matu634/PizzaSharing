@@ -44,7 +44,7 @@ namespace DAL.App.EF.Repositories
                                 .Select(inCategory => new ProductDTO()
                                 {
                                     ProductId = inCategory.ProductId,
-                                    ProductName = inCategory.Product.ProductName,
+                                    ProductName = "TEMP NAME" /*TODO: inCategory.Product.ProductName*/,
                                     ProductPrice = inCategory.Product.Prices.Where(p => p.ValidTo > time && p.ValidFrom < time).ToList()[0].Value
                                 })
                                 .ToList()

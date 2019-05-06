@@ -7,14 +7,16 @@
 <h1>@Resources.Product.Edit.Title1</h1>
 
 <h4>@Resources.Product.Edit.Title2</h4>
-<hr />
+<hr/>
 
 <div class="col-md-6">
     <div class="card card-warning">
-        
+
         @* Card Header *@
         <div class="card-header">
-            <h3 class="card-title"><i class="fa fa-edit"></i></h3>
+            <h3 class="card-title">
+                <i class="fa fa-edit"></i>
+            </h3>
         </div>
         <form role="form" asp-action="Edit">
 
@@ -24,19 +26,25 @@
 
                 <div class="form-group">
                     <label asp-for="ProductName" class="control-label"></label>
-                    <input asp-for="ProductName" class="form-control" />
+                    <input asp-for="ProductName" class="form-control"/>
                     <span asp-validation-for="ProductName" class="text-danger"></span>
                 </div>
-                
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control"/>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
-                    <input type="number" asp-for="Price" min="0" max="10000" class="form-control" asp-format="{0:N2}"/>
+                    <input asp-for="Price" min="0" max="10000" class="form-control" asp-format="{0:N2}"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
-                
+
                 <div class="form-group">
                     <label asp-for="SelectedCategories" class="control-label"></label>
-                    <select asp-for="SelectedCategories" size="@(Model.Categories.Count >= 10 ?  10 : Model.Categories.Count)" class ="form-control" asp-items="Model.Categories"></select>
+                    <select asp-for="SelectedCategories" size="@(Model.Categories.Count >= 10 ? 10 : Model.Categories.Count)" class="form-control" asp-items="Model.Categories"></select>
                     <span asp-validation-for="SelectedCategories" class="text-danger"></span>
                 </div>
 
@@ -50,7 +58,7 @@
                     <input type="submit" value="@Resources.Product.Edit.SubmitButton" class="btn btn-primary"/>
                 </div>
             </div>
-            
+
         </form>
     </div>
 </div>
@@ -63,5 +71,5 @@
 </form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

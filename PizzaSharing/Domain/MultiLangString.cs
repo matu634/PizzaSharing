@@ -8,9 +8,10 @@ namespace Domain
 {
     public class MultiLangString : BaseEntity
     {
-        private static string _defaultCulture = "en";
+        private static string _defaultCulture = "et";
         
         [MaxLength(10240)]
+        [Required]
         public string Value { get; set; }
 
         public ICollection<Translation> Translations { get; set; }
@@ -35,12 +36,12 @@ namespace Domain
             SetTranslation(value, culture);
         }
         
-        private void SetTranslation(string value)
+        public void SetTranslation(string value)
         {
             SetTranslation(value, Thread.CurrentThread.CurrentUICulture.Name);
         }
 
-        private void SetTranslation(string value, string culture)
+        public void SetTranslation(string value, string culture)
         {
             culture = culture.Substring(0, 2).ToLower();
             
@@ -52,13 +53,18 @@ namespace Domain
             var found = Translations.FirstOrDefault(translation => translation.Culture.ToLower().Equals(culture));
             if (found == null)
             {
-                Translations.Add(new Translation(value, culture));
+                Translations.Add(new Translation(culture, value));
             }
             else
             {
                 found.Value = value;
             }
-            throw new NotImplementedException();
+
+            if (culture == _defaultCulture.Substring(0, 2).ToLower())
+            {
+                Value = value;
+            }
+
         }
 
         public string Translate(string culture = "")

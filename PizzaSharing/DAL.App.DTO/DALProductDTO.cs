@@ -9,5 +9,6 @@ namespace DAL.App.DTO
         public string Name { get; set; }
         public decimal CurrentPrice { get; set; }
         public List<DALCategoryMinDTO> Categories { get; set; }
+        public string Description { get; set; }
     }
 }

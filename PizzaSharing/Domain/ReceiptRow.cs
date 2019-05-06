@@ -31,6 +31,7 @@ namespace Domain
 
             var time = Receipt.IsFinalized == false ? DateTime.Now : Receipt.CreatedTime;
             
+            
             Price currentPrice = Product.Prices
                 .FirstOrDefault(p => p.ValidTo > time && p.ValidFrom < time);
             if (currentPrice == null) throw new Exception("Couldn't find price for product!");
@@ -39,6 +40,8 @@ namespace Domain
 
             foreach (var rowChange in ReceiptRowChanges)
             {
+                if (rowChange.Change.IsDeleted) continue;
+                //TODO: rework this
                 Price changePrice = rowChange.Change.Prices
                     .FirstOrDefault(p => p.ValidTo > time && p.ValidFrom < time);
                 

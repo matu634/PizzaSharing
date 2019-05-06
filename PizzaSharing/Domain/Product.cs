@@ -22,6 +22,9 @@ namespace Domain
 
         public List<ReceiptRow> ReceiptRows { get; set; }
 
+        public int ProductDescriptionId { get; set; }
+        public MultiLangString ProductDescription { get; set; }
+
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 

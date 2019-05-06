@@ -6,11 +6,13 @@ namespace WebApp.ViewModels.Product
 {
     public class EditProductViewModel
     {
-        
         [Required] 
         public int ProductId { get; set; }
 
-        //TODO: required min length max length display error message
+        [MinLength(1, ErrorMessageResourceName = "TooShortDescriptionName", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
+        [MaxLength(10240, ErrorMessageResourceName = "TooLongDescriptionName", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
+        [Display(Name = "ProductDescription", ResourceType = typeof(Resources.Product.Edit))]
+        [Required(ErrorMessageResourceName = "MissingProductDescription", ErrorMessageResourceType = typeof(Resources.Product.Edit))]
         public string Description { get; set; }
         
         [Required]

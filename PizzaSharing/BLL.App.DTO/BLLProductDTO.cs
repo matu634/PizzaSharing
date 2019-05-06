@@ -20,5 +20,6 @@ namespace BLL.App.DTO
         public string ProductName { get; set; }
         public decimal CurrentPrice { get; set; }
         public List<BLLCategoryMinDTO> Categories { get; set; }
+        public string Description { get; set; }
     }
 }

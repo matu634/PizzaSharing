@@ -42,9 +42,20 @@ namespace BLL.App.Services
                     .Select(dto => new BLLCategoryDTO(dto.Id, dto.Name, dto.ProductNames, dto.ChangeNames))
                     .ToList(),
                 Products = products
-                    .Select(dto => new BLLProductDTO(dto.Id, dto.Name, dto.CurrentPrice, dto.Categories
-                        .Select(minDTO => new BLLCategoryMinDTO(minDTO.Id, minDTO.Name))
-                        .ToList()))
+                    .Select(dto =>
+                    {
+                        return new BLLProductDTO
+                        {
+                            Id = dto.Id,
+                            ProductName = dto.Name,
+                            Description = dto.Description,
+                            CurrentPrice = dto.CurrentPrice,
+                            OrganizationId = dto.OrganizationId,
+                            Categories = dto.Categories
+                                .Select(minDTO => new BLLCategoryMinDTO(minDTO.Id, minDTO.Name))
+                                .ToList()
+                        };
+                    })
                     .ToList(),
                 Changes = changes
                     .Select(dto => new BLLChangeDTO(dto.Id, dto.Name, dto.CurrentPrice, dto.Categories

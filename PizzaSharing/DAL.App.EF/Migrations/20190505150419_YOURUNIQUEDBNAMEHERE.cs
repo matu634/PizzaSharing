@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.App.EF.Migrations
 {
-    public partial class IdsReplacedWithBaseEntityId : Migration
+    public partial class YOURUNIQUEDBNAMEHERE : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,11 +43,26 @@ namespace DAL.App.EF.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    UserNickname = table.Column<string>(nullable: true)
+                    UserNickname = table.Column<string>(maxLength: 16, nullable: true),
+                    FirstName = table.Column<string>(maxLength: 64, nullable: true),
+                    LastName = table.Column<string>(maxLength: 64, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MultiLangStrings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Value = table.Column<string>(maxLength: 10240, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MultiLangStrings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,24 +71,12 @@ namespace DAL.App.EF.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OrganizationName = table.Column<string>(maxLength: 100, nullable: false)
+                    OrganizationName = table.Column<string>(maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Organizations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ProductName = table.Column<string>(maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,8 +125,8 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -167,8 +170,8 @@ namespace DAL.App.EF.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -204,13 +207,35 @@ namespace DAL.App.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Translations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    MultiLangStringId = table.Column<int>(nullable: false),
+                    Culture = table.Column<string>(maxLength: 12, nullable: false),
+                    Value = table.Column<string>(maxLength: 10240, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Translations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Translations_MultiLangStrings_MultiLangStringId",
+                        column: x => x.MultiLangStringId,
+                        principalTable: "MultiLangStrings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CategoryName = table.Column<string>(maxLength: 100, nullable: false),
-                    OrganizationId = table.Column<int>(nullable: false)
+                    OrganizationId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -219,6 +244,61 @@ namespace DAL.App.EF.Migrations
                         name: "FK_Categories_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Changes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ChangeName = table.Column<string>(maxLength: 100, nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    OrganizationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Changes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Changes_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ProductNameId = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    ProductDescriptionId = table.Column<int>(nullable: false),
+                    OrganizationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_MultiLangStrings_ProductDescriptionId",
+                        column: x => x.ProductDescriptionId,
+                        principalTable: "MultiLangStrings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_MultiLangStrings_ProductNameId",
+                        column: x => x.ProductNameId,
+                        principalTable: "MultiLangStrings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,51 +330,58 @@ namespace DAL.App.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReceiptRows",
+                name: "ChangeInCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Amount = table.Column<int>(nullable: false),
-                    RowDiscount = table.Column<decimal>(nullable: false),
-                    ProductId = table.Column<int>(nullable: false),
-                    ReceiptId = table.Column<int>(nullable: false)
+                    CategoryId = table.Column<int>(nullable: false),
+                    ChangeId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ReceiptRows", x => x.Id);
+                    table.PrimaryKey("PK_ChangeInCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReceiptRows_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
+                        name: "FK_ChangeInCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReceiptRows_Receipts_ReceiptId",
-                        column: x => x.ReceiptId,
-                        principalTable: "Receipts",
+                        name: "FK_ChangeInCategories_Changes_ChangeId",
+                        column: x => x.ChangeId,
+                        principalTable: "Changes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Changes",
+                name: "Prices",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ChangeName = table.Column<string>(maxLength: 100, nullable: false),
-                    CategoryId = table.Column<int>(nullable: false)
+                    Value = table.Column<decimal>(nullable: false),
+                    ProductId = table.Column<int>(nullable: true),
+                    ChangeId = table.Column<int>(nullable: true),
+                    ValidFrom = table.Column<DateTime>(nullable: false),
+                    ValidTo = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Changes", x => x.Id);
+                    table.PrimaryKey("PK_Prices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Changes_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Prices_Changes_ChangeId",
+                        column: x => x.ChangeId,
+                        principalTable: "Changes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Prices_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -319,6 +406,34 @@ namespace DAL.App.EF.Migrations
                         name: "FK_ProductInCategories_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReceiptRows",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Amount = table.Column<int>(nullable: false),
+                    RowDiscount = table.Column<decimal>(nullable: true),
+                    ProductId = table.Column<int>(nullable: false),
+                    ReceiptId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceiptRows", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReceiptRows_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReceiptRows_Receipts_ReceiptId",
+                        column: x => x.ReceiptId,
+                        principalTable: "Receipts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -355,35 +470,6 @@ namespace DAL.App.EF.Migrations
                         principalTable: "ReceiptParticipants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Prices",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<decimal>(nullable: false),
-                    ProductId = table.Column<int>(nullable: true),
-                    ChangeId = table.Column<int>(nullable: true),
-                    ValidFrom = table.Column<DateTime>(nullable: false),
-                    ValidTo = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Prices", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Prices_Changes_ChangeId",
-                        column: x => x.ChangeId,
-                        principalTable: "Changes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Prices_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -478,14 +564,30 @@ namespace DAL.App.EF.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserNickname",
+                table: "AspNetUsers",
+                column: "UserNickname",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Categories_OrganizationId",
                 table: "Categories",
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Changes_CategoryId",
-                table: "Changes",
+                name: "IX_ChangeInCategories_CategoryId",
+                table: "ChangeInCategories",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChangeInCategories_ChangeId",
+                table: "ChangeInCategories",
+                column: "ChangeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Changes_OrganizationId",
+                table: "Changes",
+                column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LoanRows_LoanId",
@@ -534,6 +636,21 @@ namespace DAL.App.EF.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_OrganizationId",
+                table: "Products",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductDescriptionId",
+                table: "Products",
+                column: "ProductDescriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductNameId",
+                table: "Products",
+                column: "ProductNameId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReceiptParticipants_AppUserId",
                 table: "ReceiptParticipants",
                 column: "AppUserId");
@@ -567,6 +684,11 @@ namespace DAL.App.EF.Migrations
                 name: "IX_Receipts_ReceiptManagerId",
                 table: "Receipts",
                 column: "ReceiptManagerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Translations_MultiLangStringId",
+                table: "Translations",
+                column: "MultiLangStringId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -587,6 +709,9 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ChangeInCategories");
+
+            migrationBuilder.DropTable(
                 name: "LoanRows");
 
             migrationBuilder.DropTable(
@@ -599,10 +724,16 @@ namespace DAL.App.EF.Migrations
                 name: "ReceiptRowChanges");
 
             migrationBuilder.DropTable(
+                name: "Translations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Loans");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Changes");
@@ -614,9 +745,6 @@ namespace DAL.App.EF.Migrations
                 name: "ReceiptParticipants");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -624,6 +752,9 @@ namespace DAL.App.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organizations");
+
+            migrationBuilder.DropTable(
+                name: "MultiLangStrings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

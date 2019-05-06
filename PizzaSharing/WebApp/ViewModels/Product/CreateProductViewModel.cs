@@ -18,8 +18,6 @@ namespace WebApp.ViewModels.Product
         [Required(ErrorMessageResourceName = "MissingProductName", ErrorMessageResourceType = typeof(Resources.Product.Create))]
         public string ProductName { get; set; }
         
-        //TODO: product description
-        
         [Range(0, 10000, ErrorMessageResourceName = "PriceRangeValidation", ErrorMessageResourceType = typeof(Resources.Product.Create))]
         [Display(Name = "ProductPrice", ResourceType = typeof(Resources.Product.Create))]
         [Required(ErrorMessageResourceName = "MissingProductPrice", ErrorMessageResourceType = typeof(Resources.Product.Create))]
@@ -28,5 +26,11 @@ namespace WebApp.ViewModels.Product
         [Display(Name = "ProductCategories" , ResourceType = typeof(Resources.Product.Create))]
         [Required(ErrorMessageResourceName = "CategoryNotSelected", ErrorMessageResourceType = typeof(Resources.Product.Create))]
         public IEnumerable<int> SelectedCategories { get; set; }
+
+        [MinLength(1, ErrorMessageResourceName = "TooShortDescriptionName", ErrorMessageResourceType = typeof(Resources.Product.Create))]
+        [MaxLength(10240, ErrorMessageResourceName = "TooLongDescriptionName", ErrorMessageResourceType = typeof(Resources.Product.Create))]
+        [Display(Name = "ProductDescription", ResourceType = typeof(Resources.Product.Create))]
+        [Required(ErrorMessageResourceName = "MissingProductDescription", ErrorMessageResourceType = typeof(Resources.Product.Create))]
+        public string Description { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class CategoryRepositoryAsync : BaseRepositoryAsync<Category> , ICategoryRepository
+    public class CategoryRepositoryAsync : BaseRepositoryAsync<Category>, ICategoryRepository
     {
         public CategoryRepositoryAsync(IDataContext dataContext) : base(dataContext)
         {
@@ -26,11 +26,11 @@ namespace DAL.App.EF.Repositories
 
         public override async Task<Category> FindAsync(params object[] id)
         {
-            var category =  await base.FindAsync(id);
+            var category = await base.FindAsync(id);
 
             if (category != null)
             {
-                await RepoDbContext.Entry(category).Reference(cat => cat.Organization).LoadAsync();    
+                await RepoDbContext.Entry(category).Reference(cat => cat.Organization).LoadAsync();
             }
 
             return category;
@@ -38,12 +38,17 @@ namespace DAL.App.EF.Repositories
 
         public async Task<List<DALCategoryDTO>> AllAsync(int organizationId)
         {
-            return await RepoDbSet
+            var categories = await RepoDbSet
                 .Include(category => category.ProductsInCategory)
                 .ThenInclude(obj => obj.Product)
+                .ThenInclude(product => product.ProductName)
+                .ThenInclude(name => name.Translations)
                 .Include(category => category.ChangesInCategory)
                 .ThenInclude(obj => obj.Change)
                 .Where(category => category.IsDeleted == false && category.OrganizationId == organizationId)
+                .ToListAsync();
+
+            return categories
                 .Select(category => new DALCategoryDTO()
                 {
                     Id = category.Id,
@@ -54,10 +59,10 @@ namespace DAL.App.EF.Repositories
                         .ToList(),
                     ProductNames = category.ProductsInCategory
                         .Where(obj => obj.Product.IsDeleted == false)
-                        .Select(obj => obj.Product.ProductName)
+                        .Select(obj => obj.Product.ProductName.Translate())
                         .ToList()
                 })
-                .ToListAsync();
+                .ToList();
         }
 
         public async Task AddAsync(BLLCategoryDTO categoryDTO)

@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.App.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190311140254_IdsReplacedWithBaseEntityId")]
-    partial class IdsReplacedWithBaseEntityId
+    [Migration("20190505150419_YOURUNIQUEDBNAMEHERE")]
+    partial class YOURUNIQUEDBNAMEHERE
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Domain.Category", b =>
@@ -27,6 +27,8 @@ namespace DAL.App.EF.Migrations
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<int>("OrganizationId");
 
@@ -42,17 +44,37 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CategoryId");
-
                     b.Property<string>("ChangeName")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("OrganizationId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("Changes");
+                });
+
+            modelBuilder.Entity("Domain.ChangeInCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("ChangeId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Changes");
+                    b.HasIndex("ChangeId");
+
+                    b.ToTable("ChangeInCategories");
                 });
 
             modelBuilder.Entity("Domain.Identity.AppRole", b =>
@@ -93,6 +115,12 @@ namespace DAL.App.EF.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(64);
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -116,7 +144,8 @@ namespace DAL.App.EF.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
-                    b.Property<string>("UserNickname");
+                    b.Property<string>("UserNickname")
+                        .HasMaxLength(16);
 
                     b.HasKey("Id");
 
@@ -126,6 +155,9 @@ namespace DAL.App.EF.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("UserNickname")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -177,10 +209,26 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("LoanRows");
                 });
 
+            modelBuilder.Entity("Domain.MultiLangString", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MultiLangStrings");
+                });
+
             modelBuilder.Entity("Domain.Organization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("OrganizationName")
                         .IsRequired()
@@ -220,11 +268,21 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<int>("OrganizationId");
+
+                    b.Property<int>("ProductDescriptionId");
+
+                    b.Property<int>("ProductNameId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("ProductDescriptionId");
+
+                    b.HasIndex("ProductNameId");
 
                     b.ToTable("Products");
                 });
@@ -294,7 +352,7 @@ namespace DAL.App.EF.Migrations
 
                     b.Property<int>("ReceiptId");
 
-                    b.Property<decimal>("RowDiscount");
+                    b.Property<decimal?>("RowDiscount");
 
                     b.HasKey("Id");
 
@@ -321,6 +379,28 @@ namespace DAL.App.EF.Migrations
                     b.HasIndex("ReceiptRowId");
 
                     b.ToTable("ReceiptRowChanges");
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(12);
+
+                    b.Property<int>("MultiLangStringId");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(10240);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MultiLangStringId");
+
+                    b.ToTable("Translations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -361,11 +441,9 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -395,11 +473,9 @@ namespace DAL.App.EF.Migrations
                 {
                     b.Property<int>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -418,9 +494,22 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
-                    b.HasOne("Domain.Category", "Category")
+                    b.HasOne("Domain.Organization", "Organization")
                         .WithMany("Changes")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.ChangeInCategory", b =>
+                {
+                    b.HasOne("Domain.Category", "Category")
+                        .WithMany("ChangesInCategory")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.Change", "Change")
+                        .WithMany("ChangeInCategories")
+                        .HasForeignKey("ChangeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -464,6 +553,24 @@ namespace DAL.App.EF.Migrations
                     b.HasOne("Domain.Product", "Product")
                         .WithMany("Prices")
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("Domain.Product", b =>
+                {
+                    b.HasOne("Domain.Organization", "Organization")
+                        .WithMany("Products")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.MultiLangString", "ProductDescription")
+                        .WithMany()
+                        .HasForeignKey("ProductDescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Domain.MultiLangString", "ProductName")
+                        .WithMany()
+                        .HasForeignKey("ProductNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Domain.ProductInCategory", b =>
@@ -523,6 +630,14 @@ namespace DAL.App.EF.Migrations
                     b.HasOne("Domain.ReceiptRow", "ReceiptRow")
                         .WithMany("ReceiptRowChanges")
                         .HasForeignKey("ReceiptRowId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Domain.Translation", b =>
+                {
+                    b.HasOne("Domain.MultiLangString", "MultiLangString")
+                        .WithMany("Translations")
+                        .HasForeignKey("MultiLangStringId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

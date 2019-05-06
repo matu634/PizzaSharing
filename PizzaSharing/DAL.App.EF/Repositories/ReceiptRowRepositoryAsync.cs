@@ -45,6 +45,12 @@ namespace DAL.App.EF.Repositories
         {
             var rows = await RepoDbSet
                 .Include(row => row.Product)
+                .ThenInclude(product => product.ProductName)
+                .ThenInclude(name => name.Translations)
+                .Include(row => row.Product)
+                .ThenInclude(product => product.ProductDescription)
+                .ThenInclude(desc => desc.Translations)
+                .Include(row => row.Product)
                 .ThenInclude(product => product.Prices)
                 .Include(row => row.ReceiptRowChanges)
                 .ThenInclude(receiptRowChange => receiptRowChange.Change)
@@ -54,13 +60,16 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(loan => loan.LoanTaker)
                 .Where(row => row.ReceiptId == receiptId)
                 .ToListAsync();
+            
             var result = new List<ReceiptRowAllDTO>();
             foreach (var row in rows)
             {
+                if (row.Product.IsDeleted) continue;
                 var product = new ProductDTO()
                 {
                     ProductId = row.ProductId,
-                    ProductName = row.Product.ProductName,
+                    ProductName = row.Product.ProductName.Translate(),
+                    Description = row.Product.ProductDescription.Translate(),
                     ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, time)
                 };
                 var changes = new List<ChangeDTO>();

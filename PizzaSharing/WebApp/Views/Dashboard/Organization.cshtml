@@ -115,6 +115,7 @@
             <div class="small-box bg-primary">
                 <div class="inner">
                     <h4> @product.ProductName - <span>@($"{product.CurrentPrice:N2}") €</span></h4>
+                    <h6> @product.Description </h6>
                     <a class="btn btn-danger mb-2" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
                         <i class="fa fa-times mr-1" aria-hidden="true"></i>@Resources.Dashboard.Organization.ProductRemove
                     </a>

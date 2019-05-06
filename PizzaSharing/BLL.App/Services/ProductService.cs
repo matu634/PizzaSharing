@@ -30,7 +30,11 @@ namespace BLL.App.Services
 
             //1.Add product
             var product = await Uow.Products.AddAsync(new DALProductDTO()
-                {Name = productDTO.ProductName, OrganizationId = productDTO.OrganizationId});
+                {
+                    Name = productDTO.ProductName, 
+                    OrganizationId = productDTO.OrganizationId,
+                    Description = productDTO.Description
+                });
 
             //2. Add product categories
             foreach (var category in productDTO.Categories)
@@ -55,9 +59,12 @@ namespace BLL.App.Services
         {
             var result = await Uow.Products.FindDTOAsync(productId);
             if (result == null) return null;
+            //TODO: mapper
+            
             return new BLLProductDTO()
             {
                 Id = result.Id,
+                Description = result.Description,
                 ProductName = result.Name,
                 CurrentPrice = result.CurrentPrice,
                 OrganizationId = result.OrganizationId,
@@ -89,6 +96,7 @@ namespace BLL.App.Services
             var product = await Uow.Products.EditAsync(new DALProductDTO()
                 {
                     Name = productDTO.ProductName,
+                    Description = productDTO.Description,
                     Id = productDTO.Id
                 });
             if (product == null) return false;
