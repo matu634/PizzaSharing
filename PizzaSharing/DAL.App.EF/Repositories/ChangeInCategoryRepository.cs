@@ -43,6 +43,9 @@ namespace DAL.App.EF.Repositories
             var changeInCategories = await RepoDbSet
                 .Include(obj => obj.Category)
                 .Include(obj => obj.Change)
+                .ThenInclude(change => change.ChangeName)
+                .ThenInclude(name => name.Translations)
+                .Include(obj => obj.Change)
                 .ThenInclude(change => change.Prices)
                 .Where(obj => categoryIds.Contains(obj.CategoryId) && obj.Change.IsDeleted == false )
                 .ToListAsync();
@@ -51,15 +54,13 @@ namespace DAL.App.EF.Repositories
                 .Select(changeInCategory =>
                 {
                     var change = changeInCategory.Change;
-                    
-                    if (change.Prices == null || change.Prices.Count == 0) Console.WriteLine("Prices not loaded \n");
                     var price = PriceFinder.ForChange(change, change.Prices, DateTime.Now);
                     if (price == null) return null;
                     
                     return new DALChangeDTO()
                     {
                         Id = change.Id,
-                        Name = change.ChangeName,
+                        Name = change.ChangeName.Translate(),
                         CurrentPrice = price.Value,
                         OrganizationId = change.OrganizationId,
                         Categories = change.ChangeInCategories

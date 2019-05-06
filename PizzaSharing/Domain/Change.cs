@@ -8,10 +8,8 @@ namespace Domain
 {
     public class Change : BaseEntity
     {
-        [MaxLength(100)]
-        [MinLength(1)]
-        [Required]
-        public string ChangeName { get; set; }
+        public int ChangeNameId { get; set; }
+        public MultiLangString ChangeName { get; set; }
 
         public List<ReceiptRowChange> ReceiptRowChanges { get; set; }
 
@@ -24,8 +22,5 @@ namespace Domain
 
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
-
-        public string ChangeAndOrganizationName =>
-            $"{ChangeName} ({Organization?.OrganizationName ?? "Organization not loaded"})";
     }
 }

@@ -7,6 +7,7 @@ using Contracts.DAL.Base;
 using Contracts.DAL.Base.Repositories;
 using DAL.App.DTO;
 using DAL.App.EF.Helpers;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -19,90 +20,52 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public override async Task<IEnumerable<Change>> AllAsync()
-        {
-            return await RepoDbSet
-                .Include(change => change.Organization)
-                .ToListAsync();
-        }
-
-
-        public async Task<Change> FindAsync(int id)
-        {
-            var change = await RepoDbSet.FindAsync(id);
-            if (change != null)
-            {
-                await RepoDbContext.Entry(change).Reference(c => c.Organization).LoadAsync();
-            }
-
-            return change;
-        }
-
         public async Task<List<DALChangeDTO>> AllAsync(int organizationId)
         {
             var changes = await RepoDbSet
                 .Include(change => change.Prices)
                 .Include(change => change.ChangeInCategories)
                 .ThenInclude(obj => obj.Category)
+                .Include(change => change.ChangeName)
+                .ThenInclude(name => name.Translations)
                 .Where(change => change.IsDeleted == false && change.OrganizationId == organizationId)
                 .ToListAsync();
 
             return changes
-                .Select(change => new DALChangeDTO()
-                {
-                    Id = change.Id,
-                    Name = change.ChangeName,
-                    CurrentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now) ?? -1.0m,
-                    Categories = change.ChangeInCategories
-                        .Where(obj => obj.Category.IsDeleted == false)
-                        .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
-                        .ToList()
-                })
+                .Select(ChangeMapper.FromDomain)
                 .Where(dto => dto.CurrentPrice != -1.0m)
                 .ToList();
         }
 
         public async Task<DALChangeDTO> AddAsync(DALChangeDTO changeDTO)
         {
-            var change = new Change()
-            {
-                OrganizationId = changeDTO.OrganizationId,
-                ChangeName = changeDTO.Name
-            };
+            var change = ChangeMapper.FromDAL(changeDTO);
 
             change = (await RepoDbSet.AddAsync(change)).Entity;
+            if (change == null) return null;
+            await RepoDbContext.Entry(change).Reference(c => c.ChangeName).LoadAsync();
+            await RepoDbContext.Entry(change.ChangeName).Collection(c => c.Translations).LoadAsync();
 
-            return new DALChangeDTO()
-            {
-                Id = change.Id,
-                Name = change.ChangeName,
-                OrganizationId = change.OrganizationId
-            };
+            return ChangeMapper.FromDomain(change);
         }
 
         public async Task<DALChangeDTO> FindDTOAsync(int changeId)
         {
             var change = await RepoDbSet
+                .Include(c => c.ChangeName)
+                .ThenInclude(name => name.Translations)
                 .Include(c => c.ChangeInCategories)
                 .ThenInclude(obj => obj.Category)
                 .Include(c => c.Prices)
                 .Where(c => c.IsDeleted == false && c.Id == changeId)
                 .SingleOrDefaultAsync();
+            
             if (change == null) return null;
 
             var currentPrice = PriceFinder.ForChange(change, change.Prices, DateTime.Now);
             if (currentPrice == null) return null;
 
-            return new DALChangeDTO()
-            {
-                Id = change.Id,
-                Name = change.ChangeName,
-                CurrentPrice = currentPrice.Value,
-                OrganizationId = change.OrganizationId,
-                Categories = change.ChangeInCategories
-                    .Select(obj => new DALCategoryMinDTO(obj.CategoryId, obj.Category.CategoryName))
-                    .ToList()
-            };
+            return ChangeMapper.FromDomain(change);
         }
 
         public async Task<bool> RemoveSoft(int changeId)
@@ -118,14 +81,13 @@ namespace DAL.App.EF.Repositories
             var change = await RepoDbSet.FindAsync(changeDTO.Id);
             if (change == null) return null;
             
-            change.ChangeName = changeDTO.Name;
-            
-            return new DALChangeDTO()
-            {
-                Id = change.Id,
-                Name = change.ChangeName,
-                OrganizationId = change.OrganizationId
-            };
+            await RepoDbContext.Entry(change).Reference(c => c.ChangeName).LoadAsync();
+            await RepoDbContext.Entry(change.ChangeName).Collection(c => c.Translations).LoadAsync();
+
+                        
+            change.ChangeName.SetTranslation(changeDTO.Name);
+
+            return ChangeMapper.FromDomain(change);
         }
     }
 }

@@ -8,8 +8,6 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IChangeRepository : IBaseRepositoryAsync<Change>
     {
-        Task<Change> FindAsync(int id);
-        
         Task<List<DALChangeDTO>> AllAsync(int organizationId);
         
         Task<DALChangeDTO> AddAsync(DALChangeDTO changeDTO);

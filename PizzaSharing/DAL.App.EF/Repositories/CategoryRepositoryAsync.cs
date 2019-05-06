@@ -45,6 +45,8 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(name => name.Translations)
                 .Include(category => category.ChangesInCategory)
                 .ThenInclude(obj => obj.Change)
+                .ThenInclude(change => change.ChangeName)
+                .ThenInclude(name => name.Translations)
                 .Where(category => category.IsDeleted == false && category.OrganizationId == organizationId)
                 .ToListAsync();
 
@@ -55,7 +57,7 @@ namespace DAL.App.EF.Repositories
                     Name = category.CategoryName,
                     ChangeNames = category.ChangesInCategory
                         .Where(obj => obj.Change.IsDeleted == false)
-                        .Select(obj => obj.Change.ChangeName)
+                        .Select(obj => obj.Change.ChangeName.Translate())
                         .ToList(),
                     ProductNames = category.ProductsInCategory
                         .Where(obj => obj.Product.IsDeleted == false)

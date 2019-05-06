@@ -132,7 +132,7 @@ namespace BLL.App.Services
                 Product = new ProductDTO()
                 {
                     ProductId = row.Product.Id,
-                    ProductName = "TEMP NAME" /*TODO: row.Product.ProductName*/,
+                    ProductName = row.Product.ProductName.Translate(),
                     ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, row.Receipt.CreatedTime)                    
                 },
                 CurrentCost = row.RowSumCost(),
@@ -140,7 +140,7 @@ namespace BLL.App.Services
                 {
                     return new ChangeDTO()
                     {
-                        Name = rowChange.Change.ChangeName,
+                        Name = rowChange.Change.ChangeName.Translate(),
                         Price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices, row.Receipt.CreatedTime) ?? -1.0m,
                         ChangeId = rowChange.ChangeId,
                         OrganizationId = rowChange.Change.OrganizationId,

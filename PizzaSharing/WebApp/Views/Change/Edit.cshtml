@@ -31,7 +31,7 @@
                 
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
-                    <input type="number" asp-for="Price" min="0" max="10000" class="form-control" asp-format="{0:N2}"/>
+                    <input asp-for="Price" min="0" max="10000" class="form-control" asp-format="{0:N2}"/>
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 

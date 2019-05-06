@@ -54,6 +54,10 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(product => product.Prices)
                 .Include(row => row.ReceiptRowChanges)
                 .ThenInclude(receiptRowChange => receiptRowChange.Change)
+                .ThenInclude(change => change.ChangeName)
+                .ThenInclude(name => name.Translations)
+                .Include(row => row.ReceiptRowChanges)
+                .ThenInclude(receiptRowChange => receiptRowChange.Change)
                 .ThenInclude(change => change.Prices)
                 .Include(row => row.RowParticpantLoanRows)
                 .ThenInclude(row => row.Loan)
@@ -62,6 +66,8 @@ namespace DAL.App.EF.Repositories
                 .ToListAsync();
             
             var result = new List<ReceiptRowAllDTO>();
+            //TODO: output BLL DTO, mapper
+            
             foreach (var row in rows)
             {
                 if (row.Product.IsDeleted) continue;
@@ -80,7 +86,7 @@ namespace DAL.App.EF.Repositories
                     
                     changes.Add(new ChangeDTO()
                     {
-                        Name = rowChange.Change.ChangeName,
+                        Name = rowChange.Change.ChangeName.Translate(),
                         Price = price.Value,
                         ChangeId = rowChange.ChangeId,
                         OrganizationId = rowChange.Change.OrganizationId,
@@ -135,7 +141,17 @@ namespace DAL.App.EF.Repositories
             return await RepoDbSet
                 .Include(row => row.Receipt)
                 .Include(row => row.Product)
+                .ThenInclude(product => product.ProductName)
+                .ThenInclude(name => name.Translations)
+                .Include(row => row.Product)
+                .ThenInclude(product => product.ProductDescription)
+                .ThenInclude(desc => desc.Translations)
+                .Include(row => row.Product)
                 .ThenInclude(product => product.Prices)
+                .Include(row => row.ReceiptRowChanges)
+                .ThenInclude(receiptRowChange => receiptRowChange.Change)
+                .ThenInclude(change => change.ChangeName)
+                .ThenInclude(name => name.Translations)
                 .Include(row => row.ReceiptRowChanges)
                 .ThenInclude(receiptRowChange => receiptRowChange.Change)
                 .ThenInclude(change => change.Prices)

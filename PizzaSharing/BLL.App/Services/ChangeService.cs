@@ -31,7 +31,7 @@ namespace BLL.App.Services
             var change = await Uow.Changes.AddAsync(new DALChangeDTO()
                 {Name = changeDto.Name, OrganizationId = changeDto.OrganizationId});
 
-            //2. Add product categories
+            //2. Add change categories
             foreach (var category in changeDto.Categories)
             {
                 await Uow.ChangesInCategories.AddAsync(change.Id, category.Id);
