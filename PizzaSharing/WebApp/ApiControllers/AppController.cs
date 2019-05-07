@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.BLL.App;
 using Contracts.DAL.App;
 using Domain.Identity;
@@ -10,12 +11,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublicApi.DTO;
+using PublicApi.DTO.Mappers;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-//    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppController : ControllerBase
     {
         private readonly IAppBLL _bll;
@@ -28,7 +30,13 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<UserDashboardDTO>> Dashboard()
         {
-            return await _bll.AppService.GetUserDashboard(User.GetUserId());
+            var userDashboard = await _bll.AppService.GetUserDashboard(User.GetUserId());
+            if (userDashboard == null) return BadRequest("Unknown error occurred");
+
+
+            var userDashboardDTO = UserDashboardMapper.FromBLL(userDashboard);
+            
+            return userDashboardDTO;
         }
 
         [HttpGet("{receiptId}")]

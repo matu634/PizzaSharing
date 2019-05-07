@@ -104,7 +104,7 @@ namespace BLL.App.Services
                 Product = new ProductDTO()
                 {
                     ProductId = row.Product.Id,
-                    ProductName = "TEMP NAME" /*TODO: row.Product.ProductName*/,
+                    ProductName = row.Product.ProductName.Translate(),
                     ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, receipt.CreatedTime)                    
                 },
                 CurrentCost = row.RowSumCost(),
@@ -149,7 +149,7 @@ namespace BLL.App.Services
                 })
                     .Where(changeDTO => changeDTO.Price != -1.0m)
                     .ToList(),
-                Participants = row.RowParticpantLoanRows.Select(loanRow =>
+                Participants = row.RowParticipantLoanRows.Select(loanRow =>
                 {
                     return new RowParticipantDTO()
                     {

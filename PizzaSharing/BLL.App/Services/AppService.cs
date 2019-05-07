@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO;
+using BLL.App.Mappers;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -14,14 +17,22 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<UserDashboardDTO> GetUserDashboard(int userId)
+        public async Task<BLLUserDashboardDTO> GetUserDashboard(int userId)
         {
-            return new UserDashboardDTO
+            return new BLLUserDashboardDTO
             {
-                Loans = await Uow.Loans.AllUserGivenLoans(userId),
-                Debts = await Uow.Loans.AllUserTakenLoans(userId),
-                OpenReceipts = await Uow.Receipts.AllUserReceipts(userId, false),
-                ClosedReceipts = await Uow.Receipts.AllUserReceipts(userId, true)
+                Loans = (await Uow.Loans.AllUserGivenLoans(userId))
+                    .Select(LoanGivenMapper.FromDAL)
+                    .ToList(),
+                Debts = (await Uow.Loans.AllUserTakenLoans(userId))
+                    .Select(LoanTakenMapper.FromDAL)
+                    .ToList(),
+                OpenReceipts = (await Uow.Receipts.AllUserReceipts(userId, false))
+                    .Select(ReceiptMapper.FromDAL)
+                    .ToList(),
+                ClosedReceipts = (await Uow.Receipts.AllUserReceipts(userId, true))
+                    .Select(ReceiptMapper.FromDAL)
+                    .ToList()
             };
         }
 
@@ -30,7 +41,7 @@ namespace BLL.App.Services
             var receipt = await Uow.Receipts.FindAsync(receiptId);
             if (receipt == null) return null;
             var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
-            
+
             return await Uow.Organizations.AllDTOAsync(time);
         }
 

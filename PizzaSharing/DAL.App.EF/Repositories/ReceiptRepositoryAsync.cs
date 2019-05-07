@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
+using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +44,7 @@ namespace DAL.App.EF.Repositories
             return receipt;
         }
 
-        public async Task<List<ReceiptDTO>> AllUserReceipts(int userId, bool isFinalized)
+        public async Task<List<DALReceiptDTO>> AllUserReceipts(int userId, bool isFinalized)
         {
             var receipts = await RepoDbSet
                 .Include(receipt => receipt.ReceiptRows)
@@ -54,26 +56,10 @@ namespace DAL.App.EF.Repositories
                         .ThenInclude(product => product.Prices)
                 .Where(receipt => receipt.ReceiptManagerId == userId && receipt.IsFinalized == isFinalized)
                 .ToListAsync();
-            
-            var result = new List<ReceiptDTO>();
-            
-            foreach (var receipt in receipts)
-            {
-                var sum = decimal.Zero;
-                foreach (var row in receipt.ReceiptRows)
-                {
-                    sum += row.RowSumCost();
-                }
-                result.Add(new ReceiptDTO()
-                {
-                    ReceiptId = receipt.Id,
-                    CreatedTime = receipt.CreatedTime,
-                    IsFinalized = isFinalized,
-                    SumCost = sum
-                });
-            }
 
-            return result;
+            return receipts
+                .Select(ReceiptMapper.FromDomain)
+                .ToList();
         }
 
         public async Task<Receipt> AddAsync(ReceiptDTO receiptDTO)

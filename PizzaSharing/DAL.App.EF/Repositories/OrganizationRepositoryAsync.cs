@@ -30,6 +30,11 @@ namespace DAL.App.EF.Repositories
                 .Include(organization => organization.Categories)
                 .ThenInclude(category => category.ProductsInCategory)
                 .ThenInclude(obj => obj.Product)
+                .ThenInclude(product => product.ProductDescription)
+                .ThenInclude(desc => desc.Translations)
+                .Include(organization => organization.Categories)
+                .ThenInclude(category => category.ProductsInCategory)
+                .ThenInclude(obj => obj.Product)
                 .ThenInclude(product => product.ProductName)
                 .ThenInclude(name => name.Translations)
                 .Include(organization => organization.Categories)
@@ -57,7 +62,8 @@ namespace DAL.App.EF.Repositories
                                 {
                                     ProductId = inCategory.ProductId,
                                     ProductName = inCategory.Product.ProductName.Translate(),
-                                    ProductPrice = inCategory.Product.Prices.Where(p => p.ValidTo > time && p.ValidFrom < time).ToList()[0].Value
+                                    ProductPrice = inCategory.Product.Prices.Where(p => p.ValidTo > time && p.ValidFrom < time).ToList()[0].Value,
+                                    Description = inCategory.Product.ProductDescription.Translate()
                                 })
                                 .ToList()
                         })

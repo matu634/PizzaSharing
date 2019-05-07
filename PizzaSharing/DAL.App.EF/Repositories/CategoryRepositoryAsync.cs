@@ -41,8 +41,6 @@ namespace DAL.App.EF.Repositories
 
         public async Task AddAsync(DALCategoryDTO categoryDTO)
         {
-
-
             var category = CategoryMapper.FromDAL(categoryDTO);
 
             await RepoDbSet.AddAsync(category);

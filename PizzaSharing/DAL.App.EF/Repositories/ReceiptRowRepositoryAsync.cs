@@ -59,7 +59,7 @@ namespace DAL.App.EF.Repositories
                 .Include(row => row.ReceiptRowChanges)
                 .ThenInclude(receiptRowChange => receiptRowChange.Change)
                 .ThenInclude(change => change.Prices)
-                .Include(row => row.RowParticpantLoanRows)
+                .Include(row => row.RowParticipantLoanRows)
                 .ThenInclude(row => row.Loan)
                 .ThenInclude(loan => loan.LoanTaker)
                 .Where(row => row.ReceiptId == receiptId)
@@ -95,7 +95,7 @@ namespace DAL.App.EF.Repositories
                 }
 
                 var participants = new List<RowParticipantDTO>();
-                foreach (var loanRow in row.RowParticpantLoanRows)
+                foreach (var loanRow in row.RowParticipantLoanRows)
                 {
                     participants.Add(new RowParticipantDTO()
                     {
@@ -155,7 +155,7 @@ namespace DAL.App.EF.Repositories
                 .Include(row => row.ReceiptRowChanges)
                 .ThenInclude(receiptRowChange => receiptRowChange.Change)
                 .ThenInclude(change => change.Prices)
-                .Include(row => row.RowParticpantLoanRows)
+                .Include(row => row.RowParticipantLoanRows)
                 .ThenInclude(row => row.Loan)
                 .ThenInclude(loan => loan.LoanTaker)
                 .FirstOrDefaultAsync(row => row.Id == id);
