@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.BLL.Base.Services;
 using PublicApi.DTO;
 
@@ -6,7 +7,7 @@ namespace Contracts.BLL.App.Services
 {
     public interface IReceiptsService : IBaseService
     {
-        Task<ReceiptAllDTO> GetReceiptAndRelatedData(int receiptId, int currentUserId);
+        Task<BLLReceiptDTO> GetReceiptAndRelatedData(int receiptId, int currentUserId);
         
         Task<int> NewReceipt(int userId);
 

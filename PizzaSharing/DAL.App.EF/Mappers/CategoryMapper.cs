@@ -14,14 +14,40 @@ namespace DAL.App.EF.Mappers
             {
                 Id = category.Id,
                 Name = category.CategoryName?.Translate() ?? "CATEGORY NAME NOT LOADED",
-                ChangeNames = category.ChangesInCategory?
+                Changes = category.ChangesInCategory?
                     .Where(obj => obj.Change.IsDeleted == false)
-                    .Select(obj => obj.Change.ChangeName.Translate())
+                    .Select(obj => ChangeMapper.FromDomainToMin(obj.Change))
                     .ToList(),
-                ProductNames = category.ProductsInCategory?
+                Products = category.ProductsInCategory?
                     .Where(obj => obj.Product.IsDeleted == false)
-                    .Select(obj => obj.Product.ProductName.Translate())
+                    .Select(obj => ProductMapper.FromDomain3(obj.Product))
                     .ToList()
+            };
+        }
+        
+        public static DALCategoryDTO FromDomain2(Category category)
+        {
+            if (category == null) throw new NullReferenceException("Can't map, category entity is null");
+            return new DALCategoryDTO()
+            {
+                Id = category.Id,
+                OrganizationId = category.OrganizationId,
+                Name = category.CategoryName?.Translate() ?? "CATEGORY NAME NOT LOADED",
+                Products = category.ProductsInCategory?
+                    .Where(obj => !obj.Product.IsDeleted)
+                    .Select(obj => ProductMapper.FromDomain2(obj.Product))
+                    .ToList()
+            };
+        }
+        
+        public static DALCategoryDTO FromDomain3(Category category)
+        {
+            if (category == null) throw new NullReferenceException("Can't map, category entity is null");
+            return new DALCategoryDTO()
+            {
+                Id = category.Id,
+                OrganizationId = category.OrganizationId,
+                Name = category.CategoryName?.Translate() ?? "CATEGORY NAME NOT LOADED",
             };
         }
         

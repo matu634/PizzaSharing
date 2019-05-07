@@ -36,13 +36,15 @@ namespace BLL.App.Services
             };
         }
 
-        public async Task<List<OrganizationDTO>> GetOrganizationsCategoriesAndProductsAsync(int receiptId)
+        public async Task<List<BLLOrganizationDTO>> GetOrganizationsCategoriesAndProductsAsync(int receiptId)
         {
             var receipt = await Uow.Receipts.FindAsync(receiptId);
             if (receipt == null) return null;
             var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
+            var organizations = await Uow.Organizations.AllWithCategoriesAndProducts(time);
+            if (organizations == null) return null;
 
-            return await Uow.Organizations.AllDTOAsync(time);
+            return organizations.Select(OrganizationMapper.FromDAL).ToList();
         }
 
         public List<ChangeDTO> GetValidProductsChanges()

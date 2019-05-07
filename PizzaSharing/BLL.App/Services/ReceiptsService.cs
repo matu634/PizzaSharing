@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO;
+using BLL.App.Mappers;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -17,26 +19,18 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<ReceiptAllDTO> GetReceiptAndRelatedData(int receiptId, int currentUserId)
+        public async Task<BLLReceiptDTO> GetReceiptAndRelatedData(int receiptId, int currentUserId)
         {
-            var receipt = await Uow.Receipts.FindAsync(receiptId);
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptId);
 
             if (receipt == null) return null;
             //Check if current user is manager or participant
             if (receipt.ReceiptManagerId != currentUserId && !receipt.ReceiptParticipants
-                    .Select(participant => participant.AppUserId).ToList().Contains(currentUserId)) return null;
+                    .Select(dto => dto.ParticipantAppUserId).ToList().Contains(currentUserId)) return null;
 
             var time = receipt.IsFinalized == false ? DateTime.Now : receipt.CreatedTime;
-            var rows = await Uow.ReceiptRows.AllReceiptsRows(receipt.Id, time);
-            var result = new ReceiptAllDTO()
-            {
-                ReceiptId = receipt.Id,
-                CreatedTime = receipt.CreatedTime,
-                IsFinalized = receipt.IsFinalized,
-                Rows = rows,
-                SumCost = rows.Select(dto => dto.CurrentCost ?? decimal.Zero).Sum()
-            };
-            return result;
+            var rows = await Uow.ReceiptRows.AllReceiptsRows(receipt.ReceiptId, time);
+            return ReceiptMapper.FromDAL2(receipt, rows);
         }
 
         public async Task<int> NewReceipt(int userId)
@@ -50,15 +44,20 @@ namespace BLL.App.Services
             };
             var receipt = await Uow.Receipts.AddAsync(receiptDTO);
             await Uow.SaveChangesAsync();
-            
+
             return receipt.Id;
         }
-
+        /// <summary>
+        ///  Permanently removes receipt, if it is not finalized and currentUser is receiptManager
+        /// </summary>
+        /// <param name="receiptId"></param>
+        /// <param name="currentUserId"></param>
+        /// <returns></returns>
         public async Task<bool> RemoveReceipt(int receiptId, int currentUserId)
         {
-            var receipt = await Uow.Receipts.FindMinAsync(receiptId);
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptId);
             if (receipt == null || receipt.IsFinalized || receipt.ReceiptManagerId != currentUserId) return false;
-            Uow.Receipts.Remove(receipt);
+            Uow.Receipts.Remove(receipt); //Hard delete
             await Uow.SaveChangesAsync();
             return true;
         }
@@ -82,7 +81,7 @@ namespace BLL.App.Services
             {
                 return null;
             }
-            
+
             //TODO: mapper
             var dalDto = new DALReceiptRowMinDTO()
             {
@@ -91,12 +90,12 @@ namespace BLL.App.Services
                 ProductId = receiptRowDTO.ProductId.Value,
                 ReceiptId = receiptRowDTO.ReceiptId.Value
             };
-            
+
             var addedRow = await Uow.ReceiptRows.AddAsync(dalDto);
-            
+
             await Uow.SaveChangesAsync();
             var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(addedRow.Id);
-            
+
             //TODO: mapper
             var result = new ReceiptRowAllDTO()
             {
@@ -105,7 +104,7 @@ namespace BLL.App.Services
                 {
                     ProductId = row.Product.Id,
                     ProductName = row.Product.ProductName.Translate(),
-                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, receipt.CreatedTime)                    
+                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, receipt.CreatedTime)
                 },
                 CurrentCost = row.RowSumCost(),
                 Changes = new List<ChangeDTO>(),
@@ -114,7 +113,7 @@ namespace BLL.App.Services
                 ReceiptRowId = row.Id,
                 Discount = row.RowDiscount
             };
-            
+
             return result;
         }
 
@@ -124,7 +123,7 @@ namespace BLL.App.Services
             if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized) return null;
             row.Amount = dto.NewAmount;
             await Uow.SaveChangesAsync();
-            
+
             //TODO: mapper
             var result = new ReceiptRowAllDTO()
             {
@@ -133,20 +132,21 @@ namespace BLL.App.Services
                 {
                     ProductId = row.Product.Id,
                     ProductName = row.Product.ProductName.Translate(),
-                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, row.Receipt.CreatedTime)                    
+                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, row.Receipt.CreatedTime)
                 },
                 CurrentCost = row.RowSumCost(),
                 Changes = row.ReceiptRowChanges.Select(rowChange =>
-                {
-                    return new ChangeDTO()
                     {
-                        Name = rowChange.Change.ChangeName.Translate(),
-                        Price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices, row.Receipt.CreatedTime) ?? -1.0m,
-                        ChangeId = rowChange.ChangeId,
-                        OrganizationId = rowChange.Change.OrganizationId,
-                        ReceiptRowId = rowChange.ReceiptRowId
-                    };
-                })
+                        return new ChangeDTO()
+                        {
+                            Name = rowChange.Change.ChangeName.Translate(),
+                            Price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices,
+                                        row.Receipt.CreatedTime) ?? -1.0m,
+                            ChangeId = rowChange.ChangeId,
+                            OrganizationId = rowChange.Change.OrganizationId,
+                            ReceiptRowId = rowChange.ReceiptRowId
+                        };
+                    })
                     .Where(changeDTO => changeDTO.Price != -1.0m)
                     .ToList(),
                 Participants = row.RowParticipantLoanRows.Select(loanRow =>
@@ -171,7 +171,7 @@ namespace BLL.App.Services
         public async Task<bool> RemoveRow(int rowId, int userId)
         {
             var row = await Uow.ReceiptRows.FindAsync(rowId);
-            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized ) return false;
+            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized) return false;
             Uow.ReceiptRows.Remove(row);
             await Uow.SaveChangesAsync();
             return true;

@@ -38,10 +38,12 @@ namespace WebApp.Controllers
         {
             var dto = await _bll.OrganizationsService.GetOrganizationAllDTOAsync(id);
             if (dto == null) return BadRequest();
+            
 
             var vm = new OrganizationViewModel()
             {
-                OrganizationMin = dto.OrganizationMin,
+                OrganizationId = dto.Id,
+                OrganizationName = dto.Name,
                 Changes = dto.Changes,
                 Products = dto.Products,
                 Categories = dto.Categories
@@ -68,7 +70,7 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var organization = new BLLOrganizationMinDTO
+                var organization = new BLLOrganizationDTO
                 {
                     Name = vm.Name
                 };

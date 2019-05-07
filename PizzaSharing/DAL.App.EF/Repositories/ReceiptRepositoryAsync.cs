@@ -18,31 +18,7 @@ namespace DAL.App.EF.Repositories
         public ReceiptRepositoryAsync(IDataContext dataContext) : base(dataContext)
         {
         }
-
-        public override async Task<IEnumerable<Receipt>> AllAsync()
-        {
-            return await RepoDbSet
-                .Include(receipt => receipt.ReceiptManager)
-                .ToListAsync();
-        }
-
-        public Task<Receipt> FindMinAsync(int receiptId)
-        {
-            return base.FindAsync(receiptId);
-        }
-
-        public override async Task<Receipt> FindAsync(params object[] id)
-        {
-            var receipt = await RepoDbSet.FindAsync(id);
-
-            if (receipt != null)
-            {
-                await RepoDbContext.Entry(receipt).Reference(r => r.ReceiptManager).LoadAsync();
-                await RepoDbContext.Entry(receipt).Collection(r => r.ReceiptParticipants).LoadAsync();
-            }
-
-            return receipt;
-        }
+        
 
         public async Task<List<DALReceiptDTO>> AllUserReceipts(int userId, bool isFinalized)
         {
@@ -71,6 +47,15 @@ namespace DAL.App.EF.Repositories
                 IsFinalized = receiptDTO.IsFinalized
             };
             return (await RepoDbSet.AddAsync(receipt)).Entity;
+        }
+
+        public async Task<DALReceiptDTO> FindReceiptAsync(int receiptId)
+        {
+            var receipt = await RepoDbSet.FindAsync(receiptId);
+            if (receipt == null) return null;
+            await RepoDbContext.Entry(receipt).Collection(r => r.ReceiptParticipants).LoadAsync();
+
+            return ReceiptMapper.FromDomain2(receipt);
         }
     }
 }

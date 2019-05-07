@@ -7,14 +7,14 @@ namespace Contracts.BLL.App.Services
 {
     public interface IOrganizationsService : IBaseService
     {
-        Task<List<BLLOrganizationMinDTO>> GetOrganizationsMinDTOAsync();
+        Task<List<BLLOrganizationDTO>> GetOrganizationsMinDTOAsync();
         
-        Task<BLLOrganizationAllDTO> GetOrganizationAllDTOAsync(int id);
+        Task<BLLOrganizationDTO> GetOrganizationAllDTOAsync(int id);
         
-        Task<BLLOrganizationWithCategoriesDTO> GetOrganizationWithCategoriesAsync(int organizationId);
+        Task<BLLOrganizationDTO> GetOrganizationWithCategoriesAsync(int organizationId);
         
-        Task<BLLOrganizationMinDTO> GetOrganizationMinAsync(int organizationId);
+        Task<BLLOrganizationDTO> GetOrganizationMinAsync(int organizationId);
         
-        Task<bool> AddOrganizationAsync(BLLOrganizationMinDTO organization);
+        Task<bool> AddOrganizationAsync(BLLOrganizationDTO organization);
     }
 }

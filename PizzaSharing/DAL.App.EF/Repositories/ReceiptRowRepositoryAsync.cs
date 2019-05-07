@@ -6,6 +6,7 @@ using Contracts.DAL.App.Repositories;
 using Contracts.DAL.Base;
 using DAL.App.DTO;
 using DAL.App.EF.Helpers;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,13 @@ namespace DAL.App.EF.Repositories
             return receiptRow;
         }
 
-        public async Task<List<ReceiptRowAllDTO>> AllReceiptsRows(int receiptId, DateTime time)
+        /// <summary>
+        ///  Returns Amount, Product(...), Changes(...), Participants(...), Discount, ReceiptId, RowId, Cost, 
+        /// </summary>
+        /// <param name="receiptId"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public async Task<List<DALReceiptRowDTO>> AllReceiptsRows(int receiptId, DateTime time)
         {
             var rows = await RepoDbSet
                 .Include(row => row.Product)
@@ -64,63 +71,11 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(loan => loan.LoanTaker)
                 .Where(row => row.ReceiptId == receiptId)
                 .ToListAsync();
-            
-            var result = new List<ReceiptRowAllDTO>();
-            //TODO: output BLL DTO, mapper
-            
-            foreach (var row in rows)
-            {
-                if (row.Product.IsDeleted) continue;
-                var product = new ProductDTO()
-                {
-                    ProductId = row.ProductId,
-                    ProductName = row.Product.ProductName.Translate(),
-                    Description = row.Product.ProductDescription.Translate(),
-                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, time)
-                };
-                var changes = new List<ChangeDTO>();
-                foreach (var rowChange in row.ReceiptRowChanges)
-                {
-                    var price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices, time);
-                    if (price == null) continue;
-                    
-                    changes.Add(new ChangeDTO()
-                    {
-                        Name = rowChange.Change.ChangeName.Translate(),
-                        Price = price.Value,
-                        ChangeId = rowChange.ChangeId,
-                        OrganizationId = rowChange.Change.OrganizationId,
-                        ReceiptRowId = rowChange.ReceiptRowId
-                    });
-                }
 
-                var participants = new List<RowParticipantDTO>();
-                foreach (var loanRow in row.RowParticipantLoanRows)
-                {
-                    participants.Add(new RowParticipantDTO()
-                    {
-                        Name = loanRow.Loan.LoanTaker.UserNickname,
-                        Involvement = loanRow.Involvement,
-                        ReceiptRowId = row.Id,
-                        LoanId = loanRow.LoanId,
-                        AppUserId = loanRow.Loan.LoanTakerId,
-                        LoanRowId = loanRow.Id
-                    });
-                }
-
-                result.Add(new ReceiptRowAllDTO()
-                {
-                    Amount = row.Amount,
-                    Product = product,
-                    Changes = changes,
-                    Discount = row.RowDiscount,
-                    ReceiptId = receiptId,
-                    ReceiptRowId = row.Id,
-                    CurrentCost = row.RowSumCost(),
-                    Participants = participants
-                });
-            }
-            return result;
+            return rows
+                .Select(row => ReceiptRowMapper.FromDomain(row, time))
+                .Where(dto => dto != null)
+                .ToList();
         }
 
         public async Task<ReceiptRow> AddAsync(DALReceiptRowMinDTO rowMin)

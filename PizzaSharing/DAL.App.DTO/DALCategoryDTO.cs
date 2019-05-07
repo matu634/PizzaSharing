@@ -6,8 +6,8 @@ namespace DAL.App.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<string> ProductNames { get; set; }
-        public List<string> ChangeNames { get; set; }
+        public List<DALProductDTO> Products { get; set; }
+        public List<DALChangeDTO> Changes { get; set; }
         public int OrganizationId { get; set; }
     }
 }

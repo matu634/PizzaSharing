@@ -10,7 +10,7 @@ namespace Contracts.BLL.App.Services
     {
         Task<BLLUserDashboardDTO> GetUserDashboard(int userId);
         
-        Task<List<OrganizationDTO>> GetOrganizationsCategoriesAndProductsAsync(int receiptId);
+        Task<List<BLLOrganizationDTO>> GetOrganizationsCategoriesAndProductsAsync(int receiptId);
 
         List<ChangeDTO> GetValidProductsChanges();
 

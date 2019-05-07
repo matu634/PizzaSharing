@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace DAL.App.DTO
+namespace BLL.App.DTO
 {
-    public class DALReceiptRowDTO
+    public class BLLReceiptRowDTO
     {
         public int? ReceiptRowId { get; set; }
         public int? ReceiptId { get; set; }
@@ -10,10 +10,10 @@ namespace DAL.App.DTO
         public int? Amount { get; set; }
         public decimal? Discount { get; set; }
 
-        public DALProductDTO Product { get; set; }
-        public List<DALChangeDTO> Changes { get; set; }
+        public BLLProductDTO Product { get; set; }
+        public List<BLLChangeDTO> Changes { get; set; }
 
-        public List<DALRowParticipantDTO> Participants { get; set; }
+        public List<BLLRowParticipantDTO> Participants { get; set; }
         public decimal? CurrentCost { get; set; }
     }
 }

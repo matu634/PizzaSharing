@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BLL.App.DTO;
 using Contracts.BLL.App;
-using Contracts.DAL.App;
-using Domain.Identity;
 using Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -32,19 +29,18 @@ namespace WebApp.ApiControllers
         {
             var userDashboard = await _bll.AppService.GetUserDashboard(User.GetUserId());
             if (userDashboard == null) return BadRequest("Unknown error occurred");
-
-
-            var userDashboardDTO = UserDashboardMapper.FromBLL(userDashboard);
             
-            return userDashboardDTO;
+            return UserDashboardMapper.FromBLL(userDashboard);
         }
 
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)
         {
-            var result = await _bll.AppService.GetOrganizationsCategoriesAndProductsAsync(receiptId);
-            if (result == null) return BadRequest();
-            return result;
+            var organizations = await _bll.AppService.GetOrganizationsCategoriesAndProductsAsync(receiptId);
+            if (organizations == null) return BadRequest();
+            return organizations
+                .Select(OrganizationMapper.FromBLL)
+                .ToList();
         }
 
         [HttpGet("{productId}")]
@@ -53,12 +49,7 @@ namespace WebApp.ApiControllers
             var changes = await _bll.ProductService.GetProductChangesAsync(productId);
             if (changes == null) return BadRequest();
             return changes
-                .Select(dto => new ChangeDTO()
-                {
-                    Price = dto.CurrentPrice,
-                    Name = dto.Name,
-                    ChangeId = dto.Id
-                })
+                .Select(ChangeMapper.FromBLL)
                 .ToList();
         }
     }

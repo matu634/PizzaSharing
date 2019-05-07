@@ -1,16 +1,16 @@
 @model WebApp.ViewModels.Dashboard.OrganizationViewModel
 
 @{
-    ViewData["Title"] = Model.OrganizationMin.Name + " | Admin";
+    ViewData["Title"] = Model.OrganizationName + " | Admin";
 }
 
-<h1 class="text-center center">@Model.OrganizationMin.Name</h1>
+<h1 class="text-center center">@Model.OrganizationName</h1>
 <hr/>
 <div class="row">
     <div class="col-lg-6">
         <h1>
             @Resources.Dashboard.Organization.CategoriesTitle
-            <a class="btn btn-primary" asp-controller="Category" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+            <a class="btn btn-primary" asp-controller="Category" asp-action="Create" asp-route-id="@Model.OrganizationId">
                 @Resources.Dashboard.Organization.CategoryCreate
             </a>
         </h1>
@@ -27,9 +27,9 @@
                             </button>
                             <div class="collapse " id="products@(category.CategoryId)">
                                 <ul>
-                                    @foreach (var productName in category.ProductNames)
+                                    @foreach (var product in category.Products)
                                     {
-                                        <li>@productName</li>
+                                        <li>@product.ProductName</li>
                                     }
                                 </ul>
                             </div>
@@ -40,9 +40,9 @@
                             </button>
                             <div class="collapse " id="changes@(category.CategoryId)">
                                 <ul>
-                                    @foreach (var changeName in category.ChangeNames)
+                                    @foreach (var change in category.Changes)
                                     {
-                                        <li>@changeName</li>
+                                        <li>@change.Name</li>
                                     }
                                 </ul>
                             </div>
@@ -59,7 +59,7 @@
             @Resources.Dashboard.Organization.ChangeTitle
             @if (Model.Categories != null && Model.Categories.Count > 0)
             {
-                <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+                <a class="btn btn-primary" asp-controller="Change" asp-action="Create" asp-route-id="@Model.OrganizationId">
                     @Resources.Dashboard.Organization.ChangeCreate
                 </a>   
             }
@@ -104,7 +104,7 @@
             @Resources.Dashboard.Organization.ProductTitle 
             @if (Model.Categories != null && Model.Categories.Count > 0)
             {
-                <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.OrganizationMin.Id">
+                <a class="btn btn-primary" asp-controller="Product" asp-action="Create" asp-route-id="@Model.OrganizationId">
                     @Resources.Dashboard.Organization.ProductCreate
                 </a>
             }

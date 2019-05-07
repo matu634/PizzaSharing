@@ -20,9 +20,8 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public async Task<List<OrganizationDTO>> AllDTOAsync(DateTime time)
+        public async Task<List<DALOrganizationDTO>> AllWithCategoriesAndProducts(DateTime time)
         {
-            //TODO: optimize this
             var o = await RepoDbSet
                 .Include(organization => organization.Categories)
                 .ThenInclude(category => category.CategoryName)
@@ -43,49 +42,25 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(product => product.Prices)
                 .Where(organization => organization.IsDeleted == false)
                 .ToListAsync();
-                
-                
-                return o.Select(organization => new OrganizationDTO()
-                {
-                    Id = organization.Id,
-                    Name = organization.OrganizationName,
-                    Categories = organization.Categories
-                        .Where(category => category.IsDeleted == false)
-                        .Select(category => new CategoryDTO()
-                        {
-                            Id = category.Id,
-                            Name = category.CategoryName.Translate(),
-                            Products = category.ProductsInCategory
-                                .Where(inCategory => inCategory.Product.IsDeleted == false && 
-                                                     inCategory.Product.Prices.Any(p => p.ValidTo > time && p.ValidFrom < time))
-                                .Select(inCategory => new ProductDTO()
-                                {
-                                    ProductId = inCategory.ProductId,
-                                    ProductName = inCategory.Product.ProductName.Translate(),
-                                    ProductPrice = inCategory.Product.Prices.Where(p => p.ValidTo > time && p.ValidFrom < time).ToList()[0].Value,
-                                    Description = inCategory.Product.ProductDescription.Translate()
-                                })
-                                .ToList()
-                        })
-                        .ToList()
-                })
+
+            return o.Select(OrganizationMapper.FromDomain).ToList();
+        }
+
+        public async Task<List<DALOrganizationDTO>> AllMinDTOAsync()
+        {
+            return (await RepoDbSet
+                .Where(organization => organization.IsDeleted == false)
+                .ToListAsync())
+                .Select(OrganizationMapper.FromDomain2)
                 .ToList();
         }
 
-        public async Task<List<DALOrganizationMinDTO>> AllMinDTOAsync()
-        {
-            return await RepoDbSet
-                .Where(organization => organization.IsDeleted == false)
-                .Select(organization => new DALOrganizationMinDTO(organization.Id, organization.OrganizationName))
-                .ToListAsync();
-        }
-
-        public async Task<DALOrganizationMinDTO> FindMinDTOAsync(int id)
+        public async Task<DALOrganizationDTO> FindMinDTOAsync(int id)
         {
             var organization =  await RepoDbSet.FindAsync(id);
             if (organization == null || organization.IsDeleted) return null;
-            
-            return new DALOrganizationMinDTO(organization.Id, organization.OrganizationName);
+
+            return OrganizationMapper.FromDomain2(organization);
         }
 
         public async Task<DALOrganizationDTO> FindWithCategoriesAsync(int id)
@@ -96,23 +71,14 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(name => name.Translations)
                 .FirstOrDefaultAsync(o => o.IsDeleted == false && o.Id == id);
             if (organization == null) return null;
-            
-            return new DALOrganizationDTO()
-            {
-                Id = organization.Id,
-                Name = organization.OrganizationName,
-                Categories = organization.Categories.Select(CategoryMapper.FromDomain).ToList()
-            };
+
+            return OrganizationMapper.FromDomain3(organization);
         }
 
-        public async Task AddAsync(DALOrganizationMinDTO organizationDTO)
+        public async Task AddAsync(DALOrganizationDTO organizationDTO)
         {
-            var organization = new Organization()
-            {
-                OrganizationName = organizationDTO.Name
-            };
 
-            await RepoDbSet.AddAsync(organization);
+            await RepoDbSet.AddAsync(OrganizationMapper.FromDAL(organizationDTO));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IReceiptRowRepository : IBaseRepositoryAsync<ReceiptRow>
     {
-        Task<List<ReceiptRowAllDTO>> AllReceiptsRows(int receiptId, DateTime time);
+        Task<List<DALReceiptRowDTO>> AllReceiptsRows(int receiptId, DateTime time);
         
         Task<ReceiptRow> AddAsync(DALReceiptRowMinDTO rowMin);
 

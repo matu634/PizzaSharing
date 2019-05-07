@@ -29,7 +29,7 @@ namespace WebApp.Controllers
                 OrganizationName = organization.Name,
                 OrganizationId = organization.Id,
                 Categories = organization.Categories
-                    .Select(dto => new SelectListItem(dto.Name, dto.Id.ToString()))
+                    .Select(dto => new SelectListItem(dto.CategoryName, dto.CategoryId.ToString()))
                     .ToList()
             };
             return View(vm);
@@ -56,7 +56,7 @@ namespace WebApp.Controllers
             var organization = await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(vm.OrganizationId);
             if (organization == null) return BadRequest("Invalid organization id");
             vm.Categories = organization.Categories
-                .Select(dto => new SelectListItem(dto.Name, dto.Id.ToString()))
+                .Select(dto => new SelectListItem(dto.CategoryName, dto.CategoryId.ToString()))
                 .ToList();
             return View(vm);
             
@@ -127,7 +127,7 @@ namespace WebApp.Controllers
                 OrganizationId = product.OrganizationId,
                 ProductName = product.ProductName,
                 Categories = categories.Select(dto =>
-                    new SelectListItem(dto.Name, dto.Id.ToString(), selectedCategoryIds.Contains(dto.Id)))
+                    new SelectListItem(dto.CategoryName, dto.CategoryId.ToString(), selectedCategoryIds.Contains(dto.CategoryId)))
                     .ToList()
             };
             vm.Categories.Sort((item, item2) => int.Parse(item.Value).CompareTo(int.Parse(item2.Value)));
@@ -158,7 +158,7 @@ namespace WebApp.Controllers
                 (await _bll.OrganizationsService.GetOrganizationWithCategoriesAsync(vm.OrganizationId)).Categories;
 
             vm.Categories = categories.Select(dto =>
-                    new SelectListItem(dto.Name, dto.Id.ToString(), vm.SelectedCategories.Contains(dto.Id)))
+                    new SelectListItem(dto.CategoryName, dto.CategoryId.ToString(), vm.SelectedCategories.Contains(dto.CategoryId)))
                 .ToList();
             
             return View(vm);

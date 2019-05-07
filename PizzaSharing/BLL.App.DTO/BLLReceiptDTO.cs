@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BLL.App.DTO
 {
@@ -9,5 +10,7 @@ namespace BLL.App.DTO
         public bool IsFinalized { get; set; }
         public decimal SumCost { get; set; }
         public int ReceiptManagerId { get; set; }
+        
+        public List<BLLReceiptRowDTO> ReceiptRows { get; set; }
     }
 }

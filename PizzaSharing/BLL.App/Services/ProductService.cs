@@ -7,6 +7,8 @@ using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using DAL.App.DTO;
+using DAL.App.EF.Mappers;
+using ChangeMapper = BLL.App.Mappers.ChangeMapper;
 
 namespace BLL.App.Services
 {
@@ -133,12 +135,7 @@ namespace BLL.App.Services
             if (changes == null) return null;
 
             return changes
-                .Select(dto => new BLLChangeDTO()
-                {
-                    Id = dto.Id,
-                    Name = dto.Name,
-                    CurrentPrice = dto.CurrentPrice
-                })
+                .Select(ChangeMapper.FromDAL2)
                 .ToList();
         }
     }

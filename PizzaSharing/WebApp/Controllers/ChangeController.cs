@@ -28,7 +28,7 @@ namespace WebApp.Controllers
                 OrganizationName = organization.Name,
                 OrganizationId = organization.Id,
                 Categories = organization.Categories
-                    .Select(dto => new SelectListItem(dto.Name, dto.Id.ToString()))
+                    .Select(dto => new SelectListItem(dto.CategoryName, dto.CategoryId.ToString()))
                     .ToList()
             };
             return View(vm);
@@ -122,7 +122,7 @@ namespace WebApp.Controllers
                 OrganizationId = change.OrganizationId,
                 ChangeName = change.Name,
                 Categories = categories.Select(dto =>
-                    new SelectListItem(dto.Name, dto.Id.ToString(), selectedCategoryIds.Contains(dto.Id)))
+                    new SelectListItem(dto.CategoryName, dto.CategoryId.ToString(), selectedCategoryIds.Contains(dto.CategoryId)))
                     .ToList()
             };
             vm.Categories.Sort((item, item2) => int.Parse(item.Value).CompareTo(int.Parse(item2.Value)));

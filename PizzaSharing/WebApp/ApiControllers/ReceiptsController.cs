@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PublicApi.DTO;
+using PublicApi.DTO.Mappers;
 
 namespace WebApp.ApiControllers
 {
@@ -23,8 +24,9 @@ namespace WebApp.ApiControllers
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<ReceiptAllDTO>> Get(int receiptId)
         {
-            var result = await _bll.ReceiptsService.GetReceiptAndRelatedData(receiptId, User.GetUserId());
-            if (result == null) return Unauthorized();
+            var receiptDto = await _bll.ReceiptsService.GetReceiptAndRelatedData(receiptId, User.GetUserId());
+            if (receiptDto == null) return Unauthorized();
+            var result = ReceiptMapper.FromBLLToAll(receiptDto);
             return result;
         }
 

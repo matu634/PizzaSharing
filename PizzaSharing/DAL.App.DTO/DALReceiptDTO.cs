@@ -10,5 +10,7 @@ namespace DAL.App.DTO
         public bool IsFinalized { get; set; }
         public decimal SumCost { get; set; }
         public int ReceiptManagerId { get; set; }
+        
+        public List<DALReceiptParticipantDTO> ReceiptParticipants { get; set; }
     }
 }

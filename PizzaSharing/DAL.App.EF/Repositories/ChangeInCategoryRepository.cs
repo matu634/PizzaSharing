@@ -54,24 +54,8 @@ namespace DAL.App.EF.Repositories
                 .ToListAsync();
 
             return changeInCategories
-                .Select(changeInCategory =>
-                {
-                    var change = changeInCategory.Change;
-                    var price = PriceFinder.ForChange(change, change.Prices, DateTime.Now);
-                    if (price == null) return null;
-                    
-                    return new DALChangeDTO()
-                    {
-                        Id = change.Id,
-                        Name = change.ChangeName.Translate(),
-                        CurrentPrice = price.Value,
-                        OrganizationId = change.OrganizationId,
-                        Categories = change.ChangeInCategories
-                            .Select(obj => CategoryMapper.FromDomainToMin(obj.Category))
-                            .ToList()
-                    };
-                })
-                .Where(dto => dto != null)
+                .Select(changeInCategory => ChangeMapper.FromDomain(changeInCategory.Change))
+                .Where(dto => dto.CurrentPrice != decimal.MinusOne)
                 .Distinct()
                 .ToList();
         }
