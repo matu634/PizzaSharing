@@ -7,137 +7,146 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2"/>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj" />
-      <ProjectReference Include="..\BLL.App\BLL.App.csproj" />
-      <ProjectReference Include="..\Contracts.BLL.Base\Contracts.BLL.Base.csproj" />
-      <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj" />
-      <ProjectReference Include="..\Identity\Identity.csproj" />
-      <ProjectReference Include="..\Resources\Resources.csproj" />
+        <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj"/>
+        <ProjectReference Include="..\BLL.App\BLL.App.csproj"/>
+        <ProjectReference Include="..\Contracts.BLL.Base\Contracts.BLL.Base.csproj"/>
+        <ProjectReference Include="..\DAL.App.EF\DAL.App.EF.csproj"/>
+        <ProjectReference Include="..\Identity\Identity.csproj"/>
+        <ProjectReference Include="..\Resources\Resources.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Views\Categories\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Categories\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Categories\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Categories\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Categories\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Changes\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Changes\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Changes\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Changes\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Changes\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\LoanRows\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\LoanRows\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\LoanRows\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\LoanRows\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\LoanRows\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Loans\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Loans\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Loans\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Loans\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Loans\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Organizations\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Organizations\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Organizations\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Organizations\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Organizations\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Prices\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Prices\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Prices\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Prices\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Prices\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ProductInCategories\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ProductInCategories\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ProductInCategories\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ProductInCategories\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ProductInCategories\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Products\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Products\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Products\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Products\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Products\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRows\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRows\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRows\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRows\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\ReceiptRows\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Receipts\Create.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Receipts\Delete.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Receipts\Details.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Receipts\Edit.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Receipts\Index.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_CookieConsentPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_Layout2.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_LoginPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_LoginSidebarPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml" />
-      <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
+        <_ContentIncludedByDefault Remove="Views\Categories\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Categories\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Categories\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Categories\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Categories\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ChangeInCategories\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Changes\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Changes\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Changes\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Changes\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Changes\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Home\Privacy.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\LoanRows\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\LoanRows\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\LoanRows\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\LoanRows\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\LoanRows\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Loans\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Loans\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Loans\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Loans\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Loans\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Organizations\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Organizations\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Organizations\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Organizations\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Organizations\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Prices\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Prices\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Prices\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Prices\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Prices\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ProductInCategories\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ProductInCategories\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ProductInCategories\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ProductInCategories\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ProductInCategories\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Products\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Products\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Products\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Products\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Products\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptParticipants\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRowChanges\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRows\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRows\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRows\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRows\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\ReceiptRows\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Receipts\Create.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Receipts\Delete.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Receipts\Details.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Receipts\Edit.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Receipts\Index.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\Error.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_CookieConsentPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_Layout2.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_LoginPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_LoginSidebarPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\Shared\_ValidationScriptsPartial.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\_ViewImports.cshtml"/>
+        <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Views\Categories\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\Categories\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\Categories\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\Categories\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\Categories\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\Changes\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\Changes\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\Changes\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\Changes\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\Changes\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\LoanRows\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\LoanRows\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\LoanRows\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\LoanRows\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\LoanRows\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\Organizations\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\Organizations\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\Organizations\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\Organizations\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\Organizations\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\ProductInCategories\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\ProductInCategories\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\ProductInCategories\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\ProductInCategories\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\ProductInCategories\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptParticipants\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptParticipants\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptParticipants\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptParticipants\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptParticipants\Index.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptRows\Create.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptRows\Delete.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptRows\Details.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptRows\Edit.cshtml" />
-      <UpToDateCheckInput Remove="Views\ReceiptRows\Index.cshtml" />
+        <UpToDateCheckInput Remove="Views\Categories\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Categories\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Categories\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Categories\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Categories\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Changes\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Changes\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Changes\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Changes\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Changes\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\LoanRows\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\LoanRows\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\LoanRows\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\LoanRows\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\LoanRows\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Organizations\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Organizations\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Organizations\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Organizations\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\Organizations\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ProductInCategories\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ProductInCategories\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ProductInCategories\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ProductInCategories\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ProductInCategories\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptParticipants\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptParticipants\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptParticipants\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptParticipants\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptParticipants\Index.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptRows\Create.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptRows\Delete.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptRows\Details.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptRows\Edit.cshtml"/>
+        <UpToDateCheckInput Remove="Views\ReceiptRows\Index.cshtml"/>
     </ItemGroup>
+
+    <PropertyGroup>
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\WebApp.xml</DocumentationFile>
+        <LangVersion>latest</LangVersion>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
 
 </Project>

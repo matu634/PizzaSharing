@@ -8,7 +8,8 @@ using PublicApi.DTO;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]/[action]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LoansController : ControllerBase

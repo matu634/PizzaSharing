@@ -13,7 +13,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]/[action]")]
+    /// <summary>
+    /// Endpoints that handle logging in and registering an account
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -33,6 +37,13 @@ namespace WebApp.ApiControllers
             _emailSender = emailSender;
         }
 
+        /// <summary>
+        /// Log in, getting the jwt token that can be used to access other endpoints
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Object with "token" field</returns>
+        /// <response code="200">JWT token successfully retrieved.</response>
+        /// <response code="403">Log in failed.</response>
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] LoginDTO model)
         {
@@ -61,6 +72,14 @@ namespace WebApp.ApiControllers
             return Ok(new {token = jwt});
         }
 
+        /// <summary>
+        /// Registers an account and then logs them in
+        /// </summary>
+        /// <param name="registerDto"></param>
+        /// <returns></returns>
+        /// <response code="200">User registered and JWT token successfully retrieved.</response>
+        /// <response code="403">Log in failed.</response>
+        /// <response code="400">Registration failed.</response>
         [HttpPost]
         public async Task<ActionResult<string>> Register([FromBody] RegisterDTO registerDto)
         {
@@ -77,7 +96,6 @@ namespace WebApp.ApiControllers
             };
                 
             IdentityResult result;
-            //
                 
             try
             {

@@ -27,7 +27,6 @@ export class BaseService<TEntity extends IBaseEntity> {
 
 
   fetchAll(): Promise<TEntity[]> {
-    // TODO: use config
     let url = this.serviceAppConfig.apiUrl + this.serviceEndPoint;
 
     return this.serviceHttpClient.fetch(url,

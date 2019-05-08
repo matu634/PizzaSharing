@@ -12,7 +12,11 @@ using PublicApi.DTO.Mappers;
 
 namespace WebApp.ApiControllers
 {
-    [Route("api/[controller]/[action]")]
+    /// <summary>
+    /// Endpoints that handle initial essential data
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppController : ControllerBase
@@ -24,6 +28,12 @@ namespace WebApp.ApiControllers
             _bll = bll;
         }
 
+        /// <summary>
+        /// Get all User's open receipts, closed receipts, debts and loans
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">User related data successfully retrieved.</response>
+        /// <response code="400">Something unexpected happened.</response>
         [HttpGet]
         public async Task<ActionResult<UserDashboardDTO>> Dashboard()
         {
@@ -32,7 +42,13 @@ namespace WebApp.ApiControllers
             
             return UserDashboardMapper.FromBLL(userDashboard);
         }
-
+        /// <summary>
+        /// Gets all organizations with all their Categories which include all their Products
+        /// </summary>
+        /// <param name="receiptId">Receipt currently being edited</param>
+        /// <returns>OrganizationDTO</returns>
+        /// <response code="200">Organizations were successfully retrieved.</response>
+        /// <response code="400">Something went wrong while retrieving organizations(Most likely receiptId is invalid).</response>
         [HttpGet("{receiptId}")]
         public async Task<ActionResult<List<OrganizationDTO>>> Organizations(int receiptId)
         {
@@ -42,7 +58,14 @@ namespace WebApp.ApiControllers
                 .Select(OrganizationMapper.FromBLL)
                 .ToList();
         }
-
+        
+        /// <summary>
+        ///  Gets all changes that can be applied to a Product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns>List of ChangeDTOs></returns>
+        /// <response code="200">Product changes successfully retrieved.</response>
+        /// <response code="400">Something went wrong while retrieving changes(Most likely productId is invalid).</response>
         [HttpGet("{productId}")]
         public async Task<ActionResult<List<ChangeDTO>>> ProductChanges(int productId)
         {

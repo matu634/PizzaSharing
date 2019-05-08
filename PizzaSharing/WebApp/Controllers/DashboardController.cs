@@ -34,6 +34,7 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
+        
         public async Task<IActionResult> Organization(int id)
         {
             var dto = await _bll.OrganizationsService.GetOrganizationAllDTOAsync(id);
