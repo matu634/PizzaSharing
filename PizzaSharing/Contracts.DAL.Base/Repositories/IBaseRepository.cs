@@ -32,6 +32,8 @@ namespace Contracts.DAL.Base.Repositories
         where TEntity : class, IBaseEntity<TKey>, new()
         where TKey : struct, IComparable
     {
+        int? GetEntityIdAfterSaveChanges(int oldId);
+        
         TEntity Update(TEntity entity);
         
         void Remove(TEntity entity);

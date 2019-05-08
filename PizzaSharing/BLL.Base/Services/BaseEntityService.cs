@@ -15,6 +15,11 @@ namespace BLL.Base.Services
         {
         }
 
+        public int? GetEntityIdAfterSaveChanges(int oldId)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual TEntity Update(TEntity entity)
         {
             return Uow.BaseRepository<TEntity>().Update(entity);

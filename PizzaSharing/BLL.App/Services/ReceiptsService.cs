@@ -62,117 +62,51 @@ namespace BLL.App.Services
             return true;
         }
 
-        public async Task<ReceiptRowAllDTO> AddRow(ReceiptRowMinDTO receiptRowDTO, int currentUserId)
+        public async Task<BLLReceiptRowDTO> AddRow(BLLReceiptRowDTO receiptRowDTO, int currentUserId)
         {
-            if (receiptRowDTO.ReceiptId == null) return null;
-            var receipt = await Uow.Receipts.FindAsync(receiptRowDTO.ReceiptId);
+            if (receiptRowDTO == null) return null;
+            
+            var receiptRow = ReceiptRowMapper.FromBLL(receiptRowDTO);
+            
+            if (receiptRow == null) return null;
+            if (receiptRow.Amount < 0) return null;
+            if (receiptRow.Discount.HasValue && (receiptRow.Discount.Value < 0.0m || receiptRow.Discount.Value > 1.0m)) return null;
+            if (!receiptRow.ReceiptId.HasValue) return null;
+            if (!receiptRow.ProductId.HasValue) return null;
 
-            //Make sure data is valid
-            if (
-                receipt == null ||
-                receipt.ReceiptManagerId != currentUserId ||
-                receipt.IsFinalized ||
-                receiptRowDTO.ProductId == null ||
-                await Uow.Products.FindAsync(receiptRowDTO.ProductId) == null ||
-                receiptRowDTO.Amount == null ||
-                receiptRowDTO.Amount < 0 ||
-                receiptRowDTO.Discount.HasValue &&
-                (receiptRowDTO.Discount.Value < 0.0m || receiptRowDTO.Discount.Value > 1.0m))
-            {
-                return null;
-            }
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
+            var product = await Uow.Products.FindDTOAsync(receiptRow.ProductId.Value);
 
-            //TODO: mapper
-            var dalDto = new DALReceiptRowMinDTO()
-            {
-                Amount = receiptRowDTO.Amount.Value,
-                Discount = receiptRowDTO.Discount,
-                ProductId = receiptRowDTO.ProductId.Value,
-                ReceiptId = receiptRowDTO.ReceiptId.Value
-            };
+            if (receipt == null || receipt.IsFinalized || receipt.ReceiptManagerId != currentUserId) return null;
+            if (product == null) return null;
 
-            var addedRow = await Uow.ReceiptRows.AddAsync(dalDto);
-
+            
+            
+            var addedRowId = await Uow.ReceiptRows.AddAsync(receiptRow);
+            if (addedRowId == null) return null;
+            
             await Uow.SaveChangesAsync();
-            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(addedRow.Id);
-
-            //TODO: mapper
-            var result = new ReceiptRowAllDTO()
-            {
-                Amount = row.Amount,
-                Product = new ProductDTO()
-                {
-                    ProductId = row.Product.Id,
-                    ProductName = row.Product.ProductName.Translate(),
-                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, receipt.CreatedTime)
-                },
-                CurrentCost = row.RowSumCost(),
-                Changes = new List<ChangeDTO>(),
-                Participants = new List<RowParticipantDTO>(),
-                ReceiptId = row.ReceiptId,
-                ReceiptRowId = row.Id,
-                Discount = row.RowDiscount
-            };
-
-            return result;
+            var newId = Uow.ReceiptRows.GetEntityIdAfterSaveChanges(addedRowId.Value);
+            if (newId == null) return null;
+            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(newId.Value);
+            return ReceiptRowMapper.FromDAL(row);
         }
 
-        public async Task<ReceiptRowAllDTO> UpdateRowAmount(ReceiptRowAmountChangeDTO dto, int userId)
+        public async Task<BLLReceiptRowDTO> UpdateRowAmount(BLLReceiptRowDTO dto, int userId)
         {
-            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(dto.ReceiptRowId);
-            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized) return null;
-            row.Amount = dto.NewAmount;
+            if (dto?.ReceiptRowId == null || dto.Amount == null) return null;
+            var rowId = await Uow.ReceiptRows.UpdateRowAmount(dto.ReceiptRowId.Value, dto.Amount.Value, userId);
+            if (rowId == null) return null;
             await Uow.SaveChangesAsync();
 
-            //TODO: mapper
-            var result = new ReceiptRowAllDTO()
-            {
-                Amount = row.Amount,
-                Product = new ProductDTO()
-                {
-                    ProductId = row.Product.Id,
-                    ProductName = row.Product.ProductName.Translate(),
-                    ProductPrice = PriceFinder.ForProduct(row.Product, row.Product.Prices, row.Receipt.CreatedTime)
-                },
-                CurrentCost = row.RowSumCost(),
-                Changes = row.ReceiptRowChanges.Select(rowChange =>
-                    {
-                        return new ChangeDTO()
-                        {
-                            Name = rowChange.Change.ChangeName.Translate(),
-                            Price = PriceFinder.ForChange(rowChange.Change, rowChange.Change.Prices,
-                                        row.Receipt.CreatedTime) ?? -1.0m,
-                            ChangeId = rowChange.ChangeId,
-                            OrganizationId = rowChange.Change.OrganizationId,
-                            ReceiptRowId = rowChange.ReceiptRowId
-                        };
-                    })
-                    .Where(changeDTO => changeDTO.Price != -1.0m)
-                    .ToList(),
-                Participants = row.RowParticipantLoanRows.Select(loanRow =>
-                {
-                    return new RowParticipantDTO()
-                    {
-                        Name = loanRow.Loan.LoanTaker.UserNickname,
-                        Involvement = loanRow.Involvement,
-                        ReceiptRowId = row.Id,
-                        LoanId = loanRow.LoanId,
-                        AppUserId = loanRow.Loan.LoanTakerId,
-                        LoanRowId = loanRow.Id
-                    };
-                }).ToList(),
-                ReceiptId = row.ReceiptId,
-                ReceiptRowId = row.Id,
-                Discount = row.RowDiscount
-            };
-            return result;
+            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(rowId.Value);
+            return ReceiptRowMapper.FromDAL(row);
         }
 
         public async Task<bool> RemoveRow(int rowId, int userId)
         {
-            var row = await Uow.ReceiptRows.FindAsync(rowId);
-            if (row == null || row.Receipt.ReceiptManagerId != userId || row.Receipt.IsFinalized) return false;
-            Uow.ReceiptRows.Remove(row);
+            var deleted = await Uow.ReceiptRows.RemoveRowAsync(rowId, userId);
+            if (deleted == false) return false;
             await Uow.SaveChangesAsync();
             return true;
         }

@@ -13,10 +13,18 @@ namespace DAL.Base.EF.Repositories
         protected readonly DbContext RepoDbContext;
         protected readonly DbSet<TEntity> RepoDbSet;
         
+        protected readonly IDictionary<int, TEntity> EntityCreationCache = new Dictionary<int, TEntity>();
+        
         public BaseRepositoryAsync(IDataContext dataContext)
         {
             RepoDbContext =  (dataContext as DbContext) ?? throw new ArgumentNullException(nameof(dataContext));
             RepoDbSet =  RepoDbContext.Set<TEntity>();
+        }
+
+        public int? GetEntityIdAfterSaveChanges(int oldId)
+        {
+            if (EntityCreationCache.ContainsKey(oldId)) return EntityCreationCache[oldId].Id;
+            return null;
         }
 
         public virtual async Task<IEnumerable<TEntity>> AllAsync()

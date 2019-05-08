@@ -10,6 +10,7 @@ namespace DAL.App.DTO
         public int? Amount { get; set; }
         public decimal? Discount { get; set; }
 
+        public int? ProductId { get; set; }
         public DALProductDTO Product { get; set; }
         public List<DALChangeDTO> Changes { get; set; }
 

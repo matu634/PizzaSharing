@@ -10,6 +10,7 @@ namespace BLL.App.DTO
         public int? Amount { get; set; }
         public decimal? Discount { get; set; }
 
+        public int? ProductId { get; set; }
         public BLLProductDTO Product { get; set; }
         public List<BLLChangeDTO> Changes { get; set; }
 

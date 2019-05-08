@@ -33,9 +33,13 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ReceiptRowAllDTO>> AddRow(ReceiptRowMinDTO receiptRowDTO)
         {
-            var result = await _bll.ReceiptsService.AddRow(receiptRowDTO, User.GetUserId());
-            if (result == null) BadRequest();
-            return result;
+            if (receiptRowDTO == null) return BadRequest("DTO missing");
+            var bllDto = ReceiptRowMapper.FromAPI2(receiptRowDTO);
+            if (bllDto == null) return BadRequest("Data missing from dto");
+            
+            var receiptRowDto = await _bll.ReceiptsService.AddRow(bllDto, User.GetUserId());
+            if (receiptRowDto == null) return BadRequest("Something went wrong while adding");
+            return ReceiptRowMapper.FromBLL(receiptRowDto);
         }
 
         [HttpPost]
@@ -63,9 +67,10 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<ReceiptRowAllDTO>> UpdateRowAmount(ReceiptRowAmountChangeDTO dto)
         {
-            var result = await _bll.ReceiptsService.UpdateRowAmount(dto, User.GetUserId());
-            if (result == null) return BadRequest();
-            return result;
+            if (dto == null) return BadRequest("DTO missing");
+            var receiptRow = await _bll.ReceiptsService.UpdateRowAmount(ReceiptRowMapper.FromAPI(dto), User.GetUserId());
+            if (receiptRow == null) return BadRequest();
+            return ReceiptRowMapper.FromBLL(receiptRow);
         }
     }
 }

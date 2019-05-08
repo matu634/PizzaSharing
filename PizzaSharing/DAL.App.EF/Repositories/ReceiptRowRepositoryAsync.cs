@@ -12,6 +12,7 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PublicApi.DTO;
+using ReceiptMapper = PublicApi.DTO.Mappers.ReceiptMapper;
 
 namespace DAL.App.EF.Repositories
 {
@@ -78,22 +79,33 @@ namespace DAL.App.EF.Repositories
                 .ToList();
         }
 
-        public async Task<ReceiptRow> AddAsync(DALReceiptRowMinDTO rowMin)
+        /// <summary>
+        /// Adds row
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="userId"></param>
+        /// <returns>receiptRowId</returns>
+        public async Task<int?> AddAsync(DALReceiptRowDTO row)
         {
-            var receiptRow = new ReceiptRow()
-            {
-                Amount = rowMin.Amount,
-                ProductId = rowMin.ProductId,
-                RowDiscount = rowMin.Discount,
-                ReceiptId = rowMin.ReceiptId
-            };
+            
+            var receiptRow = ReceiptRowMapper.FromDAL(row);
+            if (receiptRow == null) return null;
+            
+            var receiptEntity = (await RepoDbSet.AddAsync(receiptRow)).Entity;
+            
+            EntityCreationCache.Add(receiptEntity.Id, receiptEntity);
 
-            return (await RepoDbSet.AddAsync(receiptRow)).Entity;
+            return receiptEntity.Id;
         }
         
-        public async Task<ReceiptRow> FindRowAndRelatedDataAsync(int id)
+        /// <summary>
+        /// Returns Amount, Product(...), Changes(...), Participants(...), Discount, ReceiptId, RowId, Cost, 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<DALReceiptRowDTO> FindRowAndRelatedDataAsync(int id)
         {
-            return await RepoDbSet
+            var receiptRow = await RepoDbSet
                 .Include(row => row.Receipt)
                 .Include(row => row.Product)
                 .ThenInclude(product => product.ProductName)
@@ -114,6 +126,48 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(row => row.Loan)
                 .ThenInclude(loan => loan.LoanTaker)
                 .FirstOrDefaultAsync(row => row.Id == id);
+            
+            if (receiptRow == null) return null;
+            
+            return ReceiptRowMapper.FromDomain(receiptRow, DateTime.Now);
+        }
+        /// <summary>
+        /// Updates Row amount, if 1)Row is found, 2)UserId matches ManagerId, 3)Receipt is not finalized
+        /// </summary>
+        /// <param name="receiptRowId"></param>
+        /// <param name="newAmount"></param>
+        /// <param name="userId"></param>
+        /// <returns>ReceiptRowId</returns>
+        public async Task<int?> UpdateRowAmount(int receiptRowId, int newAmount, int userId)
+        {
+            var receiptRow = await RepoDbSet
+                .Include(row => row.Receipt)
+                .FirstOrDefaultAsync(row => row.Id == receiptRowId);
+
+            if (receiptRow == null) return null;
+            if (receiptRow.Receipt.ReceiptManagerId != userId || receiptRow.Receipt.IsFinalized) return null;
+
+            receiptRow.Amount = newAmount;
+            return receiptRow.Id;
+        }
+
+        /// <summary>
+        /// Removes row if 1)Row is found, 2)UserId matches ManagerId, 3)Receipt is not finalized
+        /// </summary>
+        /// <param name="rowId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<bool> RemoveRowAsync(int rowId, int userId)
+        {
+            var receiptRow = await RepoDbSet
+                .Include(row => row.Receipt)
+                .FirstOrDefaultAsync(row => row.Id == rowId);
+
+            if (receiptRow == null) return false;
+            if (receiptRow.Receipt.ReceiptManagerId != userId || receiptRow.Receipt.IsFinalized) return false;
+            RepoDbSet.Remove(receiptRow);
+            return true;
         }
     }
 }

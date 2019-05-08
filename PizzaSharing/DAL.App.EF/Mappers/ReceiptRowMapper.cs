@@ -58,5 +58,22 @@ namespace DAL.App.EF.Mappers
                 Participants = participants
             };
         }
+        /// <summary>
+        /// Maps Amount, ProductId, RowDiscount, ReceiptId
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        public static ReceiptRow FromDAL(DALReceiptRowDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, DALReceiptRowDTO is null");
+            if (dto.Amount == null || dto.ProductId == null || dto.ReceiptId == null) return null;
+            return new ReceiptRow()
+            {
+                Amount = dto.Amount.Value,
+                ProductId = dto.ProductId.Value,
+                RowDiscount = dto.Discount,
+                ReceiptId = dto.ReceiptId.Value
+            };
+        }
     }
 }

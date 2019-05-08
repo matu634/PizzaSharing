@@ -44,6 +44,25 @@ namespace BLL.App.Mappers
             return result;
 
         }
+        
+        /// <summary>
+        /// Maps ReceiptId, ProductId, Amount, Discount
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static DALReceiptRowDTO FromBLL(BLLReceiptRowDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, BLLReceiptRowDTO is null");
+            if (dto.Amount == null || dto.ProductId == null || dto.ReceiptId == null) return null;
+            return new DALReceiptRowDTO()
+            {
+                Amount = dto.Amount.Value,
+                Discount = dto.Discount,
+                ProductId = dto.ProductId.Value,
+                ReceiptId = dto.ReceiptId.Value
+            };
+        }
     }
 
     

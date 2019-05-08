@@ -12,8 +12,12 @@ namespace Contracts.DAL.App.Repositories
     {
         Task<List<DALReceiptRowDTO>> AllReceiptsRows(int receiptId, DateTime time);
         
-        Task<ReceiptRow> AddAsync(DALReceiptRowMinDTO rowMin);
+        Task<int?> AddAsync(DALReceiptRowDTO row);
 
-        Task<ReceiptRow> FindRowAndRelatedDataAsync(int id);
+        Task<DALReceiptRowDTO> FindRowAndRelatedDataAsync(int id);
+        
+        Task<int?> UpdateRowAmount(int receiptRowId, int newAmount, int userId);
+        
+        Task<bool> RemoveRowAsync(int rowId, int userId);
     }
 }

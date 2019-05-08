@@ -7,7 +7,10 @@ namespace PublicApi.DTO.Mappers
     public static class ReceiptRowMapper
     {
         /// <summary>
-        /// 
+        ///  Maps Id, ReceiptId, Amount, Discount, Cost,
+        ///     Product(5),
+        ///     Changes(4),
+        ///     Participants(5)
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -39,6 +42,41 @@ namespace PublicApi.DTO.Mappers
 
             return result;
 
+        }
+
+        /// <summary>
+        /// Maps ReceiptRowId, Amount
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static BLLReceiptRowDTO FromAPI(ReceiptRowAmountChangeDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, ReceiptRowAmountChangeDTO is null");
+            return new BLLReceiptRowDTO()
+            {
+                Amount = dto.NewAmount,
+                ReceiptRowId = dto.ReceiptRowId
+            };
+        }
+
+        /// <summary>
+        /// Maps ProductId, ReceiptId, Amount, Discount
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static BLLReceiptRowDTO FromAPI2(ReceiptRowMinDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, ReceiptRowMinDTO is null");
+            if (dto.Amount == null || dto.ProductId == null || dto.ReceiptId == null) return null;
+            return new BLLReceiptRowDTO()
+            {
+                Amount = dto.Amount.Value,
+                Discount = dto.Discount,
+                ProductId = dto.ProductId.Value,
+                ReceiptId = dto.ReceiptId.Value
+            };
         }
     }
 }

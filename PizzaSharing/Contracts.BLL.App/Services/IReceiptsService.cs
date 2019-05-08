@@ -13,9 +13,9 @@ namespace Contracts.BLL.App.Services
 
         Task<bool> RemoveReceipt(int receiptId, int currentUserId);
 
-        Task<ReceiptRowAllDTO> AddRow(ReceiptRowMinDTO receiptRowDTO, int currentUserId);
+        Task<BLLReceiptRowDTO> AddRow(BLLReceiptRowDTO receiptRowDTO, int currentUserId);
 
-        Task<ReceiptRowAllDTO> UpdateRowAmount(ReceiptRowAmountChangeDTO dto, int userId);
+        Task<BLLReceiptRowDTO> UpdateRowAmount(BLLReceiptRowDTO dto, int userId);
 
         Task<bool> RemoveRow(int rowId, int userId);
 
