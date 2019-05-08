@@ -35,17 +35,16 @@ namespace BLL.App.Services
 
         public async Task<int> NewReceipt(int userId)
         {
-            //TODO: mapper
-            var receiptDTO = new ReceiptDTO()
-            {
-                ReceiptManagerId = userId,
-                CreatedTime = DateTime.Now,
-                IsFinalized = false
-            };
-            var receipt = await Uow.Receipts.AddAsync(receiptDTO);
+
+            var receiptDTO = ReceiptMapper.FromBLL(userId);
+            
+            var receiptId = await Uow.Receipts.AddAsync(receiptDTO);
+            if (receiptId == null) return -1;
             await Uow.SaveChangesAsync();
 
-            return receipt.Id;
+            var result = Uow.Receipts.GetEntityIdAfterSaveChanges(receiptId.Value); 
+            if (result == null) return -1;
+            return result.Value;
         }
         /// <summary>
         ///  Permanently removes receipt, if it is not finalized and currentUser is receiptManager
@@ -57,7 +56,7 @@ namespace BLL.App.Services
         {
             var receipt = await Uow.Receipts.FindReceiptAsync(receiptId);
             if (receipt == null || receipt.IsFinalized || receipt.ReceiptManagerId != currentUserId) return false;
-            Uow.Receipts.Remove(receipt); //Hard delete
+            Uow.Receipts.Remove(receiptId); //Hard delete
             await Uow.SaveChangesAsync();
             return true;
         }

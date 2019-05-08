@@ -28,8 +28,8 @@ namespace BLL.App.Mappers
                     .ToList()
             };
         }
-        
-        
+
+
         /// <summary>
         /// Maps: Id, Price, Name, Description, OrganizationId
         /// </summary>
@@ -48,7 +48,7 @@ namespace BLL.App.Mappers
                 OrganizationId = dto.OrganizationId,
             };
         }
-        
+
         /// <summary>
         /// Maps: Id, Name
         /// </summary>
@@ -62,6 +62,39 @@ namespace BLL.App.Mappers
             {
                 Id = dto.Id,
                 ProductName = dto.Name
+            };
+        }
+        /// <summary>
+        /// Maps Name, OrgId, Description
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static DALProductDTO FromBLL(BLLProductDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, BLLProductDTO is null");
+            return new DALProductDTO()
+            {
+                Name = dto.ProductName,
+                OrganizationId = dto.OrganizationId,
+                Description = dto.Description
+            };
+        }
+
+        /// <summary>
+        /// Maps ProductId, Name, Description
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static DALProductDTO FromBLL2(BLLProductDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, BLLProductDTO is null");
+            return new DALProductDTO()
+            {
+                Name = dto.ProductName,
+                Description = dto.Description,
+                Id = dto.Id
             };
         }
     }

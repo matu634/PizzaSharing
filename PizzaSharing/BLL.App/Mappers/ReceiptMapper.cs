@@ -17,7 +17,7 @@ namespace BLL.App.Mappers
         public static BLLReceiptDTO FromDAL(DALReceiptDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, DALReceiptDTO is null");
-            
+
             return new BLLReceiptDTO()
             {
                 CreatedTime = dto.CreatedTime,
@@ -43,7 +43,7 @@ namespace BLL.App.Mappers
             {
                 cost = rows.Select(dto => dto.CurrentCost ?? decimal.Zero).Sum();
             }
-            
+
             var result = new BLLReceiptDTO()
             {
                 ReceiptId = receipt.ReceiptId,
@@ -55,6 +55,21 @@ namespace BLL.App.Mappers
                 SumCost = cost
             };
             return result;
+        }
+
+        /// <summary>
+        /// Creates new receipt with ManagerId, CreatedTime == now, IsFinalized == false
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static DALReceiptDTO FromBLL(int userId)
+        {
+            return new DALReceiptDTO()
+            {
+                ReceiptManagerId = userId,
+                CreatedTime = DateTime.Now,
+                IsFinalized = false
+            };
         }
     }
 }

@@ -7,14 +7,13 @@ namespace BLL.App.Mappers
 {
     public static class CategoryMapper
     {
-        
         /// <summary>
         /// Maps Id, Name, OrganizationId, Products(name, id), Changes(name, id)
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static BLLCategoryDTO FromDAL (DALCategoryDTO dto)
+        public static BLLCategoryDTO FromDAL(DALCategoryDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, DALCategoryDTO is null");
             return new BLLCategoryDTO()
@@ -30,14 +29,14 @@ namespace BLL.App.Mappers
                     .ToList()
             };
         }
-        
+
         /// <summary>
         /// Maps Id, Name, OrganizationId, Products(name, id, orgId, price, description)
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static BLLCategoryDTO FromDAL2 (DALCategoryDTO dto)
+        public static BLLCategoryDTO FromDAL2(DALCategoryDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, DALCategoryDTO is null");
             return new BLLCategoryDTO()
@@ -50,13 +49,14 @@ namespace BLL.App.Mappers
                     .ToList()
             };
         }
+
         /// <summary>
         /// Maps id, name
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static BLLCategoryDTO FromDAL3 (DALCategoryDTO dto)
+        public static BLLCategoryDTO FromDAL3(DALCategoryDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, DALCategoryDTO is null");
             return new BLLCategoryDTO()
@@ -65,14 +65,36 @@ namespace BLL.App.Mappers
                 CategoryName = dto.Name
             };
         }
-        
-        public static BLLCategoryMinDTO FromDALToMin (DALCategoryMinDTO dto)
+
+        /// <summary>
+        /// Maps Min
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static BLLCategoryMinDTO FromDALToMin(DALCategoryMinDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, DALCategoryDTO is null");
             return new BLLCategoryMinDTO()
             {
                 Id = dto.Id,
                 Name = dto.Name
+            };
+        }
+
+        /// <summary>
+        /// Maps Name, OrganizationId
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static DALCategoryDTO FromBLL(BLLCategoryDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, BLLCategoryDTO is null");
+            return new DALCategoryDTO()
+            {
+                Name = dto.CategoryName,
+                OrganizationId = dto.OrganizationId
             };
         }
     }

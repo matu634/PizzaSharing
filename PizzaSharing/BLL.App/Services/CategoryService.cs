@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using BLL.App.DTO;
+using BLL.App.Mappers;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -18,11 +19,8 @@ namespace BLL.App.Services
             var organization = await Uow.Organizations.Exists(categoryDTO.OrganizationId);
             if (!organization) return false;
 
-            await Uow.Categories.AddAsync(new DALCategoryDTO()
-            {
-                Name = categoryDTO.CategoryName, 
-                OrganizationId = categoryDTO.OrganizationId
-            });
+            
+            await Uow.Categories.AddAsync(CategoryMapper.FromBLL(categoryDTO));
             await Uow.SaveChangesAsync();
             return true;
         }

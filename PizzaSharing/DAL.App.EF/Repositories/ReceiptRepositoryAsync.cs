@@ -38,15 +38,13 @@ namespace DAL.App.EF.Repositories
                 .ToList();
         }
 
-        public async Task<Receipt> AddAsync(ReceiptDTO receiptDTO)
+        public async Task<int?> AddAsync(DALReceiptDTO receiptDTO)
         {
-            var receipt = new Receipt()
-            {
-                ReceiptManagerId = receiptDTO.ReceiptManagerId,
-                CreatedTime = receiptDTO.CreatedTime,
-                IsFinalized = receiptDTO.IsFinalized
-            };
-            return (await RepoDbSet.AddAsync(receipt)).Entity;
+            var receipt = ReceiptMapper.FromDAL(receiptDTO);
+            var addedEntity = (await RepoDbSet.AddAsync(receipt)).Entity;
+            if (addedEntity == null) return null;
+            EntityCreationCache.Add(addedEntity.Id, addedEntity);
+            return addedEntity.Id;
         }
 
         /// <summary>

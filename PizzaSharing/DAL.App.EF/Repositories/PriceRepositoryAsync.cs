@@ -80,8 +80,6 @@ namespace DAL.App.EF.Repositories
                 oldPrice.ValidTo = time;
             }
             
-            
-            
             var newPrice = new Price()
             {
                 Value = priceDTO.Value,

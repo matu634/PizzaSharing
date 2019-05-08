@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
+using BLL.App.Mappers;
 using BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -24,12 +25,12 @@ namespace BLL.App.Services
 
             foreach (var category in changeDto.Categories)
             {
+                //Make sure select categories belong to selected Organization
                 if (!organizationCategoryIds.Contains(category.Id)) return false;
             }
 
             //1.Add change
-            var change = await Uow.Changes.AddAsync(new DALChangeDTO()
-                {Name = changeDto.Name, OrganizationId = changeDto.OrganizationId});
+            var change = await Uow.Changes.AddAsync(ChangeMapper.FromBLL(changeDto));
 
             //2. Add change categories
             foreach (var category in changeDto.Categories)
@@ -52,16 +53,9 @@ namespace BLL.App.Services
 
         public async Task<BLLChangeDTO> GetChangeAsync(int changeId)
         {
-            var result = await Uow.Changes.FindDTOAsync(changeId);
-            if (result == null) return null;
-            return new BLLChangeDTO()
-            {
-                Id = result.Id,
-                Name = result.Name,
-                CurrentPrice = result.CurrentPrice,
-                OrganizationId = result.OrganizationId,
-                Categories = result.Categories.Select(dto => new BLLCategoryMinDTO(dto.Id, dto.Name)).ToList()
-            };
+            var changeDTO = await Uow.Changes.FindDTOAsync(changeId);
+            if (changeDTO == null) return null;
+            return ChangeMapper.FromDAL(changeDTO);
         }
 
         public async Task<bool> DeleteChangeAsync(int changeId)
@@ -85,11 +79,7 @@ namespace BLL.App.Services
             }
 
             //1.Edit product entity
-            var change = await Uow.Changes.EditAsync(new DALChangeDTO()
-            {
-                Name = changeDto.Name,
-                Id = changeDto.Id
-            });
+            var change = await Uow.Changes.EditAsync(ChangeMapper.FromBLL2(changeDto));
             if (change == null) return false;
             
             //2. Edit product categories

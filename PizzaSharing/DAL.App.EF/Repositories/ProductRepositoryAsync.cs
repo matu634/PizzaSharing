@@ -31,7 +31,8 @@ namespace DAL.App.EF.Repositories
                 .Include(product => product.Prices)
                 .Include(product => product.ProductInCategories)
                 .ThenInclude(obj => obj.Category)
-                //TODO: include category names
+                .ThenInclude(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
                 .Where(product => product.IsDeleted == false && product.OrganizationId == organizationId)
                 .ToListAsync();
 
@@ -66,6 +67,8 @@ namespace DAL.App.EF.Repositories
                 .ThenInclude(desc => desc.Translations)
                 .Include(p => p.ProductInCategories)
                 .ThenInclude(obj => obj.Category)
+                .ThenInclude(category => category.CategoryName)
+                .ThenInclude(name => name.Translations)
                 .Include(p => p.Prices)
                 .Where(p => p.IsDeleted == false && p.Id == productId)
                 .SingleOrDefaultAsync();

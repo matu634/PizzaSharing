@@ -46,6 +46,7 @@ namespace DAL.App.EF.Mappers
         /// <returns></returns>
         public static DALReceiptDTO FromDomain2(Receipt receipt)
         {
+            if (receipt == null) throw new NullReferenceException("Can't map, Receipt domain entity is null");
             return new DALReceiptDTO()
             {
                 ReceiptId = receipt.Id,
@@ -55,6 +56,23 @@ namespace DAL.App.EF.Mappers
                 ReceiptParticipants = receipt.ReceiptParticipants
                     .Select(ReceiptParticipantMapper.FromDomain)
                     .ToList()
+            };
+        }
+
+        /// <summary>
+        /// Maps ManagerId, IsFinalized, CreatedTime
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static Receipt FromDAL(DALReceiptDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, DALReceiptDTO is null");
+            return new Receipt()
+            {
+                CreatedTime = dto.CreatedTime,
+                IsFinalized = dto.IsFinalized,
+                ReceiptManagerId = dto.ReceiptManagerId
             };
         }
     }

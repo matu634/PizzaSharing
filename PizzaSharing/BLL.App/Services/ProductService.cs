@@ -9,6 +9,7 @@ using Contracts.DAL.App;
 using DAL.App.DTO;
 using DAL.App.EF.Mappers;
 using ChangeMapper = BLL.App.Mappers.ChangeMapper;
+using ProductMapper = BLL.App.Mappers.ProductMapper;
 
 namespace BLL.App.Services
 {
@@ -31,12 +32,7 @@ namespace BLL.App.Services
             }
 
             //1.Add product
-            var product = await Uow.Products.AddAsync(new DALProductDTO()
-                {
-                    Name = productDTO.ProductName, 
-                    OrganizationId = productDTO.OrganizationId,
-                    Description = productDTO.Description
-                });
+            var product = await Uow.Products.AddAsync(ProductMapper.FromBLL(productDTO));
 
             //2. Add product categories
             foreach (var category in productDTO.Categories)
@@ -59,19 +55,10 @@ namespace BLL.App.Services
 
         public async Task<BLLProductDTO> GetProductAsync(int productId)
         {
-            var result = await Uow.Products.FindDTOAsync(productId);
-            if (result == null) return null;
-            //TODO: mapper
-            
-            return new BLLProductDTO()
-            {
-                Id = result.Id,
-                Description = result.Description,
-                ProductName = result.Name,
-                CurrentPrice = result.CurrentPrice,
-                OrganizationId = result.OrganizationId,
-                Categories = result.Categories.Select(dto => new BLLCategoryMinDTO(dto.Id, dto.Name)).ToList()
-            };
+            var productDto = await Uow.Products.FindDTOAsync(productId);
+            if (productDto == null) return null;
+
+            return ProductMapper.FromDAL(productDto); 
         }
 
         public async Task<bool> DeleteProductAsync(int productId)
@@ -95,12 +82,7 @@ namespace BLL.App.Services
             }
 
             //1.Edit product entity
-            var product = await Uow.Products.EditAsync(new DALProductDTO()
-                {
-                    Name = productDTO.ProductName,
-                    Description = productDTO.Description,
-                    Id = productDTO.Id
-                });
+            var product = await Uow.Products.EditAsync(ProductMapper.FromBLL2(productDTO));
             if (product == null) return false;
             
             //2. Edit product categories
