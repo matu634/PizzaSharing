@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
-using Contracts.DAL.Base;
-using Contracts.DAL.Base.Repositories;
+using ee.itcollege.masirg.Contracts.DAL.Base;
+using ee.itcollege.masirg.Contracts.DAL.Base.Repositories;
 using DAL.App.DTO;
 using DAL.App.EF.Helpers;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
+using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 

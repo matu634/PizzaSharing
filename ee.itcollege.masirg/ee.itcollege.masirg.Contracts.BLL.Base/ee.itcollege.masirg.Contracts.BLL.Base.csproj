@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\common.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ee.itcollege.masirg.Contracts.Base\ee.itcollege.masirg.Contracts.Base.csproj" />
+      <ProjectReference Include="..\ee.itcollege.masirg.Contracts.DAL.Base\ee.itcollege.masirg.Contracts.DAL.Base.csproj" />
+    </ItemGroup>
+
+</Project>

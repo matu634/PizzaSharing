@@ -5,13 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="ee.itcollege.masirg.Contracts.DAL.Base" Version="1.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
       <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Contracts.DAL.Base\Contracts.DAL.Base.csproj" />
     </ItemGroup>
 
 </Project>

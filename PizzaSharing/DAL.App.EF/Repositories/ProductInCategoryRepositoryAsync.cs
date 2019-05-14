@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
-using Contracts.DAL.Base;
-using DAL.Base.EF.Repositories;
+using ee.itcollege.masirg.Contracts.DAL.Base;
+using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 

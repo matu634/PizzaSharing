@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Contracts.DAL.Base;
+using ee.itcollege.masirg.Contracts.DAL.Base;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity

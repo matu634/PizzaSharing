@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using BLL.Base.Services;
+using ee.itcollege.masirg.BLL.Base.Services;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 

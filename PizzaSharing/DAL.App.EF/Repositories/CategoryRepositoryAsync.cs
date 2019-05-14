@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.DTO;
 using Contracts.DAL.App.Repositories;
-using Contracts.DAL.Base;
+using ee.itcollege.masirg.Contracts.DAL.Base;
 using DAL.App.DTO;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
+using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 

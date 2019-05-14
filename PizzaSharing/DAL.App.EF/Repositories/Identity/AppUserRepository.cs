@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories.Identity;
-using Contracts.DAL.Base;
-using DAL.Base.EF.Repositories;
+using ee.itcollege.masirg.Contracts.DAL.Base;
+using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 

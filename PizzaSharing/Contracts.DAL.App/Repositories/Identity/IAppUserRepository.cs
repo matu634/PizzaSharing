@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Contracts.DAL.Base.Repositories;
+using ee.itcollege.masirg.Contracts.DAL.Base.Repositories;
 using Domain.Identity;
 
 namespace Contracts.DAL.App.Repositories.Identity

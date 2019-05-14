@@ -1,4 +1,4 @@
-using Contracts.BLL.Base.Services;
+using ee.itcollege.masirg.Contracts.BLL.Base.Services;
 
 namespace Contracts.BLL.App.Services
 {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contracts.DAL.Base.Repositories;
+using ee.itcollege.masirg.Contracts.DAL.Base.Repositories;
 using DAL.App.DTO;
 using Domain;
 

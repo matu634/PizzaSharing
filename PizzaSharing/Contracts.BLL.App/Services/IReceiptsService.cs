@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using BLL.App.DTO;
-using Contracts.BLL.Base.Services;
+using ee.itcollege.masirg.Contracts.BLL.Base.Services;
 using PublicApi.DTO;
 
 namespace Contracts.BLL.App.Services

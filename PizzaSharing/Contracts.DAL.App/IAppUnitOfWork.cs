@@ -1,6 +1,6 @@
 using Contracts.DAL.App.Repositories;
 using Contracts.DAL.App.Repositories.Identity;
-using Contracts.DAL.Base;
+using ee.itcollege.masirg.Contracts.DAL.Base;
 
 namespace Contracts.DAL.App
 {

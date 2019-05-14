@@ -1,4 +1,4 @@
-﻿using Contracts.DAL.Base;
+﻿using ee.itcollege.masirg.Contracts.DAL.Base;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

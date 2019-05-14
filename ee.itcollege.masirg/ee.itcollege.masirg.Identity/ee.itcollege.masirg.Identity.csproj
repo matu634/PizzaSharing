@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\common.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>Identity</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />
+    </ItemGroup>
+
+</Project>

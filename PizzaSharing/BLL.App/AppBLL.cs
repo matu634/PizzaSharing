@@ -1,13 +1,8 @@
-﻿using System;
-using BLL.App.Services;
-using BLL.Base;
-using BLL.Base.Services;
-using Contracts.BLL.App;
+﻿using Contracts.BLL.App;
 using Contracts.BLL.App.Services;
-using Contracts.BLL.Base.Helpers;
 using Contracts.DAL.App;
-using DAL.App.EF;
-using Domain;
+using ee.itcollege.masirg.BLL.Base;
+using ee.itcollege.masirg.Contracts.BLL.Base.Helpers;
 
 namespace BLL.App
 {
