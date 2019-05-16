@@ -146,6 +146,25 @@ export class ReceiptService {
         }
       })
       .then(updatedReceiptRow => updatedReceiptRow.json())
-      .catch(reason => log.debug("changeReceiptRowAmount error:", reason));
+      .catch(reason => log.debug("addRowChange error:", reason));
+  }
+  
+  removeChangeFromRow(changeId:number, rowId: number) : Promise<IReceiptRowDTO> {
+    let url = this.appConfig.apiUrl + "Receipts/RemoveComponentFromRow" ;
+
+    let body = JSON.stringify({RowId: rowId, ComponentId: changeId});
+    log.debug("addReceiptRowComponent request body: ", body);
+
+    return this.httpClient.post(
+      url,
+      body,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(updatedReceiptRow => updatedReceiptRow.json())
+      .catch(reason => log.debug("removeRowChange error:", reason));
   }
 }

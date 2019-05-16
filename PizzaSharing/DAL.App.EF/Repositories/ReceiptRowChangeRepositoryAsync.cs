@@ -45,5 +45,14 @@ namespace DAL.App.EF.Repositories
             };
             await RepoDbSet.AddAsync(receiptRowChange);
         }
+
+        public async Task<bool> RemoveWhereAsync(int changeId, int rowId)
+        {
+            var rowChange = await RepoDbSet
+                .FirstOrDefaultAsync(change => change.ChangeId == changeId && change.ReceiptRowId == rowId);
+            if (rowChange == null) return false;
+            RepoDbSet.Remove(rowChange);
+            return true;
+        }
     }
 }

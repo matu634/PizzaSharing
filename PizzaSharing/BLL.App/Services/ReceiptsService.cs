@@ -197,9 +197,25 @@ namespace BLL.App.Services
              */
         }
 
-        public ReceiptRowAllDTO RemoveRowChange()
+        public async Task<BLLReceiptRowDTO> RemoveRowChangeAsync(int rowId, int changeId, int userId)
         {
-            throw new System.NotImplementedException();
+            var receiptRow = await Uow.ReceiptRows.FindAsync(rowId);
+            if (receiptRow?.ReceiptId == null) return null;
+
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
+            if (receipt.ReceiptManagerId != userId) return null;
+            
+            var change = await Uow.Changes.FindDTOAsync(changeId);
+            if (change == null) return null;
+
+            
+
+            var removedSuccessfully = await Uow.ReceiptRowChanges.RemoveWhereAsync(changeId, rowId);
+            if (!removedSuccessfully) return null;
+            await Uow.SaveChangesAsync();
+
+            receiptRow = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(rowId);
+            return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
         public ReceiptRowAllDTO RemoveRowParticipant()

@@ -107,7 +107,7 @@
               <td>${change.name}</td>
               <td>${change.price} €</td>
               <td>
-                <button class="btn btn-danger">Remove</button>
+                <button click.delegate="removeReceiptRowComponent(change.changeId, row.receiptRowId)" class="btn btn-danger">Remove</button>
               </td>
             </tr>
             </tbody>

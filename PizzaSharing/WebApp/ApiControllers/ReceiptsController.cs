@@ -151,5 +151,20 @@ namespace WebApp.ApiControllers
             if (receiptRow == null) return BadRequest("Component was not added (changeId, rowId or user might not be valid)");
             return ReceiptRowMapper.FromBLL(receiptRow);
         }
+        /// <summary>
+        /// Removes component from receipt row and returns updated receipt row
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<ReceiptRowAllDTO>> RemoveComponentFromRow(RowAndChangeDTO dto)
+        {
+            if (dto.RowId == null) return BadRequest("rowId is missing");
+            if (dto.ComponentId == null) return BadRequest("componentId is missing");
+            
+            var receiptRow = await _bll.ReceiptsService.RemoveRowChangeAsync(dto.RowId.Value, dto.ComponentId.Value, User.GetUserId());
+            if (receiptRow == null) return BadRequest("Component was not removed (changeId, rowId or user might not be valid)");
+            return ReceiptRowMapper.FromBLL(receiptRow);
+        }
     }
 }

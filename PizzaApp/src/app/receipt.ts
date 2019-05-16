@@ -200,4 +200,20 @@ export class Receipt {
         log.debug("Current rows: ", this.receiptDTO.rows)
       })
   }
+  
+  removeReceiptRowComponent(changeId: number, receiptRowId: number) {
+    this.receiptService.removeChangeFromRow(changeId, receiptRowId)
+      .then(updatedRow => {
+        let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === updatedRow.receiptRowId);
+        if (index < 0) {
+          log.debug("Index not found. ");
+          return;
+        }
+
+        // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
+        this.receiptDTO.rows.splice(index, 1, updatedRow);
+        this.updateTotalPrice();
+        log.debug("Current rows: ", this.receiptDTO.rows)
+      })
+  }
 }
