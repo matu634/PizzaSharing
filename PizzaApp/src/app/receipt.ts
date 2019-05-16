@@ -225,11 +225,28 @@ export class Receipt {
         this.dialogService.open({viewModel: AddParticipant, model: [users, 100], lock: false}) //TODO: calculate max value from participants
           .whenClosed(response => {
             if (!response.wasCancelled) {
-              log.debug("Selected user: " + response.output[0].name + " with " + response.output[1] + " involvement")
+              log.debug("Selected user: " + response.output[0].name + " with " + response.output[1] + " involvement");
+              this.addRowParticipant(receiptRowId, response.output[0].id, response.output[1])
             } else {
               console.log('bad');
             }
           });
       });
+  }
+  
+  addRowParticipant(rowId:number, userId: number, involvement: number){
+    this.receiptService.addRowParticipant(userId, involvement / 100, rowId)
+      .then(updatedRow => {
+        let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === updatedRow.receiptRowId);
+        if (index < 0) {
+          log.debug("Index not found. ");
+          return;
+        }
+
+        // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
+        this.receiptDTO.rows.splice(index, 1, updatedRow);
+        this.updateTotalPrice();
+        log.debug("Current rows: ", this.receiptDTO.rows)
+      })
   }
 }

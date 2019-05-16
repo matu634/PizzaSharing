@@ -182,4 +182,23 @@ export class ReceiptService {
       .then(jsonData => jsonData)
       .catch(reason => log.debug("fetchAvailableUsers error:", reason));
   }
+  
+  addRowParticipant(userId: number, involvement: number, rowId: number){
+    let url = this.appConfig.apiUrl + "Receipts/AddParticipantToRow" ;
+
+    let body = JSON.stringify({RowId: rowId, UserId: userId, Involvement: involvement});
+    log.debug("addRowParticipant request body: ", body);
+
+    return this.httpClient.post(
+      url,
+      body,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(updatedReceiptRow => updatedReceiptRow.json())
+      .catch(reason => log.debug("addRowParticipant error:", reason));
+  }
 }

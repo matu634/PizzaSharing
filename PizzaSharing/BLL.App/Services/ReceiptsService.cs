@@ -139,62 +139,46 @@ namespace BLL.App.Services
             return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
-        public ReceiptRowAllDTO AddRowParticipant()
+        public async Task<BLLReceiptRowDTO> AddRowParticipantAsync(BLLRowParticipantDTO newParticipant, int currentUserId)
         {
-            throw new System.NotImplementedException();
-            /*
-              //2. Add row changes (optional)
-            if (receiptRowDTO.Changes != null && receiptRowDTO.Changes.Count > 0)
+            //Involvement is between 0 and 1
+            if (newParticipant.Involvement == null ||
+                newParticipant.Involvement > 1 ||
+                newParticipant.Involvement <= 0) return null;
+            if (newParticipant.AppUserId == null) return null;
+            
+            //Participant user exists
+            if (!await Uow.AppUsers.Exists(newParticipant.AppUserId.Value)) return null;
+
+            var receiptRow = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(newParticipant.ReceiptRowId);
+            if (receiptRow?.ReceiptId == null) return null;
+
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
+            
+            
+            if (receipt?.ReceiptParticipants == null) return null;
+            if (receipt.ReceiptManagerId != currentUserId || receipt.IsFinalized) return null;
+
+            
+            if (receiptRow.Participants != null && receiptRow.Participants.Any())
             {
-                var validChangeCategoryIds =
-                    await _uow.ProductsInCategories.CategoryIdsAsync(productId: receiptRow.ProductId);
-
-                foreach (var changeDTO in receiptRowDTO.Changes)
-                {
-                    if (changeDTO.ChangeId == null) return BadRequest("Change Id not be found");
-                    var change = await _uow.Changes.FindAsync(changeDTO.ChangeId);
-                    if (!validChangeCategoryIds.Contains(change.CategoryId))
-                        return BadRequest($"ChangeId: {change.Id} not allowed for this product.");
-
-                    changeDTO.ReceiptRowId = receiptRow.Id;
-                    await _uow.ReceiptRowChanges.AddAsync(changeDTO);
-                }
+                //Participant can't already be a participant in this row
+                if (receiptRow.Participants.Any(dto => dto.AppUserId == newParticipant.AppUserId)) return null;
+                    
+                var currentInvolvementSum = receiptRow.Participants.Select(dto => dto.Involvement).Sum();
+                //Total involvement can't be greater than 1
+                if (currentInvolvementSum == null || currentInvolvementSum + newParticipant.Involvement > 1) return null;
             }
 
-            //3. Add participants (optional)
-            if (receiptRowDTO.Participants != null && receiptRowDTO.Participants.Count > 0)
-            {
-                //Make sure there is only one entry per appUser
-                var uniqueAppUsersCount = receiptRowDTO.Participants.Select(dto => dto.AppUserId).Distinct().Count();
-                if (uniqueAppUsersCount != receiptRowDTO.Participants.Count)
-                    return BadRequest("Row participant: Only one entry per user is allowed for each row");
-                var involvementSum = decimal.Zero;
+            var receiptParticipant = await Uow.ReceiptParticipants.FindOrAddAsync(receipt.ReceiptId, newParticipant.AppUserId.Value);
+            
+            var loanId = await Uow.Loans.FindOrAddAsync(receiptParticipant, receipt.ReceiptManagerId);
 
-                foreach (var participantDTO in receiptRowDTO.Participants)
-                {
-                    if (participantDTO.Involvement == null ||
-                        participantDTO.Involvement > 1.0m ||
-                        participantDTO.AppUserId == null ||
-                        participantDTO.AppUserId == receipt.ReceiptManagerId)
-                    {
-                        return BadRequest("Invalid involvement or AppUserId");
-                    }
-
-                    involvementSum += participantDTO.Involvement.Value;
-
-                    var participant = await _uow.ReceiptParticipants.FindOrAddAsync(receiptId: receipt.Id,
-                        loanTakerId: participantDTO.AppUserId.Value);
-                    var loan = await _uow.Loans.FindOrAddAsync(participant);
-
-                    participantDTO.LoanId = loan.Id;
-                    participantDTO.ReceiptRowId = receiptRow.Id;
-
-                    await _uow.LoanRows.AddAsync(participantDTO);
-                }
-
-                if (involvementSum > decimal.One) return BadRequest("Involvement sum over 1.00");
-            }
-             */
+            await Uow.LoanRows.AddAsync(loanId, receiptRow.ReceiptRowId.Value, newParticipant.Involvement.Value);
+            await Uow.SaveChangesAsync();
+            
+            receiptRow = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(newParticipant.ReceiptRowId);
+            return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
         public async Task<BLLReceiptRowDTO> RemoveRowChangeAsync(int rowId, int changeId, int userId)

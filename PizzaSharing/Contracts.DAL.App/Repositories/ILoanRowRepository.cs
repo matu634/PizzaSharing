@@ -8,7 +8,8 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface ILoanRowRepository : IBaseRepositoryAsync<LoanRow>
     {
-        Task AddAsync(RowParticipantDTO participantDTO);
         Task<List<LoanRow>> FindByReceiptRow(int receiptRowId);
+        
+        Task AddAsync(int loanId, int receiptRowId, decimal involvement);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using DAL.App.DTO;
 using Domain;
@@ -53,9 +54,9 @@ namespace DAL.App.EF.Mappers
                 CreatedTime = receipt.CreatedTime,
                 IsFinalized = receipt.IsFinalized,
                 ReceiptManagerId = receipt.ReceiptManagerId,
-                ReceiptParticipants = receipt.ReceiptParticipants
+                ReceiptParticipants = receipt.ReceiptParticipants?
                     .Select(ReceiptParticipantMapper.FromDomain)
-                    .ToList()
+                    .ToList() ?? new List<DALReceiptParticipantDTO>()
             };
         }
 

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
+using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using ee.itcollege.masirg.Contracts.DAL.Base;
 using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain;
@@ -36,21 +38,20 @@ namespace DAL.App.EF.Repositories
             return participant;
         }
 
-        public async Task<ReceiptParticipant> FindOrAddAsync(int receiptId, int loanTakerId)
+        public async Task<DALReceiptParticipantDTO> FindOrAddAsync(int receiptId, int loanTakerId)
         {
             var participant = await RepoDbSet
                 .FirstOrDefaultAsync(obj => obj.AppUserId == loanTakerId && obj.ReceiptId == receiptId);
 
-            if (participant != null) return participant;
+            if (participant != null) return ReceiptParticipantMapper.FromDomain(participant);
 
             participant = (await RepoDbSet.AddAsync(new ReceiptParticipant
             {
                 AppUserId = loanTakerId,
                 ReceiptId = receiptId
             })).Entity;
-            await RepoDbContext.Entry(participant).Reference(p => p.Receipt).LoadAsync();
-            await RepoDbContext.Entry(participant).Reference(p => p.AppUser).LoadAsync();
-            return participant;
+            
+            return ReceiptParticipantMapper.FromDomain(participant);;
         }
     }
 }

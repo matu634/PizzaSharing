@@ -37,7 +37,7 @@ namespace PublicApi.DTO.Mappers
 
             foreach (var participantDTO in dto.Participants)
             {
-                result.Participants.Add(RowParticipantMapper.FromDAL(participantDTO));
+                result.Participants.Add(RowParticipantMapper.FromBLL(participantDTO));
             }
 
             return result;

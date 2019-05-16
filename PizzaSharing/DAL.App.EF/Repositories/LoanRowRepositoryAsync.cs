@@ -37,16 +37,14 @@ namespace DAL.App.EF.Repositories
             return loanRow;
         }
 
-        public async Task AddAsync(RowParticipantDTO participantDTO)
+        public async Task AddAsync(int loanId, int receiptRowId, decimal involvement)
         {
-            if (participantDTO.Involvement == null) return;
-            
             var loanRow = new LoanRow()
             {
-                Involvement = participantDTO.Involvement.Value,
+                Involvement = involvement,
                 IsPaid = false,
-                LoanId = participantDTO.LoanId,
-                ReceiptRowId = participantDTO.ReceiptRowId
+                LoanId = loanId,
+                ReceiptRowId = receiptRowId
             };
 
             await RepoDbSet.AddAsync(loanRow);

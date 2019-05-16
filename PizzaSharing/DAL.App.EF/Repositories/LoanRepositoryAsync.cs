@@ -91,17 +91,20 @@ namespace DAL.App.EF.Repositories
                 .ToList();
         }
 
-        //ReceiptParticipant receipt must be referenced
-        public async Task<Loan> FindOrAddAsync(ReceiptParticipant participant)
+        
+        public async Task<int> FindOrAddAsync(DALReceiptParticipantDTO participant, int receiptManagerId)
         {
-            var loan = await RepoDbSet.FirstOrDefaultAsync(obj => obj.ReceiptParticipantId == participant.Id);
-            if (loan != null) return loan;
+            var loan = await RepoDbSet
+                .FirstOrDefaultAsync(obj => obj.ReceiptParticipantId == participant.Id);
+            
+            if (loan != null) return loan.Id;
+            
             return (await RepoDbSet.AddAsync(new Loan()
             {
                 ReceiptParticipantId = participant.Id,
-                LoanTakerId = participant.AppUserId,
-                LoanGiverId = participant.Receipt.ReceiptManagerId
-            })).Entity;
+                LoanTakerId = participant.ParticipantAppUserId,
+                LoanGiverId = receiptManagerId
+            })).Entity.Id;
         }
     }
 }

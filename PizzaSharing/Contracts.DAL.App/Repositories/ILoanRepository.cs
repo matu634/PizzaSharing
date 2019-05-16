@@ -11,6 +11,6 @@ namespace Contracts.DAL.App.Repositories
     {
         Task<List<DALLoanTakenDTO>> AllUserTakenLoans(int appUserId);
         Task<List<DALLoanGivenDTO>> AllUserGivenLoans(int appUserId);
-        Task<Loan> FindOrAddAsync(ReceiptParticipant participant);
+        Task<int> FindOrAddAsync(DALReceiptParticipantDTO participant, int receiptManagerId);
     }
 }

@@ -11,7 +11,7 @@ namespace PublicApi.DTO.Mappers
         /// <param name="dto"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static RowParticipantDTO FromDAL(BLLRowParticipantDTO dto)
+        public static RowParticipantDTO FromBLL(BLLRowParticipantDTO dto)
         {
             if (dto == null) throw new NullReferenceException("Can't map, BLLRowParticipantDTO is null");
             return new RowParticipantDTO()
@@ -22,6 +22,18 @@ namespace PublicApi.DTO.Mappers
                 Involvement = dto.Involvement,
                 AppUserId = dto.AppUserId,
                 LoanRowId = dto.LoanRowId
+            };
+        }
+
+        public static BLLRowParticipantDTO FromAPI(RowParticipantMinDTO dto)
+        {
+            if (dto == null) throw new NullReferenceException("Can't map, RowParticipantMinDTO is null");
+            
+            return new BLLRowParticipantDTO()
+            {
+                Involvement = dto.Involvement,
+                AppUserId = dto.UserId,
+                ReceiptRowId = dto.RowId.Value
             };
         }
     }

@@ -183,5 +183,14 @@ namespace WebApp.ApiControllers
                 .Select(AppUserMapper.FromBLL)
                 .ToList();
         }
+        
+        [HttpPost]
+        public async Task<ActionResult<ReceiptRowAllDTO>> AddParticipantToRow(RowParticipantMinDTO dto)
+        {
+            if (dto == null) return BadRequest("RowParticipantMinDTO is null");
+            var receiptRow = await _bll.ReceiptsService.AddRowParticipantAsync(RowParticipantMapper.FromAPI(dto), User.GetUserId());
+            if (receiptRow == null) return BadRequest("Participant was not added (RowParticipantMinDTO or user might not be valid)");
+            return ReceiptRowMapper.FromBLL(receiptRow);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Contracts.BLL.App.Services
 
         Task<BLLReceiptRowDTO> AddRowChange(int rowId, int changeId, int userId);
 
-        ReceiptRowAllDTO AddRowParticipant();
+        Task<BLLReceiptRowDTO> AddRowParticipantAsync(BLLRowParticipantDTO newParticipant, int currentUserId);
 
         Task<BLLReceiptRowDTO> RemoveRowChangeAsync(int rowId, int componentId, int userId);
 
