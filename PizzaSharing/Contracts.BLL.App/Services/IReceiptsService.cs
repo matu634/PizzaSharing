@@ -19,7 +19,7 @@ namespace Contracts.BLL.App.Services
 
         Task<bool> RemoveRow(int rowId, int userId);
 
-        ReceiptRowAllDTO AddRowChange();
+        Task<BLLReceiptRowDTO> AddRowChange(int rowId, int changeId, int userId);
 
         ReceiptRowAllDTO AddRowParticipant();
 

@@ -117,7 +117,7 @@ export class ReceiptService {
   }
   
   fetchAvailableChanges(productId: number) : Promise<IChangeDTO[]>{
-    let url = this.appConfig.apiUrl + "app/ProductChanges/" + productId.toString();
+    let url = this.appConfig.apiUrl + "receipts/ProductChanges/" + productId.toString();
     
     return this.httpClient.fetch(url, {
       cache: "no-store",

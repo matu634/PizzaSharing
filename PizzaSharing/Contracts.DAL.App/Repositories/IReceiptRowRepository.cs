@@ -14,7 +14,19 @@ namespace Contracts.DAL.App.Repositories
         
         Task<int?> AddAsync(DALReceiptRowDTO row);
 
+        /// <summary>
+        /// Returns receipt row with everything
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<DALReceiptRowDTO> FindRowAndRelatedDataAsync(int id);
+
+        /// <summary>
+        /// Returns receipt row with  amount, discount, productId, receiptId, rowId
+        /// </summary>
+        /// <param name="rowId"></param>
+        /// <returns></returns>
+        Task<DALReceiptRowDTO> FindAsync(int rowId);
         
         Task<int?> UpdateRowAmount(int receiptRowId, int newAmount, int userId);
         

@@ -58,22 +58,5 @@ namespace WebApp.ApiControllers
                 .Select(OrganizationMapper.FromBLL)
                 .ToList();
         }
-        
-        /// <summary>
-        ///  Gets all changes that can be applied to a Product
-        /// </summary>
-        /// <param name="productId"></param>
-        /// <returns>List of ChangeDTOs></returns>
-        /// <response code="200">Product changes successfully retrieved.</response>
-        /// <response code="400">Something went wrong while retrieving changes(Most likely productId is invalid).</response>
-        [HttpGet("{productId}")]
-        public async Task<ActionResult<List<ChangeDTO>>> ProductChanges(int productId)
-        {
-            var changes = await _bll.ProductService.GetProductChangesAsync(productId);
-            if (changes == null) return BadRequest();
-            return changes
-                .Select(ChangeMapper.FromBLL)
-                .ToList();
-        }
     }
 }

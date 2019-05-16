@@ -7,6 +7,6 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IReceiptRowChangeRepository : IBaseRepositoryAsync<ReceiptRowChange>
     {
-        Task AddAsync(ChangeDTO changeDTO);
+        Task AddAsync(int changeId, int receiptRowId);
     }
 }

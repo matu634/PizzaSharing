@@ -75,5 +75,26 @@ namespace DAL.App.EF.Mappers
                 ReceiptId = dto.ReceiptId.Value
             };
         }
+
+        /// <summary>
+        /// Maps amount, discount, productId, receiptId, rowId
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static DALReceiptRowDTO FromDomain2(ReceiptRow row, DateTime time)
+        {
+            if (row == null) throw new NullReferenceException("Can't map, row entity is null");
+            
+            return new DALReceiptRowDTO()
+            {
+               Amount = row.Amount,
+               Discount = row.RowDiscount,
+               ProductId = row.ProductId,
+               ReceiptId = row.ReceiptId,
+               ReceiptRowId = row.Id
+            };
+        }
     }
 }

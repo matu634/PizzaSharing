@@ -12,6 +12,11 @@ namespace Contracts.DAL.App.Repositories
         
         Task<DALChangeDTO> AddAsync(DALChangeDTO changeDTO);
         
+        /// <summary>
+        /// Find change with name and categories
+        /// </summary>
+        /// <param name="changeId"></param>
+        /// <returns></returns>
         Task<DALChangeDTO> FindDTOAsync(int changeId);
         
         Task<bool> RemoveSoft(int changeId);

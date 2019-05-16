@@ -131,6 +131,14 @@ namespace DAL.App.EF.Repositories
             
             return ReceiptRowMapper.FromDomain(receiptRow, DateTime.Now);
         }
+
+        public async Task<DALReceiptRowDTO> FindAsync(int rowId)
+        {
+            var row = await RepoDbSet.FindAsync(rowId);
+            if (row == null) return null;
+            return ReceiptRowMapper.FromDomain2(row, DateTime.Now);
+        }
+
         /// <summary>
         /// Updates Row amount, if 1)Row is found, 2)UserId matches ManagerId, 3)Receipt is not finalized
         /// </summary>

@@ -47,11 +47,7 @@ namespace DAL.App.EF.Repositories
             return addedEntity.Id;
         }
 
-        /// <summary>
-        /// Return receipt and participants
-        /// </summary>
-        /// <param name="receiptId"></param>
-        /// <returns></returns>
+        
         public async Task<DALReceiptDTO> FindReceiptAsync(int receiptId)
         {
             var receipt = await RepoDbSet.FindAsync(receiptId);

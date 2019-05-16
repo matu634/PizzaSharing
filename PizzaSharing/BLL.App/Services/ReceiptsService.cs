@@ -110,9 +110,33 @@ namespace BLL.App.Services
             return true;
         }
 
-        public ReceiptRowAllDTO AddRowChange()
+        public async Task<BLLReceiptRowDTO> AddRowChange(int rowId, int changeId, int userId)
         {
-            throw new System.NotImplementedException();
+            var receiptRow = await Uow.ReceiptRows.FindAsync(rowId);
+            if (receiptRow?.ReceiptId == null) return null;
+            if (receiptRow.ProductId == null) throw new Exception("Product id is null");
+
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
+            if (receipt.ReceiptManagerId != userId) return null;
+            
+            var change = await Uow.Changes.FindDTOAsync(changeId);
+            if (change == null) return null;
+            if (change.Categories == null) throw new Exception("Change categories list is null(not loaded/mapped)");
+
+            var product = await Uow.Products.FindDTOAsync(receiptRow.ProductId.Value);
+            if (product?.Categories == null) throw new Exception("Product or its categories list is null (not loaded/mapped)");
+
+            var productCategories = product.Categories.Select(dto => dto.Id).ToList();
+            var changeCategories = change.Categories.Select(dto => dto.Id).ToList();
+            
+            //Check if product and change have common categories
+            if (!productCategories.Intersect(changeCategories).Any()) return null;
+
+            await Uow.ReceiptRowChanges.AddAsync(changeId, rowId);
+            await Uow.SaveChangesAsync();
+
+            receiptRow = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(rowId);
+            return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
         public ReceiptRowAllDTO AddRowParticipant()

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
 using Identity;
@@ -112,6 +114,41 @@ namespace WebApp.ApiControllers
             if (dto == null) return BadRequest("DTO missing");
             var receiptRow = await _bll.ReceiptsService.UpdateRowAmount(ReceiptRowMapper.FromAPI(dto), User.GetUserId());
             if (receiptRow == null) return BadRequest();
+            return ReceiptRowMapper.FromBLL(receiptRow);
+        }
+        
+        /// <summary>
+        ///  Gets all changes that can be applied to a Product
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns>List of ChangeDTOs></returns>
+        /// <response code="200">Product changes successfully retrieved.</response>
+        /// <response code="400">Something went wrong while retrieving changes(Most likely productId is invalid).</response>
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<List<ChangeDTO>>> ProductChanges(int productId)
+        {
+            var changes = await _bll.ProductService.GetProductChangesAsync(productId);
+            if (changes == null) return BadRequest();
+            return changes
+                .Select(ChangeMapper.FromBLL)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Adds a component to the receipt row and returns the updated receipt row
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <response code="200">Component was successfully added.</response>
+        /// <response code="400">Component was not added (changeId, rowId or user might not be valid)</response>
+        [HttpPost]
+        public async Task<ActionResult<ReceiptRowAllDTO>> AddComponentToRow(RowAndChangeDTO dto)
+        {
+            if (dto.RowId == null) return BadRequest("rowId is missing");
+            if (dto.ComponentId == null) return BadRequest("componentId is missing");
+            
+            var receiptRow = await _bll.ReceiptsService.AddRowChange(dto.RowId.Value, dto.ComponentId.Value, User.GetUserId());
+            if (receiptRow == null) return BadRequest("Component was not added (changeId, rowId or user might not be valid)");
             return ReceiptRowMapper.FromBLL(receiptRow);
         }
     }

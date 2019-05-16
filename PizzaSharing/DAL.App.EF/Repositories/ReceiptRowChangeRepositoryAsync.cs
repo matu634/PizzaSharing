@@ -36,12 +36,12 @@ namespace DAL.App.EF.Repositories
             return rowChange;
         }
 
-        public async Task AddAsync(ChangeDTO changeDTO)
+        public async Task AddAsync(int changeId, int receiptRowId)
         {
             var receiptRowChange = new ReceiptRowChange()
             {
-                ChangeId = changeDTO.ChangeId.Value,
-                ReceiptRowId = changeDTO.ReceiptRowId.Value
+                ChangeId = changeId,
+                ReceiptRowId = receiptRowId
             };
             await RepoDbSet.AddAsync(receiptRowChange);
         }
