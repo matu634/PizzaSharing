@@ -5,6 +5,7 @@ import {IReceiptDTO} from "../interfaces/IReceiptDTO";
 import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
 import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
+import {IChangeDTO} from "../interfaces/IChangeDTO";
 
 export var log = LogManager.getLogger('ReceiptService');
 
@@ -113,5 +114,19 @@ export class ReceiptService {
         log.debug("removeReceipt error:", reason);
         return false;
       });
+  }
+  
+  fetchAvailableChanges(productId: number) : Promise<IChangeDTO[]>{
+    let url = this.appConfig.apiUrl + "app/ProductChanges/" + productId.toString();
+    
+    return this.httpClient.fetch(url, {
+      cache: "no-store",
+      headers: {
+        Authorization: 'Bearer ' + this.appConfig.jwt,
+      }
+    })
+      .then(response => response.json())
+      .then(jsonData => jsonData)
+      .catch(reason => log.debug("fetchOrganizations error:", reason));
   }
 }

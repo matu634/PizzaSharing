@@ -4,7 +4,7 @@ namespace PublicApi.DTO
 {
     public class ReceiptRowAllDTO
     {
-        
+
         public int? ReceiptRowId { get; set; }
         public int? ReceiptId { get; set; }
 
@@ -17,6 +17,4 @@ namespace PublicApi.DTO
         public List<RowParticipantDTO> Participants { get; set; }
         public decimal? CurrentCost { get; set; }
     }
-
-    
 }

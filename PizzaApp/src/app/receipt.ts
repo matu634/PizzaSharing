@@ -8,6 +8,9 @@ import {ICategoryDTO} from "../interfaces/ICategoryDTO";
 import {IProductDTO} from "../interfaces/IProductDTO";
 import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
 import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
+import {DialogService} from "aurelia-dialog";
+import {AddComponent} from "../dialogs/add-component";
+import {IChangeDTO} from "../interfaces/IChangeDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -22,7 +25,8 @@ export class Receipt {
   constructor(
     private receiptService: ReceiptService,
     private appConfig: AppConfig,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {
     log.debug('constructor');
   }
@@ -104,12 +108,12 @@ export class Receipt {
   addToCartClicked(product: IProductDTO) {
     log.debug("Product clicked: ", product);
     if (product === null || product.productId === null) return;
-    
-    let rowDTO : IReceiptRowMinDTO = {
+
+    let rowDTO: IReceiptRowMinDTO = {
       amount: 1,
-      productId : product.productId,
-      receiptId : this.receiptDTO.receiptId,
-      discount : null
+      productId: product.productId,
+      receiptId: this.receiptDTO.receiptId,
+      discount: null
     };
     this.receiptService.addReceiptRow(rowDTO)
       .then(value => {
@@ -118,8 +122,8 @@ export class Receipt {
         this.updateTotalPrice();
       });
   }
-  
-  removeRowClicked(id: number){
+
+  removeRowClicked(id: number) {
     this.receiptService.removeReceiptRow(id).then(value => {
       if (value !== -1) {
         this.receiptDTO.rows = this.receiptDTO.rows.filter(function (obj) {
@@ -129,14 +133,14 @@ export class Receipt {
       }
     })
   }
-  
-  updateTotalPrice(){
+
+  updateTotalPrice() {
     this.receiptDTO.sumCost = 0;
-    this.receiptDTO.rows.forEach(value => 
+    this.receiptDTO.rows.forEach(value =>
       this.receiptDTO.sumCost += value.currentCost !== null ? value.currentCost : 0)
   }
-  
-  changeRowAmountClicked(newAmount: number, rowDto : IReceiptRowDTO) {
+
+  changeRowAmountClicked(newAmount: number, rowDto: IReceiptRowDTO) {
     if (rowDto.receiptRowId === null) return;
     this.receiptService.changeReceiptRowAmount(newAmount, rowDto.receiptRowId)
       .then(updatedRow => {
@@ -146,7 +150,7 @@ export class Receipt {
           log.debug("Index not found. ");
           return;
         }
-        
+
         // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
         this.receiptDTO.rows.splice(index, 1, updatedRow);
         this.updateTotalPrice();
@@ -154,12 +158,28 @@ export class Receipt {
       })
   }
 
-  removeReceipt(){
+  removeReceipt() {
     this.receiptService.removeReceipt(this.receiptDTO.receiptId)
       .then(value => {
-        if (value){
+        if (value) {
           this.router.navigateToRoute("dashboard");
         }
       })
+  }
+
+  openModal(productId: number) {
+    this.receiptService.fetchAvailableChanges(productId)
+      .then(changes => {
+        this.dialogService.open({viewModel: AddComponent, model: changes, lock: false})
+          .whenClosed(response => {
+            if (!response.wasCancelled) {
+              console.log('good - ', response.output.changeId);
+            } else {
+              console.log('bad');
+            }
+          });
+      });
+
+
   }
 }

@@ -1,0 +1,15 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-body>
+      <h2>Available changes</h2>
+      <p repeat.for="change of changes">
+        ${change.name} - ${change.price} &nbsp; &nbsp;
+        <button class="btn btn-success" click.trigger="controller.ok(change)">Ok</button> 
+      </p>
+    </ux-dialog-body>
+
+    <ux-dialog-footer>
+      <button click.trigger="controller.cancel()">Cancel</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>
