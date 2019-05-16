@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories.Identity;
+using DAL.App.DTO;
+using DAL.App.EF.Mappers;
 using ee.itcollege.masirg.Contracts.DAL.Base;
 using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain.Identity;
@@ -23,6 +27,16 @@ namespace DAL.App.EF.Repositories.Identity
         {
             return await RepoDbSet.AnyAsync(user =>
                 user.Email.ToLower().Equals(email.ToLower()));
+        }
+
+        public new async Task<List<DALAppUserDTO>> AllAsync()
+        {
+            var users = await RepoDbSet
+                .ToListAsync();
+
+            return users
+                .Select(AppUserMapper.FromDomain)
+                .ToList();
         }
     }
 }

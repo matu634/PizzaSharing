@@ -11,6 +11,7 @@ import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
 import {DialogService} from "aurelia-dialog";
 import {AddComponent} from "../dialogs/add-component";
 import {IChangeDTO} from "../interfaces/IChangeDTO";
+import {AddParticipant} from "../dialogs/add-participant";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -215,5 +216,20 @@ export class Receipt {
         this.updateTotalPrice();
         log.debug("Current rows: ", this.receiptDTO.rows)
       })
+  }
+  
+  addParticipantClicked(receiptRowId: number){
+
+    this.receiptService.fetchAvailableUsers(receiptRowId)
+      .then(users => {
+        this.dialogService.open({viewModel: AddParticipant, model: [users, 100], lock: false}) //TODO: calculate max value from participants
+          .whenClosed(response => {
+            if (!response.wasCancelled) {
+              log.debug("Selected user: " + response.output[0].name + " with " + response.output[1] + " involvement")
+            } else {
+              console.log('bad');
+            }
+          });
+      });
   }
 }

@@ -84,7 +84,7 @@
              x ${row.product.productName}</h3>
           <div class="card-tools">
             <button click.delegate="addItemClicked(row)" class="btn btn-success btn-tool">Add item</button>
-            <button class="btn btn-success btn-tool">Add participant</button>
+            <button class="btn btn-success btn-tool" click.delegate="addParticipantClicked(row.receiptRowId)">Add participant</button>
             <button class="btn btn-danger btn-tool" click.delegate="removeRowClicked(row.receiptRowId)">Remove</button>
           </div>
         </div>

@@ -1,0 +1,24 @@
+<template>
+  <ux-dialog>
+    <ux-dialog-body>
+      <h3>Add participant</h3>
+      <h6>Involvement</h6>
+      <form onkeydown="return event.key != 'Enter';">
+        <div class="form-group">
+          <input type="range" min="0" max="${maxInvolvement}" value="${selectedValue}" class="form-control-range" value.bind="selectedValue">
+        </div>
+        <div class="form-group">
+          <input type="number" min="0" max="${maxInvolvement}" value="${selectedValue}" class="form-control" value.bind="selectedValue" >
+        </div>
+      </form>
+      <p repeat.for="user of users">
+        ${user.name} - ${user.id} &nbsp; &nbsp;
+        <button class="btn btn-success" click.trigger="controller.ok([user, selectedValue])" disabled.bind="selectedValue < 1">Ok</button>
+      </p>
+    </ux-dialog-body>
+
+    <ux-dialog-footer>
+      <button click.trigger="controller.cancel()">Cancel</button>
+    </ux-dialog-footer>
+  </ux-dialog>
+</template>

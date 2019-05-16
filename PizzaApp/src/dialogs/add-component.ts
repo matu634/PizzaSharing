@@ -16,8 +16,4 @@ export class AddComponent {
   activate(changes: IChangeDTO[]){
     this.changes = changes;
   }
-  
-  changeButtonClicked(changeId: number) {
-    
-  }
 }

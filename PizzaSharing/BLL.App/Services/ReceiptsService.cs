@@ -117,7 +117,7 @@ namespace BLL.App.Services
             if (receiptRow.ProductId == null) throw new Exception("Product id is null");
 
             var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
-            if (receipt.ReceiptManagerId != userId) return null;
+            if (receipt.ReceiptManagerId != userId || receipt.IsFinalized) return null;
             
             var change = await Uow.Changes.FindDTOAsync(changeId);
             if (change == null) return null;
@@ -203,7 +203,7 @@ namespace BLL.App.Services
             if (receiptRow?.ReceiptId == null) return null;
 
             var receipt = await Uow.Receipts.FindReceiptAsync(receiptRow.ReceiptId.Value);
-            if (receipt.ReceiptManagerId != userId) return null;
+            if (receipt.ReceiptManagerId != userId || receipt.IsFinalized) return null;
             
             var change = await Uow.Changes.FindDTOAsync(changeId);
             if (change == null) return null;
@@ -241,6 +241,24 @@ namespace BLL.App.Services
         public ReceiptRowAllDTO RemoveRowDiscount()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<BLLAppUserDTO>> GetAvailableRowParticipants(int rowId, int userId)
+        {
+            //TODO: leaner find method, just needs app user ids
+            var row = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(rowId);
+            if (row == null) return null;
+
+            var rowParticipants = row.Participants
+                .Select(AppUserMapper.FromDALParticipantDTO)
+                .ToList();
+            rowParticipants.Add(new BLLAppUserDTO(){Id = userId});
+            
+            var allUsers = (await Uow.AppUsers.AllAsync())
+                .Select(AppUserMapper.FromDAL)
+                .ToList();
+
+            return allUsers.Except(rowParticipants).ToList();
         }
     }
 }

@@ -6,6 +6,7 @@ import {IOrganizationDTO} from "../interfaces/IOrganizationDTO";
 import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
 import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
 import {IChangeDTO} from "../interfaces/IChangeDTO";
+import {IUserDTO} from "../interfaces/IUserDTO";
 
 export var log = LogManager.getLogger('ReceiptService');
 
@@ -127,7 +128,7 @@ export class ReceiptService {
     })
       .then(response => response.json())
       .then(jsonData => jsonData)
-      .catch(reason => log.debug("fetchOrganizations error:", reason));
+      .catch(reason => log.debug("fetchAvailableChanges error:", reason));
   }
   
   addChangeToRow(changeId: number, rowId: number) : Promise<IReceiptRowDTO> {
@@ -166,5 +167,19 @@ export class ReceiptService {
       })
       .then(updatedReceiptRow => updatedReceiptRow.json())
       .catch(reason => log.debug("removeRowChange error:", reason));
+  }
+  
+  fetchAvailableUsers(rowId: number): Promise<IUserDTO[]> {
+    let url = this.appConfig.apiUrl + "receipts/GetAvailableRowParticipants/" + rowId.toString();
+
+    return this.httpClient.fetch(url, {
+      cache: "no-store",
+      headers: {
+        Authorization: 'Bearer ' + this.appConfig.jwt,
+      }
+    })
+      .then(response => response.json())
+      .then(jsonData => jsonData)
+      .catch(reason => log.debug("fetchAvailableUsers error:", reason));
   }
 }

@@ -166,5 +166,22 @@ namespace WebApp.ApiControllers
             if (receiptRow == null) return BadRequest("Component was not removed (changeId, rowId or user might not be valid)");
             return ReceiptRowMapper.FromBLL(receiptRow);
         }
+
+        /// <summary>
+        /// Get all users, who aren't already participating in this receipt row
+        /// </summary>
+        /// <param name="rowId"></param>
+        /// <returns></returns>
+        [HttpGet("{rowId}")]
+        public async Task<ActionResult<List<AppUserDTO>>> GetAvailableRowParticipants(int? rowId)
+        {
+            if (rowId == null) return BadRequest("rowId is null");
+            
+            var users = await _bll.ReceiptsService.GetAvailableRowParticipants(rowId.Value, User.GetUserId());
+            if (users == null) return BadRequest("Couldn't retrieve row ids");
+            return users
+                .Select(AppUserMapper.FromBLL)
+                .ToList();
+        }
     }
 }

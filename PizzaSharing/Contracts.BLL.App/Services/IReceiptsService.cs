@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.App.DTO;
 using ee.itcollege.masirg.Contracts.BLL.Base.Services;
@@ -34,5 +35,7 @@ namespace Contracts.BLL.App.Services
         ReceiptRowAllDTO AddRowDiscount();
 
         ReceiptRowAllDTO RemoveRowDiscount();
+        
+        Task<List<BLLAppUserDTO>> GetAvailableRowParticipants(int rowId, int userId);
     }
 }
