@@ -83,7 +83,7 @@
             <button class="btn btn-outline-danger" click.trigger="changeRowAmountClicked(row.amount - 1, row)" disabled.bind="row.amount <= 1"><i class="fa fa-minus"></i></button>
              x ${row.product.productName}</h3>
           <div class="card-tools">
-            <button click.delegate="openModal(row.product.productId)" class="btn btn-success btn-tool">Add item</button>
+            <button click.delegate="addItemClicked(row)" class="btn btn-success btn-tool">Add item</button>
             <button class="btn btn-success btn-tool">Add participant</button>
             <button class="btn btn-danger btn-tool" click.delegate="removeRowClicked(row.receiptRowId)">Remove</button>
           </div>

@@ -167,19 +167,37 @@ export class Receipt {
       })
   }
 
-  openModal(productId: number) {
-    this.receiptService.fetchAvailableChanges(productId)
+
+  addItemClicked(row: IReceiptRowDTO) {
+    if (row.product.productId == null) return;
+    
+    this.receiptService.fetchAvailableChanges(row.product.productId)
       .then(changes => {
         this.dialogService.open({viewModel: AddComponent, model: changes, lock: false})
           .whenClosed(response => {
-            if (!response.wasCancelled) {
-              console.log('good - ', response.output.changeId);
+            if (!response.wasCancelled && row.receiptRowId != null) {
+              this.addReceiptRowComponent(response.output.changeId, row.receiptRowId);
             } else {
               console.log('bad');
             }
           });
       });
+  }
 
+  addReceiptRowComponent(changeId: number, receiptRowId: number) {
+    log.debug("Adding new component. ComponentId : " + changeId + " RowId:" + receiptRowId)
+    this.receiptService.addChangeToRow(changeId, receiptRowId)
+      .then(updatedRow => {
+        let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === updatedRow.receiptRowId);
+        if (index < 0) {
+          log.debug("Index not found. ");
+          return;
+        }
 
+        // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
+        this.receiptDTO.rows.splice(index, 1, updatedRow);
+        this.updateTotalPrice();
+        log.debug("Current rows: ", this.receiptDTO.rows)
+      })
   }
 }
