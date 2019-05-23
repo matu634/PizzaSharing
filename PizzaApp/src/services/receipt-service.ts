@@ -110,7 +110,24 @@ export class ReceiptService {
           Authorization: 'Bearer ' + this.appConfig.jwt,
         }
       })
-      .then(response => true)
+      .then(response => true) //TODO:
+      .catch(reason => {
+        log.debug("removeReceipt error:", reason);
+        return false;
+      });
+  }
+
+  submitReceipt(receiptId: number) : Promise<boolean> {
+    let url = this.appConfig.apiUrl + "receipts/submitReceipt/" + receiptId.toString();
+
+    return this.httpClient.post(url, "",
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(response => true) //TODO:
       .catch(reason => {
         log.debug("removeReceipt error:", reason);
         return false;

@@ -30,12 +30,12 @@ namespace Contracts.BLL.App.Services
 
         ReceiptRowAllDTO EditRowParticipantInvolvement();
 
-        bool SetReceiptFinalized();
-
         ReceiptRowAllDTO AddRowDiscount();
 
         ReceiptRowAllDTO RemoveRowDiscount();
         
         Task<List<BLLAppUserDTO>> GetAvailableRowParticipants(int rowId, int userId);
+        
+        Task<bool> SubmitReceipt(int receiptId, int userId);
     }
 }

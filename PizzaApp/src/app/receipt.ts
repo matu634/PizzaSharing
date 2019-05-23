@@ -168,6 +168,13 @@ export class Receipt {
       })
   }
 
+  submitReceipt(){
+    this.receiptService.submitReceipt(this.receiptDTO.receiptId)
+      .then(value => {
+        this.router.navigateToRoute("dashboard")
+      })
+  }
+
 
   addItemClicked(row: IReceiptRowDTO) {
     if (row.product.productId == null) return;

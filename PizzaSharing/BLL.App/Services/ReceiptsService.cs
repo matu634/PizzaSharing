@@ -212,9 +212,13 @@ namespace BLL.App.Services
             throw new System.NotImplementedException();
         }
 
-        public bool SetReceiptFinalized()
+        public async Task<bool> SubmitReceipt(int receiptId, int userId)
         {
-            throw new System.NotImplementedException();
+            var receipt = await Uow.Receipts.FindReceiptAsync(receiptId);
+            if (receipt == null || receipt.IsFinalized || receipt.ReceiptManagerId != userId) return false;
+            if (await Uow.Receipts.SetFinalized(receiptId) == false) return false;
+            await Uow.SaveChangesAsync();
+            return true;
         }
 
         public ReceiptRowAllDTO AddRowDiscount()

@@ -192,5 +192,13 @@ namespace WebApp.ApiControllers
             if (receiptRow == null) return BadRequest("Participant was not added (RowParticipantMinDTO or user might not be valid)");
             return ReceiptRowMapper.FromBLL(receiptRow);
         }
+        
+        [HttpPost("{receiptId}")]
+        public async Task<ActionResult> SubmitReceipt(int receiptId)
+        {
+            var result = await _bll.ReceiptsService.SubmitReceipt(receiptId, User.GetUserId());
+            if (result == false) return BadRequest();
+            return Ok();
+        }
     }
 }

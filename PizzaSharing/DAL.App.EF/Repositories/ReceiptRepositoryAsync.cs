@@ -47,7 +47,16 @@ namespace DAL.App.EF.Repositories
             return addedEntity.Id;
         }
 
-        
+        public async Task<bool> SetFinalized(int receiptId)
+        {
+            var receipt = await RepoDbSet.FindAsync(receiptId);
+            if (receipt == null) return false;
+            receipt.IsFinalized = true;
+            receipt.CreatedTime = DateTime.Now;
+            return true;
+        }
+
+
         public async Task<DALReceiptDTO> FindReceiptAsync(int receiptId)
         {
             var receipt = await RepoDbSet.FindAsync(receiptId);

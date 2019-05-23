@@ -28,7 +28,8 @@ namespace Domain
             {
                 throw new Exception($"Invalid discount value {RowDiscount}. Must be between 1.0 and 0.0");
             }
-
+            
+            if (Product.IsDeleted == true && Receipt.IsFinalized == false) return 0;
             var time = Receipt.IsFinalized == false ? DateTime.Now : Receipt.CreatedTime;
             
             

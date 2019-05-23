@@ -19,5 +19,7 @@ namespace Contracts.DAL.App.Repositories
         Task<DALReceiptDTO> FindReceiptAsync(int receiptId);
         
         Task<int?> AddAsync(DALReceiptDTO receiptDTO);
+        
+        Task<bool> SetFinalized(int receiptId);
     }
 }
