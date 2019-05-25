@@ -37,6 +37,7 @@ namespace PublicApi.DTO.Mappers
             return new ReceiptAllDTO()
             {
                 CreatedTime = dto.CreatedTime,
+                ManagerNickname = dto.ManagerNickname,
                 IsFinalized = dto.IsFinalized,
                 ReceiptId = dto.ReceiptId,
                 SumCost = dto.SumCost,

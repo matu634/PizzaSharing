@@ -11,6 +11,7 @@ namespace PublicApi.DTO.Mappers
             return new LoanTakenDTO()
             {
                 LoanId = dto.LoanId,
+                ReceiptId = dto.ReceiptId,
                 OwedAmount = dto.OwedAmount,
                 LoanGiverName = dto.LoanGiverName
             };

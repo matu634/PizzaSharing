@@ -1,5 +1,6 @@
 export interface ILoanTakenDTO {
-  loanId: number,
-  owedAmount : number,
+  loanId: number
+  receiptId: number
+  owedAmount : number
   loanGiverName: string
 }

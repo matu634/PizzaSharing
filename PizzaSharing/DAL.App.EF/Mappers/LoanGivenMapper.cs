@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using DAL.App.DTO;
 using Domain;
 
@@ -9,6 +10,7 @@ namespace DAL.App.EF.Mappers
         public static DALLoanGivenDTO FromDomain(Loan loan)
         {
             if (loan == null) throw new NullReferenceException("Can't map, loan entity is null");
+            if (!loan.ReceiptParticipant.Receipt.IsFinalized) return null;
             var sum = decimal.Zero;
             foreach (var loanRow in loan.LoanRows)
             {
@@ -21,7 +23,8 @@ namespace DAL.App.EF.Mappers
             {
                 LoanTakerName = loan.LoanTaker.UserNickname,
                 LoanId = loan.Id,
-                OwedAmount = sum
+                OwedAmount = sum,
+                ReceiptId = loan.ReceiptParticipant.ReceiptId
             };
         }
     }

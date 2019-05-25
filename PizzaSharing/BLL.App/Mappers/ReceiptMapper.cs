@@ -47,6 +47,7 @@ namespace BLL.App.Mappers
             var result = new BLLReceiptDTO()
             {
                 ReceiptId = receipt.ReceiptId,
+                ManagerNickname = receipt.ManagerNickname,
                 CreatedTime = receipt.CreatedTime,
                 IsFinalized = receipt.IsFinalized,
                 ReceiptRows = rows

@@ -45,6 +45,8 @@ namespace DAL.App.EF.Repositories
         public async Task<List<DALLoanTakenDTO>> AllUserTakenLoans(int appUserId)
         {
             var takenLoans = await RepoDbSet
+                .Include(loan => loan.ReceiptParticipant)
+                .ThenInclude(participant => participant.Receipt)
                 .Include(loan => loan.LoanGiver)
                 .Include(loan => loan.LoanRows)
                     .ThenInclude(loanRow => loanRow.ReceiptRow)
@@ -63,13 +65,15 @@ namespace DAL.App.EF.Repositories
             
             return takenLoans
                 .Select(LoanTakenMapper.FromDomain)
-                .Where(dto => dto.OwedAmount > decimal.Zero)
+                .Where(dto => dto != null && dto.OwedAmount > decimal.Zero)
                 .ToList();
         }
 
         public async Task<List<DALLoanGivenDTO>> AllUserGivenLoans(int appUserId)
         {
             var givenLoans = await RepoDbSet
+                .Include(loan => loan.ReceiptParticipant)
+                .ThenInclude(participant => participant.Receipt)
                 .Include(loan => loan.LoanTaker)
                 .Include(loan => loan.LoanRows)
                 .ThenInclude(loanRow => loanRow.ReceiptRow)
@@ -87,7 +91,7 @@ namespace DAL.App.EF.Repositories
 
             return givenLoans
                 .Select(LoanGivenMapper.FromDomain)
-                .Where(dto => dto.OwedAmount > decimal.Zero)
+                .Where(dto => dto != null && dto.OwedAmount > decimal.Zero)
                 .ToList();
         }
 

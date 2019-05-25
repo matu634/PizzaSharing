@@ -9,6 +9,7 @@ namespace DAL.App.EF.Mappers
         public static DALLoanTakenDTO FromDomain(Loan loan)
         {
             if (loan == null) throw new NullReferenceException("Can't map, loan entity is null");
+            if (!loan.ReceiptParticipant.Receipt.IsFinalized) return null;
             var sum = decimal.Zero;
             foreach (var loanRow in loan.LoanRows)
             {
@@ -21,7 +22,8 @@ namespace DAL.App.EF.Mappers
             {
                 LoanGiverName = loan.LoanGiver.UserNickname,
                 LoanId = loan.Id,
-                OwedAmount = sum
+                OwedAmount = sum,
+                ReceiptId = loan.ReceiptParticipant.ReceiptId
             };
         }
     }

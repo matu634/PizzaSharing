@@ -8,6 +8,7 @@ namespace PublicApi.DTO
         public int ReceiptId { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsFinalized { get; set; }
+        public string ManagerNickname { get; set; }
 
         public List<ReceiptRowAllDTO> Rows { get; set; }
         public decimal SumCost { get; set; }

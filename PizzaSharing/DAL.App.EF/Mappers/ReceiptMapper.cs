@@ -54,6 +54,7 @@ namespace DAL.App.EF.Mappers
                 CreatedTime = receipt.CreatedTime,
                 IsFinalized = receipt.IsFinalized,
                 ReceiptManagerId = receipt.ReceiptManagerId,
+                ManagerNickname = receipt.ReceiptManager.UserNickname,
                 ReceiptParticipants = receipt.ReceiptParticipants?
                     .Select(ReceiptParticipantMapper.FromDomain)
                     .ToList() ?? new List<DALReceiptParticipantDTO>()

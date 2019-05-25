@@ -12,5 +12,6 @@ namespace BLL.App.DTO
         public int ReceiptManagerId { get; set; }
         
         public List<BLLReceiptRowDTO> ReceiptRows { get; set; }
+        public string ManagerNickname { get; set; }
     }
 }

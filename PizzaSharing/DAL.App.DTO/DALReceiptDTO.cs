@@ -12,5 +12,6 @@ namespace DAL.App.DTO
         public int ReceiptManagerId { get; set; }
         
         public List<DALReceiptParticipantDTO> ReceiptParticipants { get; set; }
+        public string ManagerNickname { get; set; }
     }
 }

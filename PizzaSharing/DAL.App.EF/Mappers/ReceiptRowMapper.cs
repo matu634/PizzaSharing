@@ -19,8 +19,7 @@ namespace DAL.App.EF.Mappers
         public static DALReceiptRowDTO FromDomain(ReceiptRow row, DateTime time)
         {
             if (row == null) throw new NullReferenceException("Can't map, row entity is null");
-
-            if (row.Product?.IsDeleted ?? true) return null;
+            if (!row.Receipt.IsFinalized && (row.Product?.IsDeleted ?? true)) return null;
             
             var product = ProductMapper.FromDomain2(row.Product, time);
             var changes = new List<DALChangeDTO>();

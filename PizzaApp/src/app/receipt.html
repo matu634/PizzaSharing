@@ -4,7 +4,7 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0 text-dark">Receipt No. ${receiptDTO.receiptId}</h1>
-          <h1 class="m-0 text-dark">Manager: ${appConfig.getName()}</h1>
+          <h1 class="m-0 text-dark">Manager: ${receiptDTO.managerNickname}</h1>
           <button class="btn btn-danger" click.delegate="removeReceipt()">Remove receipt</button>
           <button class="btn btn-danger" click.delegate="submitReceipt()">Submit receipt</button>
         </div><!-- /.col -->

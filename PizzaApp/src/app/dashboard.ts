@@ -93,7 +93,11 @@ export class Dashboard {
       })
   }
   
-  viewButtonClicked(receiptId: number){
+  viewReceiptButtonClicked(receiptId: number){
     this.router.navigateToRoute("receiptView",{id: receiptId});
+  }
+
+  viewOldReceiptButtonClicked(receiptId: number){
+    this.router.navigateToRoute("oldReceiptView",{id: receiptId});
   }
 }

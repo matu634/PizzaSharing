@@ -41,7 +41,8 @@ export class MainRouter {
         {route: 'identity/login', name: 'identityLogin', moduleId: PLATFORM.moduleName('identity/login'), nav: false, title: 'Login'},
         {route: 'identity/register', name: 'identityRegister', moduleId: PLATFORM.moduleName('identity/register'), nav: false, title: 'Register'},
         {route: 'identity/logout', name: 'identityLogout', moduleId: PLATFORM.moduleName('identity/logout'), nav: false, title: 'Logout'},
-        {route: 'receipt', name: 'receiptView', moduleId: PLATFORM.moduleName('app/receipt'), nav: false, title: 'Receipt'}
+        {route: 'receipt', name: 'receiptView', moduleId: PLATFORM.moduleName('app/receipt'), nav: false, title: 'Receipt'},
+        {route: 'oldReceipt', name: 'oldReceiptView', moduleId: PLATFORM.moduleName('app/old-receipt'), nav: false, title: 'Old Receipt'}
       ]
     );
 

@@ -62,6 +62,7 @@ namespace DAL.App.EF.Repositories
             var receipt = await RepoDbSet.FindAsync(receiptId);
             if (receipt == null) return null;
             await RepoDbContext.Entry(receipt).Collection(r => r.ReceiptParticipants).LoadAsync();
+            await RepoDbContext.Entry(receipt).Reference(r => r.ReceiptManager).LoadAsync();
 
             return ReceiptMapper.FromDomain2(receipt);
         }

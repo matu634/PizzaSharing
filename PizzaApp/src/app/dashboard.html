@@ -36,7 +36,7 @@
                 <td>${receipt.receiptId}</td>
                 <td>${receipt.createdTime}</td>
                 <td>${receipt.sumCost}</td>
-                <td><button class="btn btn-success" click.delegate="viewButtonClicked(receipt.receiptId)">View</button></td>
+                <td><button class="btn btn-success" click.delegate="viewReceiptButtonClicked(receipt.receiptId)">View</button></td>
               </tr>
             </tbody>
           </table>
@@ -63,7 +63,7 @@
               <td>${receipt.receiptId}</td>
               <td>${receipt.createdTime}</td>
               <td>${receipt.sumCost}</td>
-              <td><button>Button</button></td>
+              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(receipt.receiptId)">View</button></td>
             </tr>
             </tbody>
           </table>
@@ -90,7 +90,7 @@
             <tr repeat.for="loan of dashboardDTO.loans">
               <td>${loan.owedAmount}</td>
               <td>${loan.loanTakerName}</td>
-              <td><button></button></td>
+              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(loan.receiptId)">View Receipt</button></td>
             </tr>
             </tbody>
           </table>
@@ -115,7 +115,7 @@
             <tr repeat.for="debt of dashboardDTO.debts">
               <td>${debt.owedAmount}</td>
               <td>${debt.loanGiverName}</td>
-              <td><button>Button</button></td>
+              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(debt.receiptId)">View Receipt</button></td>
             </tr>
             </tbody>
           </table>

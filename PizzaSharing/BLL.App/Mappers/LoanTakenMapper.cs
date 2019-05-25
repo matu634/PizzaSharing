@@ -13,6 +13,7 @@ namespace BLL.App.Mappers
             {
                 OwedAmount = dto.OwedAmount,
                 LoanId = dto.LoanId,
+                ReceiptId = dto.ReceiptId,
                 LoanGiverName = dto.LoanGiverName
             };
         }
