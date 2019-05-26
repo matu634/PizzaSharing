@@ -8,6 +8,7 @@ using DAL.App.DTO;
 using DAL.App.EF.Mappers;
 using ee.itcollege.masirg.DAL.Base.EF.Repositories;
 using Domain;
+using Enums;
 using Microsoft.EntityFrameworkCore;
 using PublicApi.DTO;
 
@@ -109,6 +110,22 @@ namespace DAL.App.EF.Repositories
                 LoanTakerId = participant.ParticipantAppUserId,
                 LoanGiverId = receiptManagerId
             })).Entity.Id;
+        }
+
+        public async Task<DALLoanDTO> FindAsync(int loanId)
+        {
+            var loan = await RepoDbSet.FindAsync(loanId);
+            if (loan == null) return null;
+            return LoanMapper.FromDomain2(loan);
+        }
+
+        public async Task ChangeStatusAsync(int loanId, LoanStatus newStatus)
+        {
+            var loan = await RepoDbSet.FindAsync(loanId);
+            if (loan == null) throw new NullReferenceException("Didn't find Loan");
+
+            loan.Status = newStatus;
+            
         }
     }
 }

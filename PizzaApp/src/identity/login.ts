@@ -62,7 +62,7 @@ export class Login {
 
   //======================ViewMethods=========================
   submit() {
-    log.debug("submit", this.email, this.password)
+    log.debug("submit", this.email, this.password);
     this.IdentityService.login(this.email, this.password)
     .then(jwtDTO => {
       if (jwtDTO.token !== undefined) {

@@ -35,8 +35,8 @@
                 <td><button class="btn btn-danger" click.delegate="removeReceipt(receipt.receiptId)"><i class="fa fa-minus-circle"></i></button></td>
                 <td>${receipt.receiptId}</td>
                 <td>${receipt.createdTime}</td>
-                <td>${receipt.sumCost}</td>
-                <td><button class="btn btn-success" click.delegate="viewReceiptButtonClicked(receipt.receiptId)">View</button></td>
+                <td>${receipt.sumCost} €</td>
+                <td><button class="btn btn-primary" click.delegate="viewReceiptButtonClicked(receipt.receiptId)">View</button></td>
               </tr>
             </tbody>
           </table>
@@ -55,15 +55,15 @@
               <th>#</th>
               <th>Time created</th>
               <th>Sum</th>
-              <th></th>
+              <th>Status</th>
             </tr>
             </thead>
             <tbody>
             <tr repeat.for="receipt of dashboardDTO.closedReceipts">
               <td>${receipt.receiptId}</td>
               <td>${receipt.createdTime}</td>
-              <td>${receipt.sumCost}</td>
-              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(receipt.receiptId)">View</button></td>
+              <td>${receipt.sumCost} €</td>
+              <td><button class="btn btn-primary" click.delegate="viewOldReceiptButtonClicked(receipt.receiptId)">View</button></td>
             </tr>
             </tbody>
           </table>
@@ -75,7 +75,7 @@
     <div class="col-lg-6">
       <div class="card card-dark">
         <div class="card-header no-border">
-          <h3 class="card-title">Active loans</h3>
+          <h3 class="card-title">Loans</h3>
         </div>
         <div class="card-body p-0">
           <table class="table table-striped table-valign-middle">
@@ -83,14 +83,20 @@
             <tr>
               <th>Owed amount</th>
               <th>Loan taker name</th>
+              <th>Status</th>
               <th></th>
             </tr>
             </thead>
             <tbody>
             <tr repeat.for="loan of dashboardDTO.loans">
-              <td>${loan.owedAmount}</td>
+              <td>${loan.owedAmount} €</td>
               <td>${loan.loanTakerName}</td>
-              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(loan.receiptId)">View Receipt</button></td>
+              <td>${getStatusName(loan.status)}</td>
+              <td>
+                <button class="btn btn-success" show.bind="canShowConfirmPaidButton(loan.status)" click.delegate="confirmPaidClicked(loan)">Confirm</button>
+                <button class="btn btn-danger" show.bind="canShowRejectPaidButton(loan.status)" click.delegate="rejectPaidClicked(loan)" >Reject</button>
+                <button class="btn btn-primary" click.delegate="viewOldReceiptButtonClicked(loan.receiptId)">View Receipt</button>
+              </td>
             </tr>
             </tbody>
           </table>
@@ -100,7 +106,7 @@
 
       <div class="card card-dark">
         <div class="card-header no-border">
-          <h3 class="card-title">Active debts</h3>
+          <h3 class="card-title">Debts</h3>
         </div>
         <div class="card-body p-0">
           <table class="table table-striped table-valign-middle">
@@ -108,15 +114,22 @@
             <tr>
               <th>Owed amount</th>
               <th>Loan giver name</th>
+              <th>Status</th>
               <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr repeat.for="debt of dashboardDTO.debts">
-              <td>${debt.owedAmount}</td>
-              <td>${debt.loanGiverName}</td>
-              <td><button class="btn btn-success" click.delegate="viewOldReceiptButtonClicked(debt.receiptId)">View Receipt</button></td>
-            </tr>
+            <template repeat.for="debt of dashboardDTO.debts">
+              <tr >
+                <td>${debt.owedAmount} €</td>
+                <td>${debt.loanGiverName}</td>
+                <td>${getStatusName(debt.status)}</td>
+                <td>
+                  <button class="btn btn-warning" show.bind="canShowMarkPaidButton(debt.status)" click.delegate="markPaidClicked(debt)">Mark Paid</button>
+                  <button class="btn btn-primary" click.delegate="viewOldReceiptButtonClicked(debt.receiptId)">View Receipt</button>
+                </td>
+              </tr>
+            </template>
             </tbody>
           </table>
         </div>
