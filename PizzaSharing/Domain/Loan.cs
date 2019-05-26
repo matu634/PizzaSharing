@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Domain.Identity;
+using Enums;
 
 namespace Domain
 {
@@ -8,7 +11,8 @@ namespace Domain
         public int ReceiptParticipantId { get; set; }
         public ReceiptParticipant ReceiptParticipant { get; set; }
 
-        public bool IsPaid { get; set; }
+        [Required]
+        public LoanStatus Status { get; set; }
 
         public int LoanGiverId { get; set; }
         public AppUser LoanGiver { get; set; }

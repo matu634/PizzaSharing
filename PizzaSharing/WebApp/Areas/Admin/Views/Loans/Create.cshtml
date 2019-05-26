@@ -23,7 +23,7 @@
                     <label asp-for="Loan.ReceiptParticipantId" class="control-label">Receipt Participant Id</label>
                     <select asp-for="Loan.ReceiptParticipantId" class ="form-control" asp-items="Model.ReceiptParticipants"></select>
                 </div>
-                <input type="hidden" asp-for="Loan.IsPaid" value="false"/>
+                <input type="hidden" asp-for="Loan.Status" value="false"/>
                 <div class="form-group">
                     <label asp-for="Loan.LoanGiverId" class="control-label">Loan Giver</label>
                     <select asp-for="Loan.LoanGiverId" class ="form-control" asp-items="Model.LoanGivers"></select>

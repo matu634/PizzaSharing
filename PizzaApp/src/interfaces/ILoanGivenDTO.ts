@@ -3,4 +3,5 @@ export interface ILoanGivenDTO {
   receiptId: number
   owedAmount: number
   loanTakerName : string
+  status: LoanStatus
 }

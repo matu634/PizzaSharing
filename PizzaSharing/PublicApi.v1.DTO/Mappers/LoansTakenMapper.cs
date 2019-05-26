@@ -13,7 +13,8 @@ namespace PublicApi.DTO.Mappers
                 LoanId = dto.LoanId,
                 ReceiptId = dto.ReceiptId,
                 OwedAmount = dto.OwedAmount,
-                LoanGiverName = dto.LoanGiverName
+                LoanGiverName = dto.LoanGiverName,
+                Status = dto.Status
             };
         }
     }

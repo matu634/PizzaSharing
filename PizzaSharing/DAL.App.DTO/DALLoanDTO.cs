@@ -1,3 +1,5 @@
+using Enums;
+
 namespace DAL.App.DTO
 {
     public class DALLoanDTO
@@ -6,7 +8,7 @@ namespace DAL.App.DTO
         
         public DALReceiptParticipantDTO  ReceiptParticipant { get; set; }
 
-        public bool IsPaid { get; set; }
+        public LoanStatus Status { get; set; }
 
         public DALAppUserDTO LoanGiver { get; set; }
 

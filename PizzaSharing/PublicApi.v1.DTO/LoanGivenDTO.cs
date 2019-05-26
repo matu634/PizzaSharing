@@ -1,3 +1,5 @@
+using Enums;
+
 namespace PublicApi.DTO
 {
     public class LoanGivenDTO
@@ -6,5 +8,6 @@ namespace PublicApi.DTO
         public int ReceiptId { get; set; }
         public decimal OwedAmount { get; set; }
         public string LoanTakerName { get; set; }
+        public LoanStatus Status { get; set; }
     }
 }

@@ -36,7 +36,8 @@ export class Dashboard {
     this.service.fetch().then(jsonData => {
       log.debug("jsonData", jsonData);
       this.dashboardDTO = jsonData;
-      log.debug("DASHBOARD: ", this.dashboardDTO)
+      log.debug("DASHBOARD: ", this.dashboardDTO);
+      log.debug("LoanStatus is:", this.dashboardDTO.loans[0].status);
     }).catch(reason => {
       log.debug('catch reason', reason)
     });

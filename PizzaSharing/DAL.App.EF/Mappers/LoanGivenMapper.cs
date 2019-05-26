@@ -24,7 +24,8 @@ namespace DAL.App.EF.Mappers
                 LoanTakerName = loan.LoanTaker.UserNickname,
                 LoanId = loan.Id,
                 OwedAmount = sum,
-                ReceiptId = loan.ReceiptParticipant.ReceiptId
+                ReceiptId = loan.ReceiptParticipant.ReceiptId,
+                Status = loan.Status
             };
         }
     }

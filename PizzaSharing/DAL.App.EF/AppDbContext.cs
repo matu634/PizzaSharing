@@ -1,6 +1,7 @@
 ﻿using ee.itcollege.masirg.Contracts.DAL.Base;
 using Domain;
 using Domain.Identity;
+using Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,11 @@ namespace DAL.App.EF
             builder.Entity<AppUser>()
                 .HasIndex(u => u.UserNickname)
                 .IsUnique();
+
+            builder.Entity<Loan>()
+                .Property(loan => loan.Status)
+                .HasDefaultValue(LoanStatus.NotPaid)
+                .HasConversion<string>();
         }
 
         public DbSet<Category> Categories { get; set; }

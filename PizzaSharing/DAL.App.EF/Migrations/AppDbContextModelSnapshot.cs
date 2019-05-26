@@ -165,13 +165,16 @@ namespace DAL.App.EF.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("IsPaid");
-
                     b.Property<int>("LoanGiverId");
 
                     b.Property<int>("LoanTakerId");
 
                     b.Property<int>("ReceiptParticipantId");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue("NotPaid");
 
                     b.HasKey("Id");
 
@@ -547,7 +550,7 @@ namespace DAL.App.EF.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.ReceiptRow", "ReceiptRow")
-                        .WithMany("RowParticpantLoanRows")
+                        .WithMany("RowParticipantLoanRows")
                         .HasForeignKey("ReceiptRowId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -21,7 +21,7 @@ namespace DAL.App.EF.Mappers
             {
                 ReceiptParticipant = ReceiptParticipantMapper.FromDomain2(loan.ReceiptParticipant),
                 Id = loan.Id,
-                IsPaid = loan.IsPaid
+                Status = loan.Status
             };
         }
     }
