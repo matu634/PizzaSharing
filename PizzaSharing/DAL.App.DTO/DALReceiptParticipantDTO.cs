@@ -5,5 +5,6 @@ namespace DAL.App.DTO
         public int Id { get; set; }
         public int ParticipantAppUserId { get; set; }
         public int ReceiptId { get; set; }
+        public DALReceiptDTO Receipt { get; set; }
     }
 }

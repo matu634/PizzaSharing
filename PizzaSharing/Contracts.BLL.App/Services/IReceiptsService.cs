@@ -26,7 +26,7 @@ namespace Contracts.BLL.App.Services
 
         Task<BLLReceiptRowDTO> RemoveRowChangeAsync(int rowId, int componentId, int userId);
 
-        ReceiptRowAllDTO RemoveRowParticipant();
+        Task<BLLReceiptRowDTO> RemoveRowParticipantAsync(int loanRowId, int userId);
 
         ReceiptRowAllDTO EditRowParticipantInvolvement();
 

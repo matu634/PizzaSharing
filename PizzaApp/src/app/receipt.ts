@@ -12,6 +12,7 @@ import {DialogService} from "aurelia-dialog";
 import {AddComponent} from "../dialogs/add-component";
 import {IChangeDTO} from "../interfaces/IChangeDTO";
 import {AddParticipant} from "../dialogs/add-participant";
+import {IParticipantDTO} from "../interfaces/IParticipantDTO";
 
 export var log = LogManager.getLogger('Receipt');
 
@@ -229,7 +230,7 @@ export class Receipt {
 
     this.receiptService.fetchAvailableUsers(receiptRowId)
       .then(users => {
-        this.dialogService.open({viewModel: AddParticipant, model: [users, 100], lock: false}) //TODO: calculate max value from participants
+        this.dialogService.open({viewModel: AddParticipant, model: [users, this.getRemainingParticipation(receiptRowId)], lock: false})
           .whenClosed(response => {
             if (!response.wasCancelled) {
               log.debug("Selected user: " + response.output[0].name + " with " + response.output[1] + " involvement");
@@ -243,6 +244,33 @@ export class Receipt {
   
   addRowParticipant(rowId:number, userId: number, involvement: number){
     this.receiptService.addRowParticipant(userId, involvement / 100, rowId)
+      .then(updatedRow => {
+        let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === updatedRow.receiptRowId);
+        if (index < 0) {
+          log.debug("Index not found. ");
+          return;
+        }
+
+        // this.receiptDTO.rows[index] = updatedRow; Can't use this, aurelia doesn't detect changes by index
+        this.receiptDTO.rows.splice(index, 1, updatedRow);
+        this.updateTotalPrice();
+        log.debug("Current rows: ", this.receiptDTO.rows)
+      })
+  }
+  
+  getRemainingParticipation(rowId: number) : number{
+    let row = this.receiptDTO.rows.find(value => value.receiptRowId == rowId);
+    if (row == undefined) return 100;
+    let counter = 0;
+    if (row.participants == null) return 100;
+    for (let i = 0; i < row.participants.length; i++) {
+      counter += row.participants[i].involvement * 100
+    }
+    return 100 - counter
+  }
+  
+  removeParticipantClicked(participant: IParticipantDTO){
+    this.receiptService.removeRowParticipant(participant)
       .then(updatedRow => {
         let index = this.receiptDTO.rows.findIndex(row => row.receiptRowId === updatedRow.receiptRowId);
         if (index < 0) {

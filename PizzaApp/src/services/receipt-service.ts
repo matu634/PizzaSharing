@@ -7,6 +7,7 @@ import {IReceiptRowDTO} from "../interfaces/IReceiptRowDTO";
 import {IReceiptRowMinDTO} from "../interfaces/IReceiptRowMinDTO";
 import {IChangeDTO} from "../interfaces/IChangeDTO";
 import {IUserDTO} from "../interfaces/IUserDTO";
+import {IParticipantDTO} from "../interfaces/IParticipantDTO";
 
 export var log = LogManager.getLogger('ReceiptService');
 
@@ -217,5 +218,24 @@ export class ReceiptService {
       })
       .then(updatedReceiptRow => updatedReceiptRow.json())
       .catch(reason => log.debug("addRowParticipant error:", reason));
+  }
+
+  removeRowParticipant(participant: IParticipantDTO) {
+    let url = this.appConfig.apiUrl + "Receipts/RemoveParticipantFromRow";
+
+    let body = JSON.stringify(participant);
+    log.debug("removeRowParticipant request body: ", body);
+
+    return this.httpClient.post(
+      url,
+      body,
+      {
+        cache: "no-store",
+        headers: {
+          Authorization: 'Bearer ' + this.appConfig.jwt,
+        }
+      })
+      .then(updatedReceiptRow => updatedReceiptRow.json())
+      .catch(reason => log.debug("removeRowChange error:", reason));
   }
 }

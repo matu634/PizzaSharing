@@ -1,0 +1,28 @@
+using System;
+using DAL.App.DTO;
+using Domain;
+
+namespace DAL.App.EF.Mappers
+{
+    public class LoanMapper
+    {
+        
+        /// <summary>
+        /// Maps id, isPaid, ReceiptParticipantDTO -> ReceiptDTO
+        /// </summary>
+        /// <param name="loan"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static DALLoanDTO FromDomain(Loan loan)
+        {
+            if (loan == null) throw new NullReferenceException("Can't map, loan entity is null");
+            
+            return new DALLoanDTO()
+            {
+                ReceiptParticipant = ReceiptParticipantMapper.FromDomain2(loan.ReceiptParticipant),
+                Id = loan.Id,
+                IsPaid = loan.IsPaid
+            };
+        }
+    }
+}

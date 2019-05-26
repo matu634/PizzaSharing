@@ -202,9 +202,19 @@ namespace BLL.App.Services
             return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
-        public ReceiptRowAllDTO RemoveRowParticipant()
+        public async Task<BLLReceiptRowDTO> RemoveRowParticipantAsync(int loanRowId, int userId)
         {
-            throw new System.NotImplementedException();
+            var loanRow = await Uow.LoanRows.FindAsync(loanRowId);
+            if (loanRow == null) return null;
+            if (loanRow.Loan?.ReceiptParticipant?.Receipt == null) throw new NullReferenceException("Some data not mapped");
+            var receipt = loanRow.Loan.ReceiptParticipant.Receipt;
+            if (receipt.IsFinalized || receipt.ReceiptManagerId != userId) return null;
+            
+            Uow.LoanRows.Remove(loanRow.Id);
+            await Uow.SaveChangesAsync();
+            
+            var receiptRow = await Uow.ReceiptRows.FindRowAndRelatedDataAsync(loanRow.ReceiptRowId);
+            return ReceiptRowMapper.FromDAL(receiptRow);
         }
 
         public ReceiptRowAllDTO EditRowParticipantInvolvement()

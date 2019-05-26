@@ -17,7 +17,7 @@ namespace DAL.App.EF.Mappers
         public static DALReceiptDTO FromDomain(Receipt receipt)
         {
             if (receipt == null) throw new NullReferenceException("Can't map, receipt domain entity is null");
-            
+
             var sum = decimal.Zero;
             foreach (var row in receipt.ReceiptRows)
             {
@@ -27,6 +27,7 @@ namespace DAL.App.EF.Mappers
                     Console.WriteLine("Couldn't find price for a row, skipping");
                     continue;
                 }
+
                 sum += rowSumCost;
             }
 
@@ -56,8 +57,8 @@ namespace DAL.App.EF.Mappers
                 ReceiptManagerId = receipt.ReceiptManagerId,
                 ManagerNickname = receipt.ReceiptManager.UserNickname,
                 ReceiptParticipants = receipt.ReceiptParticipants?
-                    .Select(ReceiptParticipantMapper.FromDomain)
-                    .ToList() ?? new List<DALReceiptParticipantDTO>()
+                                          .Select(ReceiptParticipantMapper.FromDomain)
+                                          .ToList() ?? new List<DALReceiptParticipantDTO>()
             };
         }
 
@@ -75,6 +76,25 @@ namespace DAL.App.EF.Mappers
                 CreatedTime = dto.CreatedTime,
                 IsFinalized = dto.IsFinalized,
                 ReceiptManagerId = dto.ReceiptManagerId
+            };
+        }
+
+
+        /// <summary>
+        /// Maps Id, Time, IsFinalized, ManagerId
+        /// </summary>
+        /// <param name="receipt"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static DALReceiptDTO FromDomain3(Receipt receipt)
+        {
+            if (receipt == null) throw new NullReferenceException("Can't map, Receipt domain entity is null");
+            return new DALReceiptDTO()
+            {
+                ReceiptId = receipt.Id,
+                CreatedTime = receipt.CreatedTime,
+                IsFinalized = receipt.IsFinalized,
+                ReceiptManagerId = receipt.ReceiptManagerId,
             };
         }
     }

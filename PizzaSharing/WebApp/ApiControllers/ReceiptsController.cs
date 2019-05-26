@@ -184,6 +184,11 @@ namespace WebApp.ApiControllers
                 .ToList();
         }
         
+        /// <summary>
+        /// Adds participant to receipt row
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ReceiptRowAllDTO>> AddParticipantToRow(RowParticipantMinDTO dto)
         {
@@ -193,6 +198,11 @@ namespace WebApp.ApiControllers
             return ReceiptRowMapper.FromBLL(receiptRow);
         }
         
+        /// <summary>
+        /// Submits receipts (receipt enters isFinalized state)
+        /// </summary>
+        /// <param name="receiptId"></param>
+        /// <returns></returns>
         [HttpPost("{receiptId}")]
         public async Task<ActionResult> SubmitReceipt(int receiptId)
         {
@@ -200,5 +210,20 @@ namespace WebApp.ApiControllers
             if (result == false) return BadRequest();
             return Ok();
         }
+
+        /// <summary>
+        /// Removes Participant from receipt row
+        /// </summary>
+        /// <param name="participant">participant dto where loanRowId must be present</param>
+        /// <returns>Updated receipt row</returns>
+        [HttpPost]
+        public async Task<ActionResult<ReceiptRowAllDTO>> RemoveParticipantFromRow(RowParticipantDTO participant)
+        {
+            if (participant?.LoanRowId == null) return BadRequest();
+            var receiptRow = await _bll.ReceiptsService.RemoveRowParticipantAsync(participant.LoanRowId.Value, User.GetUserId());
+            if (receiptRow == null) return BadRequest("Participant was not removed (RowParticipantMinDTO or user might not be valid)");
+            return ReceiptRowMapper.FromBLL(receiptRow);
+        }
+        
     }
 }
